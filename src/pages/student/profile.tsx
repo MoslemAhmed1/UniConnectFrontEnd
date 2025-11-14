@@ -1,0 +1,64 @@
+import { StudentProfileForm } from "@/components/student/profile/StudentProfileForm";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { useStudentProfileData } from "@/hooks/student/use-student-profile-data";
+import { School, UserRoundPen } from "lucide-react";
+
+export const StudentProfile = () => {
+  const { profileData, isLoading } = useStudentProfileData();
+
+  return (
+    <div className="w-full flex flex-col items-center  m-auto p-10 h-dvh md:w-7/10 xl:w-5/10">
+      <div className="flex flex-row justify-start w-full">
+        <div className="">
+          <Avatar className="w-30 h-30 mr-5 rounded-lg">
+            <AvatarImage src={profileData?.profileUrl} />
+            <AvatarFallback className="rounded-lg">ST</AvatarFallback>
+          </Avatar>
+          <Button
+            size={"sm"}
+            className="mt-2"
+            variant={"outline"}
+            disabled={isLoading}
+          >
+            Change Picture
+          </Button>
+        </div>
+        <div className="flex flex-col justify-center items-start ml-5">
+          <h1 className="font-bold text-4xl mb-2">Profile Settings</h1>
+          <p className="text-gray-600">
+            Manage your student UniConnect account.
+          </p>
+        </div>
+      </div>
+      <Tabs defaultValue="profile" className="w-full mt-2">
+        <TabsList className="w-full">
+          <TabsTrigger value="profile">
+            <UserRoundPen />
+            <span className="max-md:hidden">Profile Settings</span>
+          </TabsTrigger>
+          <TabsTrigger value="classes">
+            <School />
+            <span className="max-md:hidden">Joined Classes</span>
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="profile">
+          <Card className="p-5 flex items-center justify-center ">
+            {isLoading || !profileData ? (
+              <Spinner className="size-8 text-gray-500" />
+            ) : (
+              <StudentProfileForm studentData={profileData} />
+            )}
+          </Card>
+        </TabsContent>
+        <TabsContent value="classes">
+          <h2>Classes</h2>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
