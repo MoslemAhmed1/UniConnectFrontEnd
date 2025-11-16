@@ -7,6 +7,7 @@ import LoginForm from "./components/forms/LoginForm";
 import Calendar from "@/pages/student/calendar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import StudentLayout from "./layouts/student/StudentLayout";
+import { StudentProfile } from "./pages/student/profile";
 
 const queryClient = new QueryClient();
 
