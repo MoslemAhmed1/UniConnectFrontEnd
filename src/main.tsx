@@ -7,7 +7,11 @@ import LoginForm from "./components/forms/LoginForm";
 import Calendar from "@/pages/student/calendar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import StudentLayout from "./layouts/student/StudentLayout";
+import { StudentProfile } from "./pages/student/profile";
+import SignupPage from "./pages/user/signup";
+import { Toaster } from "sonner";
 import AuthProvider from "./providers/AuthProvider";
+
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
@@ -17,10 +21,13 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginForm />} />
+            <Route path="/signup" element={<SignupPage />} />
             <Route element={<StudentLayout />}>
               <Route path="/calendar" element={<Calendar />} />
+              <Route path="/profile" element={<StudentProfile />} />
             </Route>
           </Routes>
+          <Toaster position="top-center" />
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>
