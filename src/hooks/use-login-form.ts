@@ -25,6 +25,11 @@ const useLoginForm = () => {
     },
   });
 
+  const {
+    handleSubmit,
+    formState: { isSubmitting, isValid },
+  } = form;
+
   // The type is changed here so it enforces the api request body on the output of the form
   // an error will be displayed if they can't be matched togther
   async function onSubmit(data: loginRequestBody) {
@@ -48,8 +53,9 @@ const useLoginForm = () => {
   }
 
   return {
-    form,
-    onSubmit,
+    onSubmit: handleSubmit(onSubmit),
+    isSubmitting,
+    isValid,
   };
 };
 
