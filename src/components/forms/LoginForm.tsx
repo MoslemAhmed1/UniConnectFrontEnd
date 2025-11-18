@@ -1,85 +1,50 @@
-import { Controller } from "react-hook-form";
-
 import useLoginForm from "@/hooks/use-login-form";
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Field,
-  FieldError,
+  FieldDescription,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "../ui/spinner";
 
 export default function LoginForm() {
-  const { form, onSubmit } = useLoginForm();
+  const { isSubmitting, isValid, onSubmit } = useLoginForm();
 
   return (
-    <Card className="w-full sm:max-w-md">
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input
-                    {...field}
-                    id="email"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="me@example.com"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <Input
-                    {...field}
-                    id="password"
-                    placeholder="password"
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
-        </form>
-      </CardContent>
-      <CardFooter>
-        <Field orientation="horizontal">
-          <Button
-            type="submit"
-            form="login-form"
-            disabled={!form.formState.isValid || form.formState.isSubmitting}
-          >
-            Submit
+    <form className="flex flex-col gap-6" onSubmit={onSubmit}>
+      <FieldGroup>
+        <div className="flex flex-col items-center gap-1 text-center">
+          <h1 className="text-2xl font-bold">Welcome Back!</h1>
+          <p className="text-muted-foreground text-sm text-balance">
+            Enter your email and password below to login to your account
+          </p>
+        </div>
+        <Field>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input id="email" type="email" placeholder="m@example.com" required />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="password">Password</FieldLabel>
+          <Input id="password" type="password" required />
+        </Field>
+        <Field>
+          <Button type="submit" disabled={isSubmitting || !isValid}>
+            {isSubmitting ? "Logging in" : "Login"}
+            {isSubmitting && <Spinner />}
           </Button>
         </Field>
-      </CardFooter>
-    </Card>
+        <Field>
+          <FieldDescription className="text-center">
+            Don&apos;t have an account?{" "}
+            <a href="/signup" className="underline underline-offset-4">
+              Sign up
+            </a>
+          </FieldDescription>
+        </Field>
+      </FieldGroup>
+    </form>
   );
 }
