@@ -13,14 +13,7 @@ export const useStudentCalendar = () => {
         setTimeout(() => {
           const fakeData: CalendarEvent[] = [
             {
-              deadline_at: Date.now(),
-              stringified_notes:
-                "<p>Let's do this <a target='_blank' style='color: blue; text-decoration: underline;' href='https://www.amazon.com'>Visit me</a></p>",
-              title: "Computer Architecture Deadline",
-              type: "project",
-            },
-            {
-              deadline_at: Date.now(),
+              deadline_at: Date.now() + 24 * 60 * 60 * 1000,
               stringified_notes:
                 "<p>Let's do this <a target='_blank' style='color: blue; text-decoration: underline;' href='https://www.amazon.com'>Visit me</a></p>",
               title: "Computer Architecture Deadline",
@@ -28,6 +21,13 @@ export const useStudentCalendar = () => {
             },
             {
               deadline_at: Date.now() + 24 * 60 * 60 * 1000,
+              stringified_notes:
+                "<p>Let's do this <a target='_blank' style='color: blue; text-decoration: underline;' href='https://www.amazon.com'>Visit me</a></p>",
+              title: "Computer Architecture Deadline",
+              type: "project",
+            },
+            {
+              deadline_at: Date.now() + 2 * 24 * 60 * 60 * 1000,
               stringified_notes:
                 "<p>Let's do this <a target='_blank' style='color: blue; text-decoration: underline;' href='https://www.amazon.com'>Visit me</a></p>",
               title: "Probability Assignment",
