@@ -32,7 +32,7 @@ const SignupForm = () => {
 
   return (
     <>
-      {submissionDone && selectedRole === "Student" && (
+      {submissionDone && selectedRole === "student" && (
         <Navigate to="/calendar" replace />
       )}
       <form className="flex flex-col gap-6" onSubmit={onSubmit}>
@@ -54,7 +54,7 @@ const SignupForm = () => {
 
           <RoleField control={control} trigger={trigger} />
 
-          {selectedRole === "Student" && (
+          {selectedRole === "student" && (
             <>
               <FieldSeparator />
               <FieldSet>

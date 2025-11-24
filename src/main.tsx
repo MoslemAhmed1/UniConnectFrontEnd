@@ -11,8 +11,9 @@ import { StudentProfile } from "./pages/student/profile";
 import LoginPage from "./pages/user/login";
 import SignupPage from "./pages/user/signup";
 import AuthProvider from "./providers/AuthProvider";
+import Group from "./pages/student/group";
+import ModalProvider from "./providers/ModalProvider";
 import Dashboard from "./pages/student/dashboard";
-import Dashboard2 from "./pages/student/dashboard2";
 import { CoursePage } from "./pages/student/course-page";
 import AllCourses from "./pages/student/all-courses";
 import Materials from "./pages/student/materials";
@@ -23,23 +24,28 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard2" element={<Dashboard2 />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route element={<StudentLayout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/courses" element={<AllCourses />} />
-              <Route path="/course/:id" element={<CoursePage />} />
-              <Route path="/materials/:id/:category" element={<Materials />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/profile" element={<StudentProfile />} />
-            </Route>
-          </Routes>
-          <Toaster position="top-center" />
-        </BrowserRouter>
+        <ModalProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route element={<StudentLayout />}>
+                <Route path="/calendar" element={<Calendar />} />
+                <Route path="/profile" element={<StudentProfile />} />
+                <Route path="/groups/:id" element={<Group />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/courses" element={<AllCourses />} />
+                <Route path="/course/:id" element={<CoursePage />} />
+                <Route
+                  path="/materials/:id/:category"
+                  element={<Materials />}
+                />
+              </Route>
+            </Routes>
+            <Toaster position="top-center" />
+          </BrowserRouter>
+        </ModalProvider>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>

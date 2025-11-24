@@ -28,6 +28,7 @@ const useLoginForm = () => {
   const {
     handleSubmit,
     formState: { isSubmitting, isValid },
+    control,
   } = form;
 
   // The type is changed here so it enforces the api request body on the output of the form
@@ -56,6 +57,7 @@ const useLoginForm = () => {
     onSubmit: handleSubmit(onSubmit),
     isSubmitting,
     isValid,
+    control,
   };
 };
 
