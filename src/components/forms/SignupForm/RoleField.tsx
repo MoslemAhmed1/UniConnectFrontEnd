@@ -45,7 +45,7 @@ const RoleField = ({
             </SelectTrigger>
             <SelectContent position="item-aligned">
               {SELECTABLE_ROLES.map((role) => (
-                <SelectItem key={role} value={role}>
+                <SelectItem key={role} value={role.toLowerCase()}>
                   {role}
                 </SelectItem>
               ))}

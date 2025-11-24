@@ -1,3 +1,4 @@
+import api from "@/lib/axios";
 import {
   signupFormSchema,
   type InferedFormSchema,
@@ -35,24 +36,31 @@ const useSignupForm = () => {
 
   const selectedRole = watch("role");
 
-  const { mutateAsync: signup } = useMutation({
+  const { mutateAsync: signup } = useMutation<void, Error, InferedFormSchema>({
     mutationKey: ["signup"],
-    mutationFn: () => {
-      if (selectedRole === "Student") {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve("Student Created");
-          }, 1000);
-        });
-      } else if (selectedRole === "Professor/TA") {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(
-              "Your request has been sent, please wait for admins approval."
-            );
-          }, 1000);
-        });
+    mutationFn: (data) => {
+      if (selectedRole === "student") {
+        const newUser = {
+          first_name: data.firstName,
+          parent_name: data.parentName,
+          email: data.email,
+          password: data.password,
+          role: data.role,
+          code: data.studentCode,
+          year: data.year,
+        };
+
+        return api.post("/api/users/register", newUser);
       }
+      // else if (selectedRole === "Professor/TA") {
+      //   return new Promise((resolve) => {
+      //     setTimeout(() => {
+      //       resolve(
+      //         "Your request has been sent, please wait for admins approval."
+      //       );
+      //     }, 1000);
+      //   });
+      // }
 
       return new Promise((_, reject) => reject("Invalid Role."));
     },
@@ -61,10 +69,10 @@ const useSignupForm = () => {
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
     try {
-      await signup();
+      await signup(data);
 
       let toastMessage;
-      if (selectedRole === "Student") {
+      if (selectedRole === "student") {
         toastMessage =
           "Your account has been successfully created, to customize it visit your profile page in the dashboard.";
       } else if (selectedRole === "Professor/TA") {

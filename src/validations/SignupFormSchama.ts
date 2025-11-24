@@ -15,9 +15,12 @@ const signupFormSchema = z
     parentName: z
       .string()
       .min(2, "Second name should be at least 2 characters long."),
-    role: z.enum(SELECTABLE_ROLES, {
-      error: "Please select a role.",
-    }),
+    role: z.enum(
+      SELECTABLE_ROLES.map((role) => role.toLowerCase()),
+      {
+        error: "Please select a role.",
+      }
+    ),
     year: z.enum(YEARS).optional(),
     studentCode: z.string().optional(),
   })
@@ -25,11 +28,11 @@ const signupFormSchema = z
     error: "Password and Confirm Password do not match.",
     path: ["confirmPassword"],
   })
-  .refine((data) => data.role !== "Student" || data.year, {
+  .refine((data) => data.role !== "student" || data.year, {
     error: "Year is required for students.",
     path: ["year"],
   })
-  .refine((data) => data.role !== "Student" || data.studentCode, {
+  .refine((data) => data.role !== "student" || data.studentCode, {
     error: "Code is required for students.",
     path: ["studentCode"],
   });
