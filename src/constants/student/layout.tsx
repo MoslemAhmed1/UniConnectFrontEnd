@@ -2,7 +2,7 @@ import {
   Book,
   BookA,
   Calendar,
-  Megaphone,
+  LayoutDashboard,
   Users,
   type LucideProps,
 } from "lucide-react";
@@ -16,28 +16,28 @@ export const STUDENT_SIDEBAR_ITEMS: {
   >;
 }[] = [
   {
+    icon: LayoutDashboard,
+    title: "Dashboard",
+    url: "dashboard",
+  },
+  {
     icon: Calendar,
-    url: "/calendar",
+    url: "calendar",
     title: "Deadlines Calendar",
   },
   {
     icon: Book,
-    url: "/courses",
+    url: "courses",
     title: "My Courses",
   },
   {
-    icon: Megaphone,
-    url: "/announcements",
-    title: "Announcements",
-  },
-  {
     icon: Users,
-    url: "/groups",
+    url: "groups",
     title: "Scientific Discussion Groups",
   },
   {
     icon: BookA,
-    url: "/assignments",
+    url: "assignments",
     title: "Assignments",
   },
 ] as const;

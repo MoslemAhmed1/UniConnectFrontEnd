@@ -10,11 +10,11 @@ import {
   FieldSet,
 } from "../../ui/field";
 import { Spinner } from "../../ui/spinner";
-import ConfirmPasswordField from "./ConfirmPasswordField";
-import EmailField from "./EmailField";
-import FirstNameField from "./FirstNameField";
-import ParentNameField from "./ParentNameField";
-import PasswordField from "./PasswordField";
+import ConfirmPasswordField from "../reusable-fields/ConfirmPasswordField";
+import EmailField from "../reusable-fields/EmailField";
+import FirstNameField from "../reusable-fields/FirstNameField";
+import ParentNameField from "../reusable-fields/ParentNameField";
+import PasswordField from "../reusable-fields/PasswordField";
 import RoleField from "./RoleField";
 import StudentCodeField from "./StudentCodeField";
 import StudentYearField from "./StudentYearField";

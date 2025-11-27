@@ -5,17 +5,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { InferedFormSchema } from "@/validations/SignupFormSchama";
-import { Controller, type Control } from "react-hook-form";
+import type { ReusableFormFieldProps } from "@/types/forms/reusable-form-field-props";
+import { Controller, type Path } from "react-hook-form";
 
-const PasswordField = ({
+const PasswordField = <T extends { password: string }>({
   control,
-}: {
-  control: Control<InferedFormSchema>;
-}) => {
+}: ReusableFormFieldProps<T>) => {
   return (
     <Controller
-      name="password"
+      name={"password" as Path<T>}
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>

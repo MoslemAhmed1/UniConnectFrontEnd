@@ -1,25 +1,23 @@
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { InferedFormSchema } from "@/validations/SignupFormSchama";
-import { Controller, type Control } from "react-hook-form";
+import type { ReusableFormFieldProps } from "@/types/forms/reusable-form-field-props";
+import { Controller, type Path } from "react-hook-form";
 
-const FirstNameField = ({
+const ParentNameField = <T extends { parentName: string }>({
   control,
-}: {
-  control: Control<InferedFormSchema>;
-}) => {
+}: ReusableFormFieldProps<T>) => {
   return (
     <Controller
-      name="firstName"
+      name={"parentName" as Path<T>}
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor="first-name">First Name</FieldLabel>
+          <FieldLabel htmlFor="second-name">Second Name</FieldLabel>
           <Input
             {...field}
-            id="first-name"
+            id="second-name"
             aria-invalid={fieldState.invalid}
-            placeholder="Ahmed"
+            placeholder="Mohammed"
           />
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
@@ -28,4 +26,4 @@ const FirstNameField = ({
   );
 };
 
-export default FirstNameField;
+export default ParentNameField;
