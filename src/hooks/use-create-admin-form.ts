@@ -32,7 +32,7 @@ const useCreateAdminForm = () => {
       parent_name: data.parentName,
       email: data.email,
       password: data.password,
-      role: "admin",
+      role: "system_admin",
     };
 
     try {
