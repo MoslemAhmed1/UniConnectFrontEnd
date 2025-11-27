@@ -5,6 +5,7 @@ import {
 } from "@/validations/SignupFormSchama";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -49,16 +50,16 @@ const useSignupForm = () => {
         };
 
         return api.post("/api/users/register", newUser);
+      } else if (selectedRole === "professor/ta") {
+        const newUser = {
+          first_name: data.firstName,
+          parent_name: data.parentName,
+          email: data.email,
+          password: data.password,
+          role: data.role,
+        };
+        return api.post("/api/users/register", newUser);
       }
-      // else if (selectedRole === "Professor/TA") {
-      //   return new Promise((resolve) => {
-      //     setTimeout(() => {
-      //       resolve(
-      //         "Your request has been sent, please wait for admins approval."
-      //       );
-      //     }, 1000);
-      //   });
-      // }
 
       return new Promise((_, reject) => reject("Invalid Role."));
     },
@@ -72,7 +73,7 @@ const useSignupForm = () => {
       if (selectedRole === "student") {
         toastMessage =
           "Your account has been successfully created, to customize it visit your profile page in the dashboard.";
-      } else if (selectedRole === "Professor/TA") {
+      } else if (selectedRole === "professor/ta") {
         toastMessage =
           "Your request has been sent. Please wait for admins approval.";
       }
@@ -80,9 +81,17 @@ const useSignupForm = () => {
       toast.success(toastMessage);
 
       setSubmissionDone(true);
-    } catch (error) {
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (err.response?.data && "message" in err.response.data) {
+          const message = err.response.data.message;
+          toast.error(message);
+          return;
+        }
+      }
+
       toast.error("An error occured, please try again.");
-      console.log(error);
+      console.log(err);
     }
   });
 

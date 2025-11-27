@@ -9,13 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const useLoginForm = () => {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  // TODO: Change calendar to the home page (dashboard)
-  const from = location.state?.from?.pathname || "/calendar";
+  let from = location.state?.from?.pathname;
 
   const form = useForm<InferedFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -37,19 +37,21 @@ const useLoginForm = () => {
     try {
       const res = await api.post<loginResponse>("/api/auth/login", data);
       setAuth({ token: res.data.accessToken, user: res.data.user });
+      if (!from) {
+        // TODO: Based on the user transfer him to the approperiate link
+        if (res.data.user.role == "student") from = "/student/dashboard";
+        else from = "/";
+      }
       navigate(from, { replace: true });
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data && "message" in err.response.data) {
           const message = err.response.data.message;
-          // TODO: Handle errors properly with react-hook-form
-          // TODO: each wrong status returns a json object that conatins a message
-
-          console.log(message);
+          toast.error(message);
+          return;
         }
-        // Unexpected axios error
       }
-      // Unexpected error in general
+      toast.error("Unexpected server error");
     }
   }
 

@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { StudentUser } from "@/types/student/student-user";
 import { useStudentProfileForm } from "@/hooks/student/use-student-profile-form";
+import { Controller } from "react-hook-form";
+import { Spinner } from "@/components/ui/spinner";
 
 type StudentProfileFormProps = {
   studentData: StudentUser;
@@ -18,9 +20,10 @@ type StudentProfileFormProps = {
 export const StudentProfileForm = ({
   studentData,
 }: StudentProfileFormProps) => {
-  const { register, onFormSubmit, errors } = useStudentProfileForm(studentData);
+  const { onSubmit, control, isSubmiting, isValid } =
+    useStudentProfileForm(studentData);
   return (
-    <form className="w-full" onSubmit={onFormSubmit}>
+    <form className="w-full" onSubmit={onSubmit}>
       <FieldGroup>
         <FieldSet className="grid grid-cols-1 md:grid-cols-2">
           <FieldLegend>
@@ -29,69 +32,142 @@ export const StudentProfileForm = ({
           <Field className="col-span-2">
             <FieldLabel>Student Code</FieldLabel>
             <Input
-              placeholder="Update your first name"
+              placeholder="Student Code"
               readOnly
               disabled
-              value={studentData.studentCode}
+              value={studentData.code}
             />
           </Field>
-          <Field>
-            <FieldLabel>First Name</FieldLabel>
+          <Field className="col-span-2">
+            <FieldLabel>Student Year</FieldLabel>
             <Input
-              placeholder="Update your first name"
-              {...register("firstName")}
-              aria-invalid={!!errors.firstName}
+              placeholder="Student Year"
+              readOnly
+              disabled
+              value={studentData.year}
             />
-            {errors.firstName && (
-              <FieldError>{errors.firstName.message}</FieldError>
+          </Field>
+          {/* First Name */}
+          <Controller
+            name="first_name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                className="col-span-2 md:col-span-1"
+              >
+                <FieldLabel htmlFor="first_name">First Name</FieldLabel>
+                <Input
+                  {...field}
+                  id="first_name"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Update your first name"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
             )}
-          </Field>
-          <Field>
-            <FieldLabel>Parent's Name</FieldLabel>
-            <Input
-              placeholder="Update your parent's name"
-              {...register("parentName")}
-              aria-invalid={!!errors.parentName}
-            />
-            {errors.parentName && (
-              <FieldError>{errors.parentName.message}</FieldError>
+          />
+
+          {/* Parent's Name */}
+          <Controller
+            name="parent_name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                className="col-span-2 md:col-span-1"
+              >
+                <FieldLabel htmlFor="parent_name">Parent's Name</FieldLabel>
+                <Input
+                  {...field}
+                  id="parent_name"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Update your parent's name"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
             )}
-          </Field>
-          <Field>
-            <FieldLabel>Grandparent's Name</FieldLabel>
-            <Input
-              placeholder="Update your grandparent's name"
-              {...register("grandparentName")}
-              aria-invalid={!!errors.grandparentName}
-            />
-            {errors.grandparentName && (
-              <FieldError>{errors.grandparentName.message}</FieldError>
+          />
+
+          {/* Grandparent's Name */}
+          <Controller
+            name="grandparent_name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                className="col-span-2 md:col-span-1"
+              >
+                <FieldLabel htmlFor="grandparent_name">
+                  Grandparent's Name
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="grandparent_name"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Update your grandparent's name"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
             )}
-          </Field>
-          <Field>
-            <FieldLabel>Family's Name</FieldLabel>
-            <Input
-              placeholder="Update your family name"
-              {...register("familyName")}
-              aria-invalid={!!errors.familyName}
-            />
-            {errors.familyName && (
-              <FieldError>{errors.familyName.message}</FieldError>
+          />
+
+          {/* Family Name */}
+          <Controller
+            name="family_name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field
+                className="col-span-2 md:col-span-1"
+                data-invalid={fieldState.invalid}
+              >
+                <FieldLabel htmlFor="family_name">Family Name</FieldLabel>
+                <Input
+                  {...field}
+                  id="family_name"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Update your family name"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
             )}
-          </Field>
-          <Field className="md:col-span-2">
-            <FieldLabel>Email</FieldLabel>
-            <Input
-              type="email"
-              placeholder="Update your email address"
-              {...register("email")}
-              aria-invalid={!!errors.email}
-            />
-            {errors.email && <FieldError>{errors.email.message}</FieldError>}
-          </Field>
+          />
+
+          {/* Email */}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field className="col-span-2" data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="email">E-Mail</FieldLabel>
+                <Input
+                  {...field}
+                  id="email"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="m@example.com"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
         </FieldSet>
         <FieldSet>
-          <Button className="w-full md:w-2/5 lg:w-1/5">Save Changes</Button>
+          <Field>
+            <Button type="submit" disabled={isSubmiting || !isValid}>
+              {isSubmiting ? "Saving Changes" : "Save Changes"}
+              {isSubmiting && <Spinner />}
+            </Button>
+          </Field>
         </FieldSet>
       </FieldGroup>
     </form>
