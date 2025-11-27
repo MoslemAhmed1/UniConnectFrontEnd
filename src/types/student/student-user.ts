@@ -1,9 +1,8 @@
 import { YEARS } from "@/constants/student/student";
 
-// TODO: Modify this when the ER is completed
 type StudentUser = {
-  profileUrl?: string;
-  studentCode: string;
+  image_url?: string;
+  code: string;
   first_name: string;
   parent_name: string;
   grandparent_name?: string;

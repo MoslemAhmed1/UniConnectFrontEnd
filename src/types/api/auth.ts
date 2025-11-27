@@ -1,13 +1,15 @@
-export type userRoles =
-  | "admin"
-  | "student"
-  | "class_representitive"
-  | "course_head"
-  | "professer";
+import type { StudentUser } from "../student/student-user";
 
-export type AuthUser = {
-  userId: string;
-  role: userRoles;
+export type serverRolesType =
+  | "student"
+  | "professor/ta"
+  | "system_admin"
+  | "class_representative"
+  | "course_head";
+
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type AuthUser = PartialBy<StudentUser, "year" | "code"> & {
+  role: serverRolesType;
 };
 
 export type loginRequestBody = {

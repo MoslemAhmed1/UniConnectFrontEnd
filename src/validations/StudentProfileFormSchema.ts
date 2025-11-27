@@ -1,11 +1,15 @@
 import * as z from "zod";
+import { YEARS } from "@/constants/student/student";
 
 const StudentProfileFormSchema = z.object({
-  firstName: z.string().nonempty("You must enter a first name"),
-  parentName: z.string().nonempty("You must enter a parent name"),
-  grandparentName: z.string().nonempty("You must enter a grandparent name"),
-  familyName: z.string().nonempty("You must enter a family name"),
-  email: z.email(),
+  image_url: z.url().nullable(),
+  code: z.string().nonempty("You must enter a code"),
+  first_name: z.string().nonempty("You must enter a first name"),
+  parent_name: z.string().nonempty("You must enter a parent name"),
+  grandparent_name: z.string().optional(),
+  family_name: z.string().optional(),
+  email: z.email().nonempty("Your must enter an email."),
+  year: z.enum(YEARS),
 });
 
 type InferedStudentProfileSchema = z.infer<typeof StudentProfileFormSchema>;

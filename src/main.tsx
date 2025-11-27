@@ -18,6 +18,7 @@ import LoginPage from "./pages/user/login";
 import SignupPage from "./pages/user/signup";
 import AuthProvider from "./providers/AuthProvider";
 import ModalProvider from "./providers/ModalProvider";
+import { AuthGuard } from "./components/guards/AuthGuard";
 
 const queryClient = new QueryClient();
 
@@ -32,11 +33,13 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/student" element={<StudentLayout />}>
                 <Route path="calendar" element={<Calendar />} />
-                <Route path="profile" element={<StudentProfile />} />
                 <Route path="groups/:id" element={<Group />} />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="courses" element={<AllCourses />} />
                 <Route path="materials/:id/:category" element={<Materials />} />
+                <Route element={<AuthGuard />}>
+                  <Route path="profile" element={<StudentProfile />} />
+                </Route>
               </Route>
               <Route path="course/:id" element={<CoursePage />} />
               <Route path="/admin">

@@ -1,29 +1,57 @@
+import api from "@/lib/axios";
 import type { StudentUser } from "@/types/student/student-user";
 import {
   type InferedStudentProfileSchema,
   StudentProfileFormSchema,
 } from "@/validations/StudentProfileFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const useStudentProfileForm = (studentData: StudentUser) => {
+  const client = useQueryClient();
   const {
-    register,
     handleSubmit,
-    formState: { errors },
+    control,
+    formState: { isValid },
   } = useForm<InferedStudentProfileSchema>({
     resolver: zodResolver(StudentProfileFormSchema),
+    mode: "onBlur",
     defaultValues: studentData,
   });
 
-  const onSubmit: SubmitHandler<InferedStudentProfileSchema> = (data) => {
-    console.log(data);
-  };
+  const { mutateAsync: updateProfile, isPending } = useMutation({
+    mutationKey: ["profileUpdate"],
+    mutationFn: (data: InferedStudentProfileSchema) => {
+      return api.patch("/api/users/me", data);
+    },
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ["student-profile-data"] });
+      toast.success("Successfully updated profile data.");
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.data && "message" in err.response.data) {
+          const message = err.response.data.message;
+          toast.error(message);
+        }
+      }
+
+      toast.error("An unkown error occurred!");
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    await updateProfile(data);
+  });
 
   return {
-    register,
-    onFormSubmit: handleSubmit(onSubmit),
-    errors,
+    control,
+    onSubmit,
+    isSubmiting: isPending,
+    isValid,
   };
 };
 

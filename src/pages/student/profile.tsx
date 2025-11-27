@@ -6,17 +6,17 @@ import { Spinner } from "@/components/ui/spinner";
 
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { useStudentProfileData } from "@/hooks/student/use-student-profile-data";
-import { School, UserRoundPen } from "lucide-react";
+import { UserRoundPen } from "lucide-react";
 
 export const StudentProfile = () => {
   const { profileData, isLoading } = useStudentProfileData();
 
   return (
-    <div className="w-full flex flex-col items-center  m-auto p-10 h-dvh md:w-7/10 xl:w-5/10">
+    <div className="w-full flex flex-col items-center  m-auto p-10 h-full md:w-full xl:w-6/10">
       <div className="flex flex-row justify-start w-full">
         <div className="">
           <Avatar className="w-30 h-30 mr-5 rounded-lg">
-            <AvatarImage src={profileData?.profileUrl} />
+            <AvatarImage src={profileData?.image_url} />
             <AvatarFallback className="rounded-lg">ST</AvatarFallback>
           </Avatar>
           <Button
@@ -41,17 +41,18 @@ export const StudentProfile = () => {
             <UserRoundPen />
             <span className="max-md:hidden">Profile Settings</span>
           </TabsTrigger>
-          <TabsTrigger value="classes">
-            <School />
-            <span className="max-md:hidden">Joined Classes</span>
-          </TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
           <Card className="p-5 flex items-center justify-center ">
-            {isLoading || !profileData ? (
+            {!isLoading && !profileData && (
+              <p className="text-red-500">
+                An error has occurred couldn't load profile data.
+              </p>
+            )}
+            {isLoading ? (
               <Spinner className="size-8 text-gray-500" />
             ) : (
-              <StudentProfileForm studentData={profileData} />
+              profileData && <StudentProfileForm studentData={profileData} />
             )}
           </Card>
         </TabsContent>

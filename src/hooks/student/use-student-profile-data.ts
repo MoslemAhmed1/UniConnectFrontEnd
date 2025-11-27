@@ -1,25 +1,31 @@
+import api from "@/lib/axios";
 import type { StudentUser } from "@/types/student/student-user";
 import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
 
 const useStudentProfileData = () => {
-  const { data: profileData, isLoading } = useQuery<StudentUser>({
+  const { data: profileData, isLoading } = useQuery({
     queryKey: ["student-profile-data"],
-    queryFn: () => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const tempUser: StudentUser = {
-            studentCode: "912912912",
-            profileUrl:
-              "https://tr.rbxcdn.com/180DAY-d4a6d1564bf7c0e65447501bdb3cc584/420/420/FaceAccessory/Webp/noFilter",
-            firstName: "kit",
-            parentName: "cat",
-            grandparentName: "boss",
-            familyName: "abood",
-            email: "cat_99@cats.com",
-          };
-          resolve(tempUser);
-        }, 2000);
-      });
+    queryFn: async () => {
+      try {
+        const res = await api.get<StudentUser>("/api/users/me");
+
+        if (!res.data.family_name) res.data.family_name = "";
+        if (!res.data.grandparent_name) res.data.grandparent_name = "";
+
+        return res.data;
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          if (err.response?.data && "message" in err.response.data) {
+            const message = err.response.data.message;
+            toast.error(message);
+            return;
+          }
+
+          toast.error("Unexpected error occurred.");
+        }
+      }
     },
   });
 
