@@ -16,58 +16,60 @@ export default function Dashboard() {
   const { profileData, isLoading: isLoadingProfile } = useStudentProfileData();
   const { calendarEvents, isLoading: isLoadingCalendar } = useStudentCalendar();
   const { courses, isLoading: isLoadingCourses } = useStudentCourses();
-  const { announcements, isLoading: isLoadingAnnouncements } = useStudentAnnouncements();
-  const { getUpcomingDeadlines, formatDeadlineDate, getDeadlineColor } = useDeadlineUtils();
+  const { announcements, isLoading: isLoadingAnnouncements } =
+    useStudentAnnouncements();
+  const { getUpcomingDeadlines, formatDeadlineDate, getDeadlineColor } =
+    useDeadlineUtils();
 
-  const studentName = profileData ? (profileData.firstName ? profileData.firstName : "Student") : "Student";
+  const studentName = profileData
+    ? profileData.firstName
+      ? profileData.firstName
+      : "Student"
+    : "Student";
   const upcomingDeadlines = getUpcomingDeadlines(calendarEvents);
   const upcomingEventsCount = useUpcomingEventsCount(calendarEvents);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="container mx-auto px-6 py-8">
+      {/* Welcome Section */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          {isLoadingProfile ? "Welcome back!" : `Welcome back, ${studentName}!`}
+        </h1>
+        <p className="text-slate-500">
+          Here's what's happening with your courses today.
+        </p>
+      </div>
 
-      <div className="container mx-auto px-6 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            {isLoadingProfile ? (
-              "Welcome back!"
-            ) : (
-              `Welcome back, ${studentName}!`
-            )}
-          </h1>
-          <p className="text-slate-500">
-            Here's what's happening with your courses today.
-          </p>
+      {/* Quick Stats */}
+      <DashboardStats
+        upcomingEventsCount={upcomingEventsCount}
+        isLoadingCalendar={isLoadingCalendar}
+        activeCoursesCount={courses.length}
+      />
+
+      <div className="grid lg:grid-cols-3 gap-8">
+        {/* Left Section */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Courses Section */}
+          <DashboardCourses courses={courses} isLoading={isLoadingCourses} />
+
+          {/* Recent Announcements */}
+          <DashboardAnnouncements
+            announcements={announcements}
+            isLoading={isLoadingAnnouncements}
+          />
         </div>
 
-        {/* Quick Stats */}
-        <DashboardStats
-          upcomingEventsCount={upcomingEventsCount}
-          isLoadingCalendar={isLoadingCalendar}
-          activeCoursesCount={courses.length}
-        />
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Section */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Courses Section */}
-            <DashboardCourses courses={courses} isLoading={isLoadingCourses} />
-
-            {/* Recent Announcements */}
-            <DashboardAnnouncements announcements={announcements} isLoading={isLoadingAnnouncements} />
-          </div>
-
-          {/* Right Section */}
-          <div className="space-y-6">
-            {/* Deadlines Widget */}
-            <DashboardDeadlines
-              upcomingDeadlines={upcomingDeadlines}
-              isLoadingCalendar={isLoadingCalendar}
-              formatDeadlineDate={formatDeadlineDate}
-              getDeadlineColor={getDeadlineColor}
-            />
-          </div>
+        {/* Right Section */}
+        <div className="space-y-6">
+          {/* Deadlines Widget */}
+          <DashboardDeadlines
+            upcomingDeadlines={upcomingDeadlines}
+            isLoadingCalendar={isLoadingCalendar}
+            formatDeadlineDate={formatDeadlineDate}
+            getDeadlineColor={getDeadlineColor}
+          />
         </div>
       </div>
     </div>

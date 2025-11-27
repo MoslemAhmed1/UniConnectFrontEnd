@@ -32,8 +32,6 @@ const useSignupForm = () => {
     watch,
   } = form;
 
-  console.log(isValid);
-
   const selectedRole = watch("role");
 
   const { mutateAsync: signup } = useMutation<void, Error, InferedFormSchema>({
@@ -67,7 +65,6 @@ const useSignupForm = () => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     try {
       await signup(data);
 
