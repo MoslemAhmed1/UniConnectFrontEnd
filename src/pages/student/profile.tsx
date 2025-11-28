@@ -1,3 +1,5 @@
+import { CreateCourseModal } from "@/components/professor/course/CreateCourseModal";
+import { UpdateCourseModal } from "@/components/professor/course/UpdateCourseModal";
 import { StudentProfileForm } from "@/components/student/profile/StudentProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -35,6 +37,7 @@ export const StudentProfile = () => {
           </p>
         </div>
       </div>
+      <CreateCourseModal />
       <Tabs defaultValue="profile" className="w-full mt-2">
         <TabsList className="w-full">
           <TabsTrigger value="profile">
@@ -55,9 +58,6 @@ export const StudentProfile = () => {
               profileData && <StudentProfileForm studentData={profileData} />
             )}
           </Card>
-        </TabsContent>
-        <TabsContent value="classes">
-          <h2>Classes</h2>
         </TabsContent>
       </Tabs>
     </div>

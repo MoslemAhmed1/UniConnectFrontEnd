@@ -1,11 +1,10 @@
+import type { YEARS } from "@/constants/student/student";
+
 type Course = {
   code: string;
   name: string;
   image_url: string;
-  instructor: string; // temporary till backend is implemented
-  class: string; // semester/year --> e.g "Fall 2024"
-  // Additional attributes can be added here
+  year: (typeof YEARS)[number];
 };
 
 export { type Course };
-

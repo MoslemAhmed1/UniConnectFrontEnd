@@ -86,11 +86,11 @@ const useGroup = () => {
   }, [id, queryClient]);
 
   const sendMessage = async () => {
-    if (!message || !auth.user?.userId) return;
+    if (!message || !auth.user?.id) return;
 
     const newMessage = {
       content: message,
-      sender_id: auth.user.userId,
+      sender_id: auth.user.id,
     };
 
     await api.post(`/api/groups/${id}/messages`, newMessage);
@@ -105,7 +105,7 @@ const useGroup = () => {
     messages: messagesWithGroup?.messages ?? [],
     isLoadingMessages,
     sendMessage,
-    userId: auth.user?.userId,
+    userId: auth.user?.id,
     authLoading,
   };
 };
