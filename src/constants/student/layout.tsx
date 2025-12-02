@@ -3,7 +3,6 @@ import {
   BookA,
   Calendar,
   LayoutDashboard,
-  Users,
   type LucideProps,
 } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
@@ -29,11 +28,6 @@ export const STUDENT_SIDEBAR_ITEMS: {
     icon: Book,
     url: "courses",
     title: "My Courses",
-  },
-  {
-    icon: Users,
-    url: "groups",
-    title: "Scientific Discussion Groups",
   },
   {
     icon: BookA,
