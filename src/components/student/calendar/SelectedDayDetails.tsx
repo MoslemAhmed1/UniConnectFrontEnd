@@ -65,7 +65,8 @@ const SelectedDayDetails = ({
                   <Badge
                     className={`capitalize ${EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName}`}
                   >
-                    {event.type}
+                    {EVENT_TYPE_TO_STYLINGS[event.type].prettyName ||
+                      event.type}
                   </Badge>
                   {event.title}
                 </ItemTitle>
@@ -73,7 +74,7 @@ const SelectedDayDetails = ({
                   {/* Sanitize incoming HTML to prevent XSS */}
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(event.stringified_notes),
+                      __html: DOMPurify.sanitize(event.notes),
                     }}
                   />
                 </ItemDescription>

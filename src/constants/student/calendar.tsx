@@ -3,6 +3,7 @@ import {
   BookA,
   ChartBarIncreasing,
   ClipboardList,
+  Microscope,
   NotebookPen,
   Presentation,
 } from "lucide-react";
@@ -10,7 +11,7 @@ import type { ReactNode } from "react";
 
 export const EVENT_TYPE_TO_STYLINGS: Record<
   CalendarEventType,
-  { backgroundColorClassName: string; icon: ReactNode }
+  { backgroundColorClassName: string; icon: ReactNode; prettyName?: string }
 > = {
   exam: {
     backgroundColorClassName: "bg-red-600",
@@ -31,5 +32,10 @@ export const EVENT_TYPE_TO_STYLINGS: Record<
   assignment: {
     backgroundColorClassName: "bg-violet-700",
     icon: <BookA />,
+  },
+  lab_exam: {
+    backgroundColorClassName: "bg-orange-600",
+    icon: <Microscope />,
+    prettyName: "lab exam",
   },
 };
