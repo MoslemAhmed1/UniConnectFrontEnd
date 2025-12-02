@@ -10,7 +10,7 @@ import {
 import { type Notification as TNotification } from "@/types/student/notification";
 import converToTimeWithAmPm from "@/utils/time/convert-to-time-am-pm";
 import { isToday } from "date-fns/isToday";
-import { Book, Users } from "lucide-react";
+import { Calendar, Megaphone } from "lucide-react";
 
 type NotificationProps = {
   notification: TNotification;
@@ -22,8 +22,8 @@ const Notification = ({
   return (
     <Item variant="outline" className="mb-2">
       <ItemMedia variant="icon">
-        {source === "course" && <Book />}
-        {source === "discussion_group" && <Users />}
+        {source === "announcement" && <Megaphone />}
+        {source === "calendar_event" && <Calendar />}
       </ItemMedia>
       <ItemContent>
         <ItemTitle className="flex justify-between w-full">
@@ -38,7 +38,7 @@ const Notification = ({
       </ItemContent>
       <ItemFooter className="ms-auto self-end">
         {isToday(created_at)
-          ? converToTimeWithAmPm(created_at)
+          ? converToTimeWithAmPm(new Date(created_at).getTime())
           : new Date(created_at).toDateString()}
       </ItemFooter>
     </Item>

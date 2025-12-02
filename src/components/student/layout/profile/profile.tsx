@@ -7,16 +7,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/providers/context/authContext";
 import { LogOut, User } from "lucide-react";
 
 const Profile = () => {
+  const { auth } = useAuth();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
           <Avatar>
             <AvatarImage
-              src="https://github.com/shadcn.png"
+              src={auth.user?.image_url}
               alt="Your profile avatar."
             />
             <AvatarFallback>

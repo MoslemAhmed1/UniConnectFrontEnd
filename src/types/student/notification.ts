@@ -1,8 +1,8 @@
 export type Notification = {
-  created_at: number;
+  created_at: string;
   content: string;
   marked_as_read: boolean;
-  source: string;
+  source: "calendar_event" | "announcement";
   title: string;
   //   is_global: boolean;
 };

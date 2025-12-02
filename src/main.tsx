@@ -31,16 +31,30 @@ createRoot(document.getElementById("root")!).render(
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
-              <Route path="/student" element={<StudentLayout />}>
-                <Route path="calendar" element={<Calendar />} />
-                <Route path="groups/:id" element={<Group />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="courses" element={<AllCourses />} />
-                <Route path="materials/:id/:category" element={<Materials />} />
-                <Route element={<AuthGuard />}>
+              <Route
+                element={
+                  <AuthGuard
+                    allowedRoles={[
+                      "student",
+                      "class_representative",
+                      "course_head",
+                    ]}
+                  />
+                }
+              >
+                <Route path="/student" element={<StudentLayout />}>
+                  <Route path="calendar" element={<Calendar />} />
+                  <Route path="groups/:id" element={<Group />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="courses" element={<AllCourses />} />
+                  <Route
+                    path="materials/:id/:category"
+                    element={<Materials />}
+                  />
                   <Route path="profile" element={<StudentProfile />} />
                 </Route>
               </Route>
+
               <Route path="course/:id" element={<CoursePage />} />
               <Route path="/admin">
                 <Route path="create" element={<CreateAdminPage />} />
