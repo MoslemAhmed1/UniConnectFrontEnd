@@ -14,7 +14,7 @@ const GroupsMenuItem = () => {
         <CollapsibleContent>
           <SidebarMenuSub>
             {groups?.map((group) => (
-              <GroupItem group={group} />
+              <GroupItem key={group.id} group={group} />
             ))}
           </SidebarMenuSub>
         </CollapsibleContent>

@@ -43,6 +43,7 @@ const useLoginForm = () => {
         else from = "/";
       }
       navigate(from, { replace: true });
+      setAuth({ token: res.data.accessToken, user: res.data.user });
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data && "message" in err.response.data) {

@@ -61,7 +61,7 @@ export function CourseFieldGroup({ control }: CourseFieldGroupProps) {
               <Input
                 {...field}
                 aria-invalid={fieldState.invalid}
-                placeholder="Propability"
+                placeholder="Probability"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
