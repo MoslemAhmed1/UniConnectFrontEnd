@@ -1,5 +1,4 @@
 import { CreateCourseModal } from "@/components/professor/course/CreateCourseModal";
-import { UpdateCourseModal } from "@/components/professor/course/UpdateCourseModal";
 import { StudentProfileForm } from "@/components/student/profile/StudentProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
