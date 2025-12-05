@@ -1,4 +1,4 @@
-import { CreateCourseModal } from "@/components/professor/course/CreateCourseModal";
+import { ChangePasswordForm } from "@/components/student/profile/ChangePasswordForm";
 import { StudentProfileForm } from "@/components/student/profile/StudentProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { useStudentProfileData } from "@/hooks/student/use-student-profile-data";
-import { UserRoundPen } from "lucide-react";
+import { Lock, UserRoundPen } from "lucide-react";
 
 export const StudentProfile = () => {
   const { profileData, isLoading } = useStudentProfileData();
@@ -36,12 +36,15 @@ export const StudentProfile = () => {
           </p>
         </div>
       </div>
-      <CreateCourseModal />
       <Tabs defaultValue="profile" className="w-full mt-2">
         <TabsList className="w-full">
           <TabsTrigger value="profile">
             <UserRoundPen />
             <span className="max-md:hidden">Profile Settings</span>
+          </TabsTrigger>
+          <TabsTrigger value="security">
+            <Lock />
+            <span className="max-md:hidden">Security Settings</span>
           </TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
@@ -56,6 +59,11 @@ export const StudentProfile = () => {
             ) : (
               profileData && <StudentProfileForm studentData={profileData} />
             )}
+          </Card>
+        </TabsContent>
+        <TabsContent value="security">
+          <Card className="p-5 flex items-center justify-center ">
+            <ChangePasswordForm />
           </Card>
         </TabsContent>
       </Tabs>

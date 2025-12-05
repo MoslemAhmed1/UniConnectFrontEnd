@@ -7,11 +7,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import api from "@/lib/axios";
 import { useAuth } from "@/providers/context/authContext";
 import { LogOut, User } from "lucide-react";
 
 const Profile = () => {
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
+
+  const handleLogout = async () => {
+    await api.get("/api/auth/logout");
+    setAuth({
+      token: null,
+      user: null,
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -36,10 +45,10 @@ const Profile = () => {
             </a>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuItem asChild>
-          <a href="/logout">
+        <DropdownMenuItem asChild onClick={handleLogout}>
+          <p>
             Log out <LogOut className="ms-auto" />
-          </a>
+          </p>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

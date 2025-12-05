@@ -20,6 +20,7 @@ import AuthProvider from "./providers/AuthProvider";
 import ModalProvider from "./providers/ModalProvider";
 import { AuthGuard } from "./components/guards/AuthGuard";
 import { ClassMembers } from "./pages/student/class-members";
+import { Unauthorized } from "./pages/Unauthorized";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,8 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/admin">
                 <Route path="create" element={<CreateAdminPage />} />
               </Route>
+
+              <Route path="/unauthorized" element={<Unauthorized />} />
             </Routes>
             <Toaster position="top-center" />
           </BrowserRouter>
