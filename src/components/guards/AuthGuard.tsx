@@ -24,11 +24,12 @@ export const AuthGuard = ({ allowedRoles }: AuthGuardProps) => {
   // not authorized go to unauthorized page
   // if not authenticated
   // go to login
+  if (!auth.user)
+    return <Navigate to="/login" state={{ from: location }} replace />;
 
-  return auth.user &&
-    (!allowedRoles || allowedRoles.includes(auth.user.role)) ? (
+  return !allowedRoles || allowedRoles.includes(auth.user.role) ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
+    <Navigate to="/unauthorized" replace />
   );
 };
