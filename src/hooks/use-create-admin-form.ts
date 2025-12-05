@@ -1,14 +1,14 @@
 import api from "@/lib/axios";
 import {
   basicFormSchema,
-  type InferedFormSchema,
+  type InferredFormSchema,
 } from "@/validations/BasicFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const useCreateAdminForm = () => {
-  const form = useForm<InferedFormSchema>({
+  const form = useForm<InferredFormSchema>({
     resolver: zodResolver(basicFormSchema),
     defaultValues: {
       firstName: "",

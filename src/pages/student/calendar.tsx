@@ -2,6 +2,9 @@ import ConfiguredCalendar from "@/components/student/calendar/ConfiguredCalendar
 import Legend from "@/components/student/calendar/Legend";
 import SelectedDayDetails from "@/components/student/calendar/SelectedDayDetails";
 import { useStudentCalendar } from "@/hooks/student/use-student-calendar";
+// import AddEventModal from "@/components/common/course/AddEventModal";
+// import CalendarSection from "@/components/common/course/CalendarSection";
+// import type { CalendarEvent } from "@/types/student/calendar-event";
 
 export default function StudentCalendar() {
   const { calendarEvents, date, isLoading, setDate } = useStudentCalendar();
@@ -30,3 +33,15 @@ export default function StudentCalendar() {
     </div>
   );
 }
+
+          {/* <TabsContent value="events">
+            {featureFlags.showAddCalendarEventBtn && (
+              <div className="flex justify-end mb-4">
+                <AddEventModal open={openDialog === "event"} onOpenChange={(open) => setOpenDialog(open ? "event" : null)} />
+              </div>
+            )}
+            <CalendarSection
+              calendarEvents={calendarEvents}
+              // allowModifyAnnouncements={featureFlags.showAddCalendarEventBtn}
+            />
+          </TabsContent> */}

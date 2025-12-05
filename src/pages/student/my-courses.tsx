@@ -1,7 +1,7 @@
 import { useStudentCourses } from "@/hooks/student/use-student-courses";
 import CourseCard from "@/components/student/dashboard/CourseCard";
 
-export default function AllCourses() {
+export default function MyStudentCourses() {
   const { courses, isLoading } = useStudentCourses();
 
   return (

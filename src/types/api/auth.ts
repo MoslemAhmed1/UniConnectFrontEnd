@@ -1,5 +1,4 @@
 import type { StudentUser } from "../student/student-user";
-
 export type serverRolesType =
   | "student"
   | "professor/ta"

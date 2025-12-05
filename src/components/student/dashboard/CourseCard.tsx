@@ -8,7 +8,7 @@ type CourseCardProps = {
 
 export default function CourseCard({ course }: CourseCardProps) {
   return (
-    <Link to={`/course/${course.code}`}>
+    <Link to={`/student/courses/${course.code}`}>
       <Card className="overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer p-0 gap-0">
         <CardHeader className="p-0">
           <img src={course.image_url} alt={course.name}  className="w-full h-32 object-cover"/>
@@ -25,23 +25,3 @@ export default function CourseCard({ course }: CourseCardProps) {
     </Link>
   )
 }
-
-/*
-export default function CourseCard({ course, color }: CourseCardProps) {
-  return (
-    <Link to={`/course/${course.code}`}>
-      <Card className="hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer">
-        <CardContent className="p-4">
-          <div className={`w-full h-2 bg-gradient-to-r ${color} rounded-full mb-4`} />
-          <h3 className="font-semibold text-foreground mb-4">{course.name}</h3>
-          <p className="text-sm text-muted-foreground mb-4">{course.instructor}</p>
-          <div className="flex items-center justify-between text-sm mt-1">
-            <span className="text-muted-foreground">{course.code}</span>
-            <span className="text-primary font-medium">{course.class}</span>
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
-  )
-}
-*/

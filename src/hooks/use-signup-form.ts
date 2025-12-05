@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
 import {
   signupFormSchema,
-  type InferedFormSchema,
+  type InferredFormSchema,
 } from "@/validations/SignupFormSchama";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -13,7 +13,7 @@ import { toast } from "sonner";
 const useSignupForm = () => {
   const [submissionDone, setSubmissionDone] = useState(false);
 
-  const form = useForm<InferedFormSchema>({
+  const form = useForm<InferredFormSchema>({
     resolver: zodResolver(signupFormSchema),
     mode: "onBlur",
     defaultValues: {
@@ -35,7 +35,7 @@ const useSignupForm = () => {
 
   const selectedRole = watch("role");
 
-  const { mutateAsync: signup } = useMutation<void, Error, InferedFormSchema>({
+  const { mutateAsync: signup } = useMutation<void, Error, InferredFormSchema>({
     mutationKey: ["signup"],
     mutationFn: (data) => {
       if (selectedRole === "student") {

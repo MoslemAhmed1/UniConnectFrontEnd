@@ -4,20 +4,22 @@ import { FileText } from "lucide-react";
 import MaterialItem from "./MaterialItem";
 import type { Material } from "@/types/student/material";
 
+import AddMaterialModal from "@/components/common/course/modals/AddMaterialModal";
+
 type MaterialsSectionProps = {
   materials: Material[];
-  isLoading: boolean;
   courseCode: string;
+  allowModifyMaterials: boolean;
 };
 
-export default function MaterialsSection({ materials, isLoading, courseCode }: MaterialsSectionProps) {
+export default function MaterialsSection({ materials, courseCode, allowModifyMaterials }: MaterialsSectionProps) {
   const categoryFolders = [
-    { name: "Lecture Slides", category: "lecture", color: "from-blue-600 to-blue-600" },
-    { name: "Problem Sheets", category: "sheet", color: "from-teal-600 to-teal-600" },
-    { name: "Past Quizzes", category: "quiz", color: "from-teal-600 to-teal-600" },
-    { name: "Tutorials", category: "tutorial", color: "from-blue-600 to-teal-600" },
-    { name: "Textbook", category: "textbook", color: "from-teal-600 to-blue-600" },
-    { name: "Assignments", category: "assignment", color: "from-blue-600 to-teal-600" },
+    { name: "Lecture Slides", category: "lecture", color: "bg-blue-600" },
+    { name: "Problem Sheets", category: "sheet", color: "bg-teal-600" },
+    { name: "Past Quizzes", category: "quiz", color: "bg-cyan-600" },
+    { name: "Tutorials", category: "tutorial", color: "bg-sky-600" },
+    { name: "Textbook", category: "textbook", color: "bg-indigo-600" },
+    { name: "Assignments", category: "assignment", color: "bg-emerald-600" },
   ];
 
   const recentMaterials = materials.slice(0, 3);
@@ -30,10 +32,18 @@ export default function MaterialsSection({ materials, isLoading, courseCode }: M
     <div className="space-y-6">
       {/* Folders */}
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-4">Folders</h3>
+        <div className="flex justify-between">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Folders</h3>
+          {allowModifyMaterials && (
+            <div className="flex justify-end mb-3">
+              <AddMaterialModal courseCode={courseCode} />
+            </div>
+          )}
+        </div>
         <div className="grid md:grid-cols-3 gap-4">
+          {/* TODO: Hide Past Quizzes for Instructor */}
           {categoryFolders.map((folder) => (
-            <Link key={folder.category} to={`/materials/${courseCode}/${folder.category}`}>
+            <Link key={folder.category} to={allowModifyMaterials ? `/instructor/materials/${courseCode}/${folder.category}` : `/student/materials/${courseCode}/${folder.category}`}>
               <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02]">
                 <CardContent className="p-0">
                   <div className="flex items-center gap-4 pl-6">
@@ -62,17 +72,13 @@ export default function MaterialsSection({ materials, isLoading, courseCode }: M
           Recent Materials
         </h3>
         <Card className="divide-y gap-0 p-0">
-          {isLoading ? (
-            <p className="p-4 text-sm text-muted-foreground">
-              Loading materials...
-            </p>
-          ) : recentMaterials.length === 0 ? (
+          {recentMaterials.length === 0 ? (
             <p className="p-4 text-sm text-muted-foreground">
               No materials found
             </p>
           ) : (
             recentMaterials.map((material) => (
-              <MaterialItem key={material.id} material={material}/>
+              <MaterialItem key={material.id} material={material} allowModifyMaterials={allowModifyMaterials}/>
             ))
           )}
         </Card>

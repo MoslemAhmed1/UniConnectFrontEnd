@@ -3,7 +3,7 @@ import { useAuth } from "@/providers/context/authContext";
 import { type loginRequestBody, type loginResponse } from "@/types/api/auth";
 import {
   loginFormSchema,
-  type InferedFormSchema,
+  type InferredFormSchema,
 } from "@/validations/LoginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
@@ -17,7 +17,7 @@ const useLoginForm = () => {
   const location = useLocation();
   let from = location.state?.from?.pathname;
 
-  const form = useForm<InferedFormSchema>({
+  const form = useForm<InferredFormSchema>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",

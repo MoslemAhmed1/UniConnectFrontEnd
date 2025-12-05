@@ -1,18 +1,13 @@
+import type { File } from "@/types/student/file";
+
 type Material = {
-  // Main Attributes
   id: number | string;
   title: string;
   category: MaterialCategory;
+  uploaded_at: number;
   courseCode: string;
-  uploader_id?: number | string;
-
-  // Extra Attributes (for visualization)
-  type: string;
-  size: string;
-  uploaded_at: string;
   uploader: string;
-  
-  // Additional attributes can be added here
+  file: File;
 };
 
 type MaterialCategory = "lecture" | "sheet" | "quiz" | "assignment" | "tutorial" | "textbook";

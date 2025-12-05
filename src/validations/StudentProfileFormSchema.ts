@@ -12,6 +12,6 @@ const StudentProfileFormSchema = z.object({
   year: z.enum(YEARS),
 });
 
-type InferedStudentProfileSchema = z.infer<typeof StudentProfileFormSchema>;
+type InferredStudentProfileSchema = z.infer<typeof StudentProfileFormSchema>;
 
-export { StudentProfileFormSchema, type InferedStudentProfileSchema };
+export { StudentProfileFormSchema, type InferredStudentProfileSchema };

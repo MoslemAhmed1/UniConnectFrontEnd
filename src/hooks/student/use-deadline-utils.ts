@@ -1,5 +1,4 @@
-import type { CalendarEvent, CalendarEventType } from "@/types/student/calendar-event";
-import { EVENT_TYPE_TO_STYLINGS } from "@/constants/student/calendar";
+import type { CalendarEvent } from "@/types/student/calendar-event";
 
 const useDeadlineUtils = () => {
   const formatDeadlineDate = (timestamp: number): string => {
@@ -18,10 +17,6 @@ const useDeadlineUtils = () => {
     return date.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric", });
   };
 
-  const getDeadlineColor = (eventType: CalendarEventType): string => {
-    return EVENT_TYPE_TO_STYLINGS[eventType].backgroundColorClassName;
-  };
-
   // Return 5 soonest deadlines within 7 days
   const getUpcomingDeadlines = (calendarEvents: CalendarEvent[] | undefined): CalendarEvent[] => {
     if (!calendarEvents) return [];
@@ -30,13 +25,12 @@ const useDeadlineUtils = () => {
     const sevenDaysFromNow = now + 7 * 24 * 60 * 60 * 1000;
 
     return calendarEvents.filter((event) => event.deadline_at >= now && event.deadline_at <= sevenDaysFromNow)
-                        .sort((a, b) => a.deadline_at - b.deadline_at).slice(0, 5); // get top 5 deadlines
+                         .sort((a, b) => a.deadline_at - b.deadline_at).slice(0, 5); // get top 5 deadlines
 };
 
   return {
     getUpcomingDeadlines,
     formatDeadlineDate,
-    getDeadlineColor,
   };
 };
 

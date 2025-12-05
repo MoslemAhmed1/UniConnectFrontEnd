@@ -17,7 +17,7 @@ export default function StatCard({
   isLoading,
 }: StatCardProps) {
   return (
-    <Card className="hover:shadow-lg transition-shadow p-6">
+    <Card className="hover:shadow-lg transition-shadow p-6 gap-0">
       <CardHeader className="p-0 mb-0">
         <div className="flex items-center gap-4">
           <div className={`w-12 h-12 bg-linear-to-br ${color} rounded-xl flex items-center justify-center`}>
