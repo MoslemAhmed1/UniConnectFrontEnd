@@ -23,6 +23,6 @@ const signupFormSchema = basicFormSchema
     path: ["studentCode"],
   });
 
-type InferedFormSchema = z.infer<typeof signupFormSchema>;
+type InferredFormSchema = z.infer<typeof signupFormSchema>;
 
-export { signupFormSchema, type InferedFormSchema };
+export { signupFormSchema, type InferredFormSchema };

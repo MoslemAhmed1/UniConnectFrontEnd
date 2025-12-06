@@ -19,6 +19,6 @@ const basicFormSchema = z
     path: ["confirmPassword"],
   });
 
-type InferedFormSchema = z.infer<typeof basicFormSchema>;
+type InferredFormSchema = z.infer<typeof basicFormSchema>;
 
-export { basicFormSchema, type InferedFormSchema };
+export { basicFormSchema, type InferredFormSchema };

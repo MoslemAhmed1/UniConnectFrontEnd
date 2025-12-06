@@ -16,14 +16,12 @@ export default function Dashboard() {
   const { profileData, isLoading: isLoadingProfile } = useStudentProfileData();
   const { calendarEvents, isLoading: isLoadingCalendar } = useStudentCalendar();
   const { courses, isLoading: isLoadingCourses } = useStudentCourses();
-  const { announcements, isLoading: isLoadingAnnouncements } =
-    useStudentAnnouncements();
-  const { getUpcomingDeadlines, formatDeadlineDate, getDeadlineColor } =
-    useDeadlineUtils();
+  const { announcements, isLoading: isLoadingAnnouncements } = useStudentAnnouncements();
+  const { getUpcomingDeadlines, formatDeadlineDate } = useDeadlineUtils();
 
   const studentName = profileData
-    ? profileData.firstName
-      ? profileData.firstName
+    ? profileData.first_name
+      ? profileData.first_name
       : "Student"
     : "Student";
   const upcomingDeadlines = getUpcomingDeadlines(calendarEvents);
@@ -68,7 +66,6 @@ export default function Dashboard() {
             upcomingDeadlines={upcomingDeadlines}
             isLoadingCalendar={isLoadingCalendar}
             formatDeadlineDate={formatDeadlineDate}
-            getDeadlineColor={getDeadlineColor}
           />
         </div>
       </div>

@@ -5,6 +5,6 @@ const loginFormSchema = z.object({
   password: z.string().min(8, "Incorrect password."),
 });
 
-type InferedFormSchema = z.infer<typeof loginFormSchema>;
+type InferredFormSchema = z.infer<typeof loginFormSchema>;
 
-export { loginFormSchema, type InferedFormSchema };
+export { loginFormSchema, type InferredFormSchema };

@@ -16,7 +16,7 @@ export default function DashboardCourses({
     <section>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-slate-800">My Courses</h2>
-        <Link to="/courses">
+        <Link to="/student/courses">
           <Button variant="ghost" size="sm" className="cursor-pointer">
             View All
           </Button>

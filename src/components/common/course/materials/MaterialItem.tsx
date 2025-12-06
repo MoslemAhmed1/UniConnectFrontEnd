@@ -1,15 +1,29 @@
 import { Button } from "@/components/ui/button";
-import { FileText, Eye, Download } from "lucide-react";
+import { FileText, Eye, Download, Edit, Trash2 } from "lucide-react";
 import type { Material } from "@/types/student/material";
 import { CardTitle , CardDescription , CardContent } from "@/components/ui/card";
+import { formatDistanceToNow, format } from "date-fns";
 
 type MaterialItemProps = {
   material: Material;
+  allowModifyMaterials?: boolean;
 };
 
-export default function MaterialItem({ material }: MaterialItemProps) {
+export default function MaterialItem({ material, allowModifyMaterials }: MaterialItemProps) {
+  const uploadedAt = new Date(material.uploaded_at);
+  const now = new Date();
+  const diffInMs = now.getTime() - uploadedAt.getTime();
+  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+  let formattedDate: string;
+  if (diffInDays < 7) {
+    formattedDate = formatDistanceToNow(uploadedAt, { addSuffix: true });
+  } else {
+    formattedDate = format(uploadedAt, "MMM d, h:mma");
+  }
+
   return (
-      <CardContent className="p-6 hover:bg-muted/50 transition-colors">
+      <CardContent className="p-6 hover:bg-slate-100/70 transition-colors">
         <div className="flex items-center justify-between">
           {/* Left Section */}
           <div className="flex items-center gap-4 flex-1">
@@ -23,11 +37,11 @@ export default function MaterialItem({ material }: MaterialItemProps) {
               </CardTitle>
 
               <CardDescription className="flex items-center gap-2 text-sm mt-1">
-                <span>{material.type}</span>
+                <span>{material.file.type.toUpperCase()}</span>
                 <span>•</span>
-                <span>{material.size}</span>
+                <span>{material.file.size}</span>
                 <span>•</span>
-                <span>{material.uploaded_at}</span>
+                <span>{formattedDate}</span>
                 <span>•</span>
                 <span>{material.uploader}</span>
               </CardDescription>
@@ -36,6 +50,16 @@ export default function MaterialItem({ material }: MaterialItemProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
+            {allowModifyMaterials && (
+              <>
+                <Button variant="ghost" size="icon">
+                  <Edit className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </>
+            )}
             <Button variant="ghost" size="icon" className="cursor-pointer">
               <Eye className="w-5 h-5" />
             </Button>

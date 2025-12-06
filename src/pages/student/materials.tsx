@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStudentMaterials } from "@/hooks/student/use-student-materials";
 import type { Material } from "@/types/student/material";
-import MaterialSection from "@/components/student/course/MaterialSection";
+import MaterialSection from "@/components/common/course/materials/MaterialSection";
 
 const categoryList = [
   { id: "lecture", label: "Lecture Slides", category: "lecture" },

@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
 import type { StudentUser } from "@/types/student/student-user";
 import {
-  type InferedStudentProfileSchema,
+  type InferredStudentProfileSchema,
   StudentProfileFormSchema,
 } from "@/validations/StudentProfileFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,7 @@ const useStudentProfileForm = (studentData: StudentUser) => {
     handleSubmit,
     control,
     formState: { isValid },
-  } = useForm<InferedStudentProfileSchema>({
+  } = useForm<InferredStudentProfileSchema>({
     resolver: zodResolver(StudentProfileFormSchema),
     mode: "onBlur",
     defaultValues: studentData,
@@ -24,7 +24,7 @@ const useStudentProfileForm = (studentData: StudentUser) => {
 
   const { mutateAsync: updateProfile, isPending } = useMutation({
     mutationKey: ["profileUpdate"],
-    mutationFn: (data: InferedStudentProfileSchema) => {
+    mutationFn: (data: InferredStudentProfileSchema) => {
       return api.patch("/api/users/me", data);
     },
     onSuccess: () => {

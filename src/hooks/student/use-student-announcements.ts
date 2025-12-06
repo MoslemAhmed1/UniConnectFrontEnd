@@ -15,7 +15,7 @@ export const useStudentAnnouncements = () => {
                 content: "The midterm exam will be held on November 18, 2025 at 2:00 PM in Hall A. Please review chapters 1-6 and complete all practice problems.",
                 courseCode: "EEC-225",
                 uploader: "Dr. Sarah Johnson",
-                created_at: "2 hours ago",
+                created_at: Date.now() - 1 * 24 * 60 * 60 * 1000,
                 type: "announcement",
             },
             {
@@ -24,7 +24,7 @@ export const useStudentAnnouncements = () => {
                 content: "Due to the building maintenance, the lab session scheduled for Thursday has been moved to Friday at the same time.",
                 courseCode: "EEC-225",
                 uploader: "Dr. Sarah Johnson",
-                created_at: "5 hours ago",
+                created_at: Date.now() - 2 * 24 * 60 * 60 * 1000,
                 type: "announcement",
             },
             {
@@ -33,7 +33,7 @@ export const useStudentAnnouncements = () => {
                 content: "The project submission deadline has been extended to November 30, 2025 to allow more time for completion.",
                 courseCode: "EEC-225",
                 uploader: "Teaching Assistant",
-                created_at: "1 day ago",
+                created_at: Date.now() - 3 * 24 * 60 * 60 * 1000,
                 type: "announcement",
             },
             {
@@ -42,7 +42,7 @@ export const useStudentAnnouncements = () => {
                 content: "Due to the building maintenance, the lab session scheduled for Thursday has been moved to Friday at the same time.",
                 courseCode: "GEN-221",
                 uploader: "Dr. Emad Aziz",
-                created_at: "5 hours ago",
+                created_at: Date.now() - 4 * 24 * 60 * 60 * 1000,
                 type: "announcement",
             },
             ];

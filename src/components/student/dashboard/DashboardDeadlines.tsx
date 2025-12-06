@@ -3,25 +3,24 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "lucide-react"
 import { Link } from "react-router-dom"
 import DeadlineItem from "./DeadlineItem"
-import type { CalendarEvent, CalendarEventType } from "@/types/student/calendar-event"
+import type { CalendarEvent } from "@/types/student/calendar-event"
+import { EVENT_TYPE_TO_STYLINGS } from "@/constants/student/calendar"
 
 type DashboardDeadlinesProps = {
   upcomingDeadlines: CalendarEvent[]
   isLoadingCalendar: boolean
   formatDeadlineDate: (timestamp: number) => string
-  getDeadlineColor: (eventType: CalendarEventType) => string
 }
 
 export default function DashboardDeadlines({
   upcomingDeadlines,
   isLoadingCalendar,
-  formatDeadlineDate,
-  getDeadlineColor,
+  formatDeadlineDate
 }: DashboardDeadlinesProps) {
   return (
     <Card className="p-6 gap-0">
       <CardHeader className="space-y-4 p-0">
-          <h3 className="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <h3 className="font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-600" />
           Upcoming Deadlines
         </h3>
@@ -32,19 +31,19 @@ export default function DashboardDeadlines({
         ) : upcomingDeadlines.length === 0 ? (
           <p className="text-sm text-slate-500">No upcoming deadlines</p>
         ) : (
-          upcomingDeadlines.map((event: CalendarEvent) => (
+          upcomingDeadlines.map((event: CalendarEvent, index) => (
             <DeadlineItem
-              key={event.title + event.deadline_at} // Should i use "index" from the .map() instead ?
+              key={index} // Should i use "index" from the .map() instead ?
               title={event.title}
               date={formatDeadlineDate(event.deadline_at)}
               eventType={event.type}
-              backgroundColorClassName={getDeadlineColor(event.type)}
+              backgroundColorClassName={EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName}
             />
           ))
         )}
       </CardContent>
       <CardFooter>
-        <Link to="/calendar" className="w-full">
+        <Link to="/student/calendar" className="w-full">
           <Button className="w-full cursor-pointer bg-blue-700 hover:brightness-90 mt-4">
             Go To Calendar
           </Button>
