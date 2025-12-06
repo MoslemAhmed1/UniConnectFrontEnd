@@ -1,5 +1,5 @@
 import Logo from "@/components/global/Logo";
-import PopulatedSidebarContent from "@/components/student/layout/sidebar/PopulatedSidebarContent";
+import PopulatedSidebarContent from "@/components/layout/sidebar/PopulatedSidebarContent";
 import {
   Sidebar,
   SidebarFooter,
@@ -8,7 +8,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const StudentSidebar = () => {
+const GlobalSidebar = () => {
   const { open } = useSidebar();
 
   return (
@@ -24,4 +24,4 @@ const StudentSidebar = () => {
   );
 };
 
-export default StudentSidebar;
+export default GlobalSidebar;

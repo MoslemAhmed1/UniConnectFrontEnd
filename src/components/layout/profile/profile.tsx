@@ -10,6 +10,7 @@ import {
 import api from "@/lib/axios";
 import { useAuth } from "@/providers/context/authContext";
 import { LogOut, User } from "lucide-react";
+import { Link } from "react-router";
 
 const Profile = () => {
   const { auth, setAuth } = useAuth();
@@ -20,6 +21,14 @@ const Profile = () => {
       token: null,
       user: null,
     });
+  };
+
+  const getProfilePath = () => {
+    if (!auth.user) return "/";
+
+    return auth.user.role === "professor/ta"
+      ? "/instructor/profile"
+      : "/student/profile";
   };
 
   return (
@@ -40,9 +49,9 @@ const Profile = () => {
       <DropdownMenuContent className="w-40" align="start">
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <a href="/profile">
+            <Link to={getProfilePath()}>
               My Profile <User className="ms-auto" />
-            </a>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuItem asChild onClick={handleLogout}>

@@ -3,8 +3,8 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import Notifications from "@/components/student/layout/notifications/Notifications";
-import Profile from "@/components/student/layout/profile/profile";
+import Notifications from "@/components/layout/notifications/Notifications";
+import Profile from "@/components/layout/profile/profile";
 
 const NavBar = () => {
   return (

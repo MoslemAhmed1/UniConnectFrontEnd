@@ -21,7 +21,7 @@ export const useAssignCourseActions = (
   const { mutate: assignCourseHead, isPending: isAdding } = useMutation({
     mutationKey: ["assign-course-head"],
     mutationFn: (userId: string) => {
-      return api.post(`/api/courses/assign-course-head`, {
+      return api.post(`/api/courses/course-head/assign`, {
         userId,
         courseCode: chosenCourse,
       });
@@ -62,7 +62,7 @@ export const useAssignCourseActions = (
       courseCode: string;
       userId: string;
     }) => {
-      return api.post(`/api/courses/remove-course-head`, {
+      return api.post(`/api/courses/course-head/remove`, {
         userId,
         courseCode,
       });

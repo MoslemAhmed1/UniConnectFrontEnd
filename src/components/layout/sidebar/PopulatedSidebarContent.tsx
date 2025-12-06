@@ -1,4 +1,4 @@
-import GroupsMenuItem from "@/components/student/layout/sidebar/GroupsMenuItem";
+import GroupsMenuItem from "@/components/layout/sidebar/GroupsMenuItem";
 import {
   SidebarContent,
   SidebarGroup,
@@ -7,15 +7,28 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { INSTRUCTOR_SIDEBAR_ITEMS } from "@/constants/instructor/layout";
 import { STUDENT_SIDEBAR_ITEMS } from "@/constants/student/layout";
+import { useHasRole } from "@/hooks/use-has-role";
 
 const PopulatedSidebarContent = () => {
+  const { hasRole } = useHasRole();
+
+  const getSidebarItems = () => {
+    if (hasRole("student", "class_representative", "course_head"))
+      return STUDENT_SIDEBAR_ITEMS;
+    else if (hasRole("system_admin", "professor/ta"))
+      return INSTRUCTOR_SIDEBAR_ITEMS;
+
+    return [];
+  };
+
   return (
     <SidebarContent>
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-            {STUDENT_SIDEBAR_ITEMS.map((item) => (
+            {getSidebarItems().map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
                   <a href={item.url}>
@@ -25,7 +38,9 @@ const PopulatedSidebarContent = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
-            <GroupsMenuItem />
+            {hasRole("class_representative", "course_head", "student") && (
+              <GroupsMenuItem />
+            )}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

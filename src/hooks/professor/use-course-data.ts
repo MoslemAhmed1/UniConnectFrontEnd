@@ -3,7 +3,7 @@ import type { Course } from "@/types/student/course";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-export const useCourseData = (courseCode: string) => {
+export const useCourseData = (courseCode: string | undefined) => {
   const {
     data: courseData,
     isLoading,
@@ -26,6 +26,7 @@ export const useCourseData = (courseCode: string) => {
         }
       }
     },
+    enabled: courseCode !== undefined,
   });
 
   return {

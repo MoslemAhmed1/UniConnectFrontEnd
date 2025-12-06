@@ -6,7 +6,7 @@ import Calendar from "@/pages/student/calendar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
-import StudentLayout from "./layouts/student/StudentLayout";
+import GlobalLayout from "./layouts/GlobalLayout";
 import CreateAdminPage from "./pages/admin/CreateAdminPage";
 import MyStudentCourses from "./pages/student/my-courses";
 import { MyInstructorCourses } from "./pages/instructor/my-courses";
@@ -17,7 +17,7 @@ import AssignmentSubmissionProfessor from "./components/common/course/assignment
 import Dashboard from "./pages/student/dashboard";
 import Group from "./pages/student/group";
 import Materials from "./pages/student/materials";
-import { StudentProfile } from "./pages/student/profile";
+import { ProgilePage } from "./pages/profile";
 import LoginPage from "./pages/user/login";
 import SignupPage from "./pages/user/signup";
 import AuthProvider from "./providers/AuthProvider";
@@ -25,6 +25,7 @@ import ModalProvider from "./providers/ModalProvider";
 import { AuthGuard } from "./components/guards/AuthGuard";
 import { ClassMembers } from "./pages/student/class-members";
 import { Unauthorized } from "./pages/Unauthorized";
+import { UnAuthGuard } from "./components/guards/UnAuthGuard";
 
 const queryClient = new QueryClient();
 
@@ -35,28 +36,61 @@ createRoot(document.getElementById("root")!).render(
         <ModalProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route element={<AuthGuard allowedRoles={[ "student", "class_representative", "course_head" ]}/>}>
-                <Route path="/student" element={<StudentLayout />}>
-                  <Route path="calendar" element={<Calendar />} />
-                  <Route path="groups/:id" element={<Group />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="courses" element={<MyStudentCourses />} />
-                  <Route path="courses/:id" element={<StudentCoursePage />} />
-                  <Route path="courses/:id/assignment/:assignmentId" element={<AssignmentSubmission />} />
-                  <Route path="materials/:id/:category" element={<Materials />}/>
-                  <Route path="profile" element={<StudentProfile />} />
-                  <Route element={<AuthGuard allowedRoles={["class_representative"]} />}>
-                    <Route path="members" element={<ClassMembers />} />
+              <Route element={<UnAuthGuard />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+              </Route>
+
+              <Route element={<GlobalLayout />}>
+                <Route
+                  element={
+                    <AuthGuard
+                      allowedRoles={[
+                        "student",
+                        "class_representative",
+                        "course_head",
+                      ]}
+                    />
+                  }
+                >
+                  <Route path="/student">
+                    <Route path="calendar" element={<Calendar />} />
+                    <Route path="groups/:id" element={<Group />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="courses" element={<MyStudentCourses />} />
+                    <Route path="courses/:id" element={<StudentCoursePage />} />
+                    <Route
+                      path="courses/:id/assignment/:assignmentId"
+                      element={<AssignmentSubmission />}
+                    />
+                    <Route
+                      path="materials/:id/:category"
+                      element={<Materials />}
+                    />
+                    <Route path="profile" element={<ProgilePage />} />
+                    <Route
+                      element={
+                        <AuthGuard allowedRoles={["class_representative"]} />
+                      }
+                    >
+                      <Route path="members" element={<ClassMembers />} />
+                    </Route>
                   </Route>
                 </Route>
-              </Route>
-              <Route element={<AuthGuard allowedRoles={[ "professor/ta" ]}/>}>
-                <Route path="/instructor">
-                  <Route path="courses/:id" element={<InstructorCoursePage />} />
-                  <Route path="courses" element={<MyInstructorCourses />} />
-                  <Route path="courses/:id/assignment/:assignmentId" element={<AssignmentSubmissionProfessor />} />
+
+                <Route element={<AuthGuard allowedRoles={["professor/ta"]} />}>
+                  <Route path="/instructor">
+                    <Route path="profile" element={<ProgilePage />} />
+                    <Route
+                      path="courses/:id"
+                      element={<InstructorCoursePage />}
+                    />
+                    <Route path="courses" element={<MyInstructorCourses />} />
+                    <Route
+                      path="courses/:id/assignment/:assignmentId"
+                      element={<AssignmentSubmissionProfessor />}
+                    />
+                  </Route>
                 </Route>
               </Route>
               <Route path="/admin">
