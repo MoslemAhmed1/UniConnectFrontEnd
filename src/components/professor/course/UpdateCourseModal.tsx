@@ -12,16 +12,19 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { useCourseForm } from "@/hooks/professor/use-course-form";
 import { CourseFieldGroup } from "./CourseFieldGroup";
-import { useCourseData } from "@/hooks/professor/use-course-data";
+import { Edit } from "lucide-react";
+import type { Course } from "@/types/student/course";
 
-export const UpdateCourseModal = ({ courseCode }: { courseCode: string }) => {
-  const { courseData, isLoading, isError, error } = useCourseData(courseCode);
+export const UpdateCourseModal = ({ courseData }: { courseData: Course }) => {
   const { control, isValid, onSubmit, isPending } = useCourseForm(courseData);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Update Course</Button>
+        <Button variant="outline" size="sm" className="cursor-pointer">
+          <Edit className="w-4 h-4 mr-2" />
+          Modify Course
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>
@@ -32,15 +35,8 @@ export const UpdateCourseModal = ({ courseCode }: { courseCode: string }) => {
               course.
             </DialogDescription>
           </DialogHeader>
-          {isLoading ? (
-            <Spinner className="size-8 text-gray-500" />
-          ) : (
-            courseData && <CourseFieldGroup control={control} />
-          )}
-          {isError && (
-            <div className="">
-              <p className="text-red-400">{error?.message}</p>
-            </div>
+          {courseData && (
+            <CourseFieldGroup control={control} disableCode={true} />
           )}
           <DialogFooter>
             <DialogClose asChild>

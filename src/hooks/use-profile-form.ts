@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { StudentUser } from "@/types/student/student-user";
+import type { GlobalUser } from "@/types/user/user";
 import {
   type InferredStudentProfileSchema,
   StudentProfileFormSchema,
@@ -10,7 +10,7 @@ import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const useStudentProfileForm = (studentData: StudentUser) => {
+export const useProfileForm = (userData: GlobalUser) => {
   const client = useQueryClient();
   const {
     handleSubmit,
@@ -19,7 +19,7 @@ const useStudentProfileForm = (studentData: StudentUser) => {
   } = useForm<InferredStudentProfileSchema>({
     resolver: zodResolver(StudentProfileFormSchema),
     mode: "onBlur",
-    defaultValues: studentData,
+    defaultValues: userData,
   });
 
   const { mutateAsync: updateProfile, isPending } = useMutation({
@@ -54,5 +54,3 @@ const useStudentProfileForm = (studentData: StudentUser) => {
     isValid,
   };
 };
-
-export { useStudentProfileForm };

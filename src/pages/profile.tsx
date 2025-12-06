@@ -1,16 +1,16 @@
-import { ChangePasswordForm } from "@/components/student/profile/ChangePasswordForm";
-import { StudentProfileForm } from "@/components/student/profile/StudentProfileForm";
+import { ChangePasswordForm } from "@/components/profile/ChangePasswordForm";
+import { ProfileForm } from "@/components/profile/ProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import { useStudentProfileData } from "@/hooks/student/use-student-profile-data";
+import { useProfileData } from "@/hooks/use-profile-data";
 import { Lock, UserRoundPen } from "lucide-react";
 
-export const StudentProfile = () => {
-  const { profileData, isLoading } = useStudentProfileData();
+export const ProgilePage = () => {
+  const { profileData, isLoading } = useProfileData();
 
   return (
     <div className="w-full flex flex-col items-center  m-auto p-10 h-full md:w-full xl:w-6/10">
@@ -31,9 +31,7 @@ export const StudentProfile = () => {
         </div>
         <div className="flex flex-col justify-center items-start ml-5">
           <h1 className="font-bold text-4xl mb-2">Profile Settings</h1>
-          <p className="text-gray-600">
-            Manage your student UniConnect account.
-          </p>
+          <p className="text-gray-600">Manage your UniConnect account.</p>
         </div>
       </div>
       <Tabs defaultValue="profile" className="w-full mt-2">
@@ -57,7 +55,7 @@ export const StudentProfile = () => {
             {isLoading ? (
               <Spinner className="size-8 text-gray-500" />
             ) : (
-              profileData && <StudentProfileForm studentData={profileData} />
+              profileData && <ProfileForm userData={profileData} />
             )}
           </Card>
         </TabsContent>

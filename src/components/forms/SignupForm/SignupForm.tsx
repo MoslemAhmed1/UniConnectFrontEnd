@@ -1,5 +1,5 @@
 import useSignupForm from "@/hooks/use-signup-form";
-import { Link, Navigate } from "react-router";
+import { Link } from "react-router";
 import { Button } from "../../ui/button";
 import {
   Field,
@@ -20,21 +20,11 @@ import StudentCodeField from "./StudentCodeField";
 import StudentYearField from "./StudentYearField";
 
 const SignupForm = () => {
-  const {
-    onSubmit,
-    control,
-    isValid,
-    selectedRole,
-    isSubmitting,
-    submissionDone,
-    trigger,
-  } = useSignupForm();
+  const { onSubmit, control, isValid, selectedRole, isSubmitting, trigger } =
+    useSignupForm();
 
   return (
     <>
-      {submissionDone && selectedRole === "student" && (
-        <Navigate to="/calendar" replace />
-      )}
       <form className="flex flex-col gap-6" onSubmit={onSubmit}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-1 text-center">

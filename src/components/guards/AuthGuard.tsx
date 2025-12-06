@@ -18,12 +18,6 @@ export const AuthGuard = ({ allowedRoles }: AuthGuardProps) => {
       </div>
     );
 
-  // TODO: update this to have an unauthorized page
-  // if authenticated
-  // authorized -> go to route
-  // not authorized go to unauthorized page
-  // if not authenticated
-  // go to login
   if (!auth.user)
     return <Navigate to="/login" state={{ from: location }} replace />;
 

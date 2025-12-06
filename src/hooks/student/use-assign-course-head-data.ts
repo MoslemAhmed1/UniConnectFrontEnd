@@ -12,7 +12,9 @@ export const useAssignCourseHeadData = (id: string | undefined) => {
     queryFn: async () => {
       if (!id) throw Error("User id not avaliable");
       try {
-        const res = await api.get(`/api/courses/managed-courses/${id}`);
+        const res = await api.get(
+          `/api/courses/course-head/managed-courses/${id}`
+        );
         return res.data;
       } catch (err) {
         if (err instanceof AxiosError) {
@@ -35,7 +37,9 @@ export const useAssignCourseHeadData = (id: string | undefined) => {
     queryFn: async () => {
       if (!id) throw Error("User id not avaliable");
       try {
-        const res = await api.get(`/api/courses/manageable-courses/${id}`);
+        const res = await api.get(
+          `/api/courses/course-head/manageable-courses/${id}`
+        );
         return res.data;
       } catch (err) {
         if (err instanceof AxiosError) {

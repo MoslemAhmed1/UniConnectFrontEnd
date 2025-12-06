@@ -6,13 +6,11 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 const useSignupForm = () => {
-  const [submissionDone, setSubmissionDone] = useState(false);
-
   const form = useForm<InferredFormSchema>({
     resolver: zodResolver(signupFormSchema),
     mode: "onBlur",
@@ -24,6 +22,8 @@ const useSignupForm = () => {
       confirmPassword: "",
     },
   });
+
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -79,8 +79,7 @@ const useSignupForm = () => {
       }
 
       toast.success(toastMessage);
-
-      setSubmissionDone(true);
+      navigate("/login", { replace: true });
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data && "message" in err.response.data) {
@@ -103,7 +102,6 @@ const useSignupForm = () => {
     isValid,
     selectedRole,
     isSubmitting,
-    submissionDone,
   };
 };
 

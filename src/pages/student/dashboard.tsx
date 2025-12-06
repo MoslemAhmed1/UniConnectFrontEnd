@@ -1,5 +1,5 @@
 // Hooks
-import { useStudentProfileData } from "@/hooks/student/use-student-profile-data";
+import { useProfileData } from "@/hooks/use-profile-data";
 import { useStudentCalendar } from "@/hooks/student/use-student-calendar";
 import { useStudentCourses } from "@/hooks/student/use-student-courses";
 import { useStudentAnnouncements } from "@/hooks/student/use-student-announcements";
@@ -13,10 +13,11 @@ import DashboardAnnouncements from "@/components/student/dashboard/DashboardAnno
 import DashboardDeadlines from "@/components/student/dashboard/DashboardDeadlines";
 
 export default function Dashboard() {
-  const { profileData, isLoading: isLoadingProfile } = useStudentProfileData();
+  const { profileData, isLoading: isLoadingProfile } = useProfileData();
   const { calendarEvents, isLoading: isLoadingCalendar } = useStudentCalendar();
   const { courses, isLoading: isLoadingCourses } = useStudentCourses();
-  const { announcements, isLoading: isLoadingAnnouncements } = useStudentAnnouncements();
+  const { announcements, isLoading: isLoadingAnnouncements } =
+    useStudentAnnouncements();
   const { getUpcomingDeadlines, formatDeadlineDate } = useDeadlineUtils();
 
   const studentName = profileData

@@ -22,9 +22,13 @@ type CourseFieldGroupProps = {
     name: string;
     year: string;
   }>;
+  disableCode: boolean;
 };
 
-export function CourseFieldGroup({ control }: CourseFieldGroupProps) {
+export function CourseFieldGroup({
+  control,
+  disableCode = false,
+}: CourseFieldGroupProps) {
   return (
     <FieldGroup className="mb-5">
       <FieldSet>
@@ -44,6 +48,8 @@ export function CourseFieldGroup({ control }: CourseFieldGroupProps) {
               <FieldLabel htmlFor="code">Course Code: </FieldLabel>
               <Input
                 {...field}
+                disabled={disableCode}
+                readOnly={disableCode}
                 id="course_code"
                 aria-invalid={fieldState.invalid}
                 placeholder="CMPG102"

@@ -8,20 +8,19 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import type { StudentUser } from "@/types/student/student-user";
-import { useStudentProfileForm } from "@/hooks/student/use-student-profile-form";
+import { useProfileForm } from "@/hooks/use-profile-form";
 import { Controller } from "react-hook-form";
 import { Spinner } from "@/components/ui/spinner";
+import { useHasRole } from "@/hooks/use-has-role";
+import type { GlobalUser } from "@/types/user/user";
 
-type StudentProfileFormProps = {
-  studentData: StudentUser;
+type ProfileFormProps = {
+  userData: GlobalUser;
 };
 
-export const StudentProfileForm = ({
-  studentData,
-}: StudentProfileFormProps) => {
-  const { onSubmit, control, isSubmiting, isValid } =
-    useStudentProfileForm(studentData);
+export const ProfileForm = ({ userData }: ProfileFormProps) => {
+  const { onSubmit, control, isSubmiting, isValid } = useProfileForm(userData);
+  const { hasRole } = useHasRole();
   return (
     <form className="w-full" onSubmit={onSubmit}>
       <FieldGroup>
@@ -29,24 +28,31 @@ export const StudentProfileForm = ({
           <FieldLegend>
             <span className="text-xl font-bold">Profile Details</span>
           </FieldLegend>
-          <Field className="col-span-2">
-            <FieldLabel>Student Code</FieldLabel>
-            <Input
-              placeholder="Student Code"
-              readOnly
-              disabled
-              value={studentData.code}
-            />
-          </Field>
-          <Field className="col-span-2">
-            <FieldLabel>Student Year</FieldLabel>
-            <Input
-              placeholder="Student Year"
-              readOnly
-              disabled
-              value={studentData.year}
-            />
-          </Field>
+
+          {hasRole("class_representative", "course_head", "student") && (
+            <Field className="col-span-2">
+              <FieldLabel>Student Code</FieldLabel>
+              <Input
+                placeholder="Student Code"
+                readOnly
+                disabled
+                value={userData.code}
+              />
+            </Field>
+          )}
+
+          {hasRole("class_representative", "course_head", "student") && (
+            <Field className="col-span-2">
+              <FieldLabel>Student Year</FieldLabel>
+              <Input
+                placeholder="Student Year"
+                readOnly
+                disabled
+                value={userData.year}
+              />
+            </Field>
+          )}
+
           {/* First Name */}
           <Controller
             name="first_name"

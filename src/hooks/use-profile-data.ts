@@ -1,15 +1,15 @@
 import api from "@/lib/axios";
-import type { StudentUser } from "@/types/student/student-user";
+import type { GlobalUser } from "@/types/user/user";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-const useStudentProfileData = () => {
+export const useProfileData = () => {
   const { data: profileData, isLoading } = useQuery({
-    queryKey: ["student-profile-data"],
+    queryKey: ["profile-data"],
     queryFn: async () => {
       try {
-        const res = await api.get<StudentUser>("/api/users/me");
+        const res = await api.get<GlobalUser>("/api/users/me");
 
         if (!res.data.family_name) res.data.family_name = "";
         if (!res.data.grandparent_name) res.data.grandparent_name = "";
@@ -34,5 +34,3 @@ const useStudentProfileData = () => {
     isLoading,
   };
 };
-
-export { useStudentProfileData };

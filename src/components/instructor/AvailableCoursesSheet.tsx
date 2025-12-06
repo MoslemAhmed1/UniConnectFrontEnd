@@ -2,17 +2,27 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import type { Course } from "@/types/student/course";
+import { CreateCourseModal } from "../professor/course/CreateCourseModal";
 
 type AvailableCoursesSheetProps = {
   availableCourses: Course[];
-}
+};
 
-export default function AvailableCoursesSheet({availableCourses}: AvailableCoursesSheetProps) {
+export default function AvailableCoursesSheet({
+  availableCourses,
+}: AvailableCoursesSheetProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
@@ -27,7 +37,9 @@ export default function AvailableCoursesSheet({availableCourses}: AvailableCours
         </SheetTrigger>
         <SheetContent className="w-[400px] sm:w-[540px] gap-0">
           <SheetHeader className="p-6">
-            <SheetTitle className="text-gray-800 text-xl">Available Courses</SheetTitle>
+            <SheetTitle className="text-gray-800 text-xl">
+              Available Courses
+            </SheetTitle>
             <SheetDescription>
               Select a course to assign yourself as an instructor
             </SheetDescription>
@@ -43,12 +55,16 @@ export default function AvailableCoursesSheet({availableCourses}: AvailableCours
                       className="w-20 h-20 object-cover rounded-lg"
                     />
                     <div className="flex-1">
-                      <h3 className="font-semibold text-foreground mb-1">{course.name}</h3>
+                      <h3 className="font-semibold text-foreground mb-1">
+                        {course.name}
+                      </h3>
                       <div className="flex items-center gap-2 mb-3">
                         <Badge variant="outline">{course.code}</Badge>
                         <Badge variant="secondary">{course.class}</Badge>
                       </div>
-                      <Badge className="bg-muted text-muted-foreground">Not assigned</Badge>
+                      <Badge className="bg-muted text-muted-foreground">
+                        Not assigned
+                      </Badge>
                     </div>
                   </div>
                   {/* TODO: Implement Assign Self To Course */}
@@ -63,16 +79,10 @@ export default function AvailableCoursesSheet({availableCourses}: AvailableCours
             </div>
           </ScrollArea>
           <div className="p-6">
-            {/* TODO: Implement Create New Course */}
-            <Link to="">
-              <Button variant="outline" className="w-full">
-                <Plus className="w-4 h-4 mr-2" />
-                Create New Course
-              </Button>
-            </Link>
+            <CreateCourseModal />
           </div>
         </SheetContent>
       </Sheet>
     </div>
-  )
+  );
 }

@@ -17,21 +17,21 @@ export const STUDENT_SIDEBAR_ITEMS: {
   {
     icon: LayoutDashboard,
     title: "Dashboard",
-    url: "dashboard",
+    url: "/student/dashboard",
   },
   {
     icon: Calendar,
-    url: "calendar",
+    url: "/student/calendar",
     title: "Deadlines Calendar",
   },
   {
     icon: Book,
-    url: "courses",
+    url: "/student/courses",
     title: "My Courses",
   },
   {
     icon: BookA,
-    url: "assignments",
+    url: "/student/assignments",
     title: "Assignments",
   },
 ] as const;

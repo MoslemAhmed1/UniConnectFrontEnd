@@ -1,12 +1,13 @@
 import { useAuth } from "@/providers/context/authContext";
 import { Navigate, Outlet, useLocation } from "react-router";
 import { Spinner } from "../ui/spinner";
+import type { serverRolesType } from "@/types/api/auth";
 
 export const UnAuthGuard = () => {
   const { auth, loading } = useAuth();
   const location = useLocation();
   // TODO: Change calendar to the home page (dashboard)
-  const from = location.state?.from?.pathname || "/calendar";
+  let from = location.state?.from?.pathname as string;
 
   if (loading)
     return (
@@ -15,5 +16,28 @@ export const UnAuthGuard = () => {
       </div>
     );
 
-  return !auth.user ? <Outlet /> : <Navigate to={from} replace />;
+  const STUDENT_ROLES: serverRolesType[] = [
+    "class_representative",
+    "student",
+    "course_head",
+  ];
+
+  function prevRouteFits(from: string, role: serverRolesType) {
+    if (STUDENT_ROLES.includes(role)) return from.includes("student");
+    if (role === "professor/ta") return from.includes("instructor");
+    return false;
+  }
+  const getNavigateRoute = () => {
+    if (!auth.user) return "/";
+
+    if (!from || !prevRouteFits(from, auth.user.role)) {
+      if (STUDENT_ROLES.includes(auth.user.role)) from = "/student/dashboard";
+      else if (auth.user.role === "professor/ta") from = "/instructor/courses";
+      else from = "/";
+    }
+
+    return from;
+  };
+
+  return !auth.user ? <Outlet /> : <Navigate to={getNavigateRoute()} replace />;
 };

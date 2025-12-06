@@ -1,12 +1,12 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
 import NavBar from "./NavBar";
-import StudentSidebar from "./StudentSidebar";
+import GlobalSidebar from "./GlobalSidebar";
 
-const StudentLayout = () => {
+const GlobalLayout = () => {
   return (
     <SidebarProvider defaultOpen className="flex items-start">
-      <StudentSidebar />
+      <GlobalSidebar />
       <SidebarInset className="flex flex-col self-stretch">
         <NavBar />
         <div className="p-3 grow flex flex-col">
@@ -17,4 +17,4 @@ const StudentLayout = () => {
   );
 };
 
-export default StudentLayout;
+export default GlobalLayout;
