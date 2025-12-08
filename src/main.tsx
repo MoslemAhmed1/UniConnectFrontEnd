@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./main.css";
+import "@uploadthing/react/styles.css";
 
 import Calendar from "@/pages/student/calendar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
