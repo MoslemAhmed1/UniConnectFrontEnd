@@ -1,6 +1,6 @@
 import type { CalendarEvent } from "@/types/student/calendar-event";
 
-const useDeadlineUtils = () => {
+const deadlineUtils = () => {
   const formatDeadlineDate = (timestamp: number): string => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -34,5 +34,5 @@ const useDeadlineUtils = () => {
   };
 };
 
-export default useDeadlineUtils;
+export default deadlineUtils;
 

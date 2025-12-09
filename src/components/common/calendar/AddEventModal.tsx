@@ -9,32 +9,19 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import AddEventForm from "@/components/forms/CourseForms/AddEventForm";
+import EventForm from "@/components/forms/CourseForms/EventForm";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-type AddEventModalProps = {
-  courseCode: string;
-  onSuccess?: (event: any) => void;
-  trigger?: React.ReactNode;
-};
-
-export default function AddEventModal({
-  courseCode,
-  onSuccess,
-  trigger,
-}: AddEventModalProps) {
+export default function AddEventModal() {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {trigger ? (
-          <>{trigger}</>
-        ) : (
           <Button>
             <Plus className="w-4 h-4 mr-2" />
             Add Event
           </Button>
-        )}
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
@@ -43,11 +30,12 @@ export default function AddEventModal({
             Add an important event to your course calendar.
           </DialogDescription>
         </DialogHeader>
-        <AddEventForm
-          courseCode={courseCode}
-          onClose={() => setOpen(false)}
-          onSuccess={onSuccess}
-        />
+        <ScrollArea className="max-h-[70vh] pr-4">
+          <EventForm
+            mode="create"
+            onClose={() => setOpen(false)}
+          />
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

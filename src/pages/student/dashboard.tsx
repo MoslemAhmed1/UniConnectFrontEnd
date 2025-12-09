@@ -3,8 +3,7 @@ import { useProfileData } from "@/hooks/use-profile-data";
 import { useStudentCalendar } from "@/hooks/student/use-student-calendar";
 import { useStudentCourses } from "@/hooks/student/use-student-courses";
 import { useStudentAnnouncements } from "@/hooks/student/use-student-announcements";
-import useUpcomingEventsCount from "@/hooks/student/use-upcoming-events-count";
-import useDeadlineUtils from "@/hooks/student/use-deadline-utils";
+import deadlineUtils from "@/utils/time/deadline-utils";
 
 // Components
 import DashboardStats from "@/components/student/dashboard/DashboardStats";
@@ -16,9 +15,8 @@ export default function Dashboard() {
   const { profileData, isLoading: isLoadingProfile } = useProfileData();
   const { calendarEvents, isLoading: isLoadingCalendar } = useStudentCalendar();
   const { courses, isLoading: isLoadingCourses } = useStudentCourses();
-  const { announcements, isLoading: isLoadingAnnouncements } =
-    useStudentAnnouncements();
-  const { getUpcomingDeadlines, formatDeadlineDate } = useDeadlineUtils();
+  const { announcements, isLoading: isLoadingAnnouncements } = useStudentAnnouncements();
+  const { getUpcomingDeadlines, formatDeadlineDate } = deadlineUtils();
 
   const studentName = profileData
     ? profileData.first_name
@@ -26,7 +24,7 @@ export default function Dashboard() {
       : "Student"
     : "Student";
   const upcomingDeadlines = getUpcomingDeadlines(calendarEvents);
-  const upcomingEventsCount = useUpcomingEventsCount(calendarEvents);
+  const upcomingEventsCount = calendarEvents.filter((event) => event.deadline_at >= Date.now()).length;
 
   return (
     <div className="container mx-auto px-6 py-8">

@@ -9,7 +9,7 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { useProfileData } from "@/hooks/use-profile-data";
 import { Lock, UserRoundPen } from "lucide-react";
 
-export const ProgilePage = () => {
+export const ProfilePage = () => {
   const { profileData, isLoading } = useProfileData();
 
   return (
