@@ -15,6 +15,7 @@ export const useStudentCourses = () => {
               image_url: "/public/signals_systems.jpeg",
               instructor: "Prof. Abdelghany",
               class: "Fall 2024",
+              year: "3"
             },
             {
               code: "MTH-204",
@@ -22,6 +23,7 @@ export const useStudentCourses = () => {
               image_url: "/public/probability.jpeg",
               instructor: "Prof. Maha Amin",
               class: "Fall 2024",
+              year: "3"
             },
             {
               code: "EEC-226",
@@ -29,6 +31,7 @@ export const useStudentCourses = () => {
               image_url: "/public/digital_electronics.jpeg",
               instructor: "Prof. Amr Hafez",
               class: "Fall 2024",
+              year: "3"
             },
             {
               code: "CMP-202",
@@ -36,20 +39,23 @@ export const useStudentCourses = () => {
               image_url: "/public/dbms.jpeg",
               instructor: "Prof. Lydia Wahid",
               class: "Fall 2024",
+              year: "3"
             },
             {
               code: "CMP-201",
               name: "Computer Architecture",
               image_url: "/public/computer_architecture.jpeg",
               instructor: "Prof. Moustafa Ghouneem",
-              class: "Fall 2025"
+              class: "Fall 2025",
+              year: "3"
             },
             {
               code: "GEN-221",
               name: "Project Management",
               image_url: "/public/project_management.jpeg",
               instructor: "Prf. Emad Aziz",
-              class: "Fall 2025"
+              class: "Fall 2025",
+              year: "3"
             },
           ];
 

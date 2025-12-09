@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -17,6 +18,10 @@ import { EVENT_TYPE_TO_STYLINGS } from "@/constants/student/calendar";
 import DOMPurify from "dompurify";
 import type { CalendarEvent } from "@/types/student/calendar-event";
 import { Badge } from "@/components/ui/badge";
+import { Trash2, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import EditEventModal from "@/components/common/calendar/EditEventModal";
+import { useDeleteEvent } from "@/hooks/student/use-delete-event";
 
 type SelectedDayDetailsProps = {
   selectedDate: Date;
@@ -29,7 +34,10 @@ const SelectedDayDetails = ({
   isLoading,
   calendarEvents,
 }: SelectedDayDetailsProps) => {
-  const formatedDate = selectedDate?.toLocaleDateString("en-US", {
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const { handleDeleteEvent, isDeleting } = useDeleteEvent();
+
+  const formattedDate = selectedDate?.toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -40,11 +48,20 @@ const SelectedDayDetails = ({
     (event) => new Date(event.deadline_at).getDate() === selectedDate.getDate()
   );
 
+  const handleDelete = async (eventId: number) => {
+    try {
+      setPendingDeleteId(eventId);
+      await handleDeleteEvent(eventId);
+    } finally {
+      setPendingDeleteId(null);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          <p>{formatedDate}</p>
+          <p>{formattedDate}</p>
         </CardTitle>
         <CardDescription>
           Select a day to view the details of its deadlines.
@@ -55,23 +72,43 @@ const SelectedDayDetails = ({
           {selectedDayEvents.length === 0 && !isLoading && (
             <p className="ms-3 mt-3">No events at the selected day.</p>
           )}
-          {selectedDayEvents?.map((event, index) => (
-            <Item key={event.title + index}>
+          {selectedDayEvents?.map((event) => (
+            <Item key={event.id} className="flex items-start justify-between">
               <ItemMedia variant="icon">
                 {EVENT_TYPE_TO_STYLINGS[event.type].icon}
               </ItemMedia>
               <ItemContent>
-                <ItemTitle>
-                  <Badge
-                    className={`capitalize ${EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName}`}
-                  >
-                    {EVENT_TYPE_TO_STYLINGS[event.type].prettyName ||
-                      event.type}
-                  </Badge>
-                  {event.title}
-                </ItemTitle>
+                {/* Title + Edit & Delete Buttons */}
+                <div className="flex items-start justify-between gap-2">
+                  <ItemTitle className="flex-1">
+                    <Badge
+                      className={`capitalize mr-2 ${EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName}`}
+                    >
+                      {EVENT_TYPE_TO_STYLINGS[event.type].prettyName || event.type}
+                    </Badge>
+                    {event.title}
+                  </ItemTitle>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-1 shrink-0">
+                    <EditEventModal event={event} />
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                      onClick={() => handleDelete(event.id)}
+                      disabled={isDeleting && pendingDeleteId === event.id}
+                    >
+                      {isDeleting && pendingDeleteId === event.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
                 <ItemDescription>
-                  {/* Sanitize incoming HTML to prevent XSS */}
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(event.notes),
