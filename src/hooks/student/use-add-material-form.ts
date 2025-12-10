@@ -9,55 +9,91 @@ import {
 } from "@/validations/AddMaterialFormSchema";
 
 import type { Material } from "@/types/student/material";
+import { AxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
 
 type UseAddMaterialFormArgs = {
   courseCode: string;
   defaultValues?: Partial<InferredAddMaterialFormSchema>;
 };
 
-export const useAddMaterialForm = ({ courseCode, defaultValues }: UseAddMaterialFormArgs) => {
+type UploadFile = {
+  file_id: string;
+  file_key: string;
+};
+
+export const useAddMaterialForm = ({
+  courseCode,
+  defaultValues,
+}: UseAddMaterialFormArgs) => {
   const form = useForm<InferredAddMaterialFormSchema>({
     resolver: zodResolver(addMaterialSchema),
     defaultValues: {
       title: defaultValues?.title ?? "",
       folder: defaultValues?.folder ?? "lecture",
-      file: undefined,
+      file_id: undefined,
     },
     mode: "onBlur",
   });
 
+  // TODO: will use it to delete the file later on
+  // const [fileKey, setFileKey] = useState<string | undefined>();
+
   const {
     register,
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid, errors },
+    reset,
     handleSubmit,
+    setValue,
+    getValues,
   } = form;
-
-  const onSubmit = handleSubmit(async (values) => {
-    try {
+  console.log(errors);
+  const { mutate: createMaterial, isPending } = useMutation({
+    mutationKey: ["create-material"],
+    mutationFn: (data: InferredAddMaterialFormSchema) => {
       const newMaterial = {
-        title: values.title,
-        category: values.folder,
-        type: values.folder,
+        title: data.title,
+        category: data.folder,
         courseCode,
-        file: values.file, // backend now handles uploading + restrictions
+        file_id: data.file_id,
       };
 
-      await api.post<Material>("/api/materials", newMaterial);
-
+      return api.post<Material>("/api/materials", newMaterial);
+    },
+    onSuccess: () => {
+      reset();
       toast.success("Material has been added successfully.");
-    } catch (error) {
-      console.log(error);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        if (error.response?.data && "message" in error.response.data) {
+          const message = error.response.data.message;
+          toast.error(message);
+          return;
+        }
+      }
       toast.error(
         "An error occurred while adding this material. Please try again."
       );
-    }
+    },
   });
+
+  const onSubmit = handleSubmit(async (values) => {
+    createMaterial(values);
+  });
+
+  const chooseFile = (file: UploadFile) => {
+    setValue("file_id", file.file_id);
+  };
 
   return {
     register,
     control,
-    isSubmitting,
+    isValid,
+    isSubmitting: isPending || isSubmitting,
     onSubmit,
+    chooseFile,
+    isFileChosen: getValues("file_id") !== undefined,
   };
 };

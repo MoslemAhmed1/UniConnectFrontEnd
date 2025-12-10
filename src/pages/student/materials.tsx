@@ -15,12 +15,10 @@ const categoryList = [
 
 export default function Materials() {
   const { id, category } = useParams<{ id: string; category: string }>();
-  const { materials } = useStudentMaterials();
+  const { materials } = useStudentMaterials(id);
 
   const filterMaterialsByCategory = (tabCategory: string): Material[] => {
-    return materials.filter(
-      (m) => m.category === tabCategory && m.courseCode === id
-    );
+    return materials.filter((m) => m.category === tabCategory);
   };
 
   return (

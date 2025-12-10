@@ -7,7 +7,6 @@ type File = {
   uploaded_at: number;
 };
 
-type FileType = "pdf" | "docx" | "plain" | "zip" | "png" | "jpeg"; // more could be added later
+type FileType = "application/pdf"; // more could be added later
 
 export { type File };
-

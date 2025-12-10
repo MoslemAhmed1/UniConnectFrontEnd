@@ -14,11 +14,11 @@ export const InstructorCoursePage = () => {
   const { id } = useParams<{ id: string }>();
   const { announcements } = useStudentAnnouncements();
   const { assignments } = useStudentAssignments();
-  const { materials } = useStudentMaterials();
 
   // Find the selected course by code (id from URL)
   const { courseData } = useCourseData(id);
 
+  const { materials } = useStudentMaterials(courseData?.code);
   if (!courseData) {
     return <>{/* Lottie React 404 */}</>;
   }

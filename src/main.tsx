@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./main.css";
+
 import "@uploadthing/react/styles.css";
+import "./main.css";
 
 import Calendar from "@/pages/student/calendar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,7 +19,8 @@ import AssignmentSubmissionProfessor from "./components/common/course/assignment
 import Dashboard from "./pages/student/dashboard";
 import Group from "./pages/student/group";
 import Materials from "./pages/student/materials";
-import { ProgilePage } from "./pages/profile";
+import { ProfilePage } from "./pages/profile";
+import { MaterialViewer } from "./pages/student/material-viewer";
 import LoginPage from "./pages/user/login";
 import SignupPage from "./pages/user/signup";
 import AuthProvider from "./providers/AuthProvider";
@@ -68,7 +70,7 @@ createRoot(document.getElementById("root")!).render(
                       path="materials/:id/:category"
                       element={<Materials />}
                     />
-                    <Route path="profile" element={<ProgilePage />} />
+                    <Route path="profile" element={<ProfilePage />} />
                     <Route
                       element={
                         <AuthGuard allowedRoles={["class_representative"]} />
@@ -81,7 +83,7 @@ createRoot(document.getElementById("root")!).render(
 
                 <Route element={<AuthGuard allowedRoles={["professor/ta"]} />}>
                   <Route path="/instructor">
-                    <Route path="profile" element={<ProgilePage />} />
+                    <Route path="profile" element={<ProfilePage />} />
                     <Route
                       path="courses/:id"
                       element={<InstructorCoursePage />}
@@ -90,6 +92,14 @@ createRoot(document.getElementById("root")!).render(
                     <Route
                       path="courses/:id/assignment/:assignmentId"
                       element={<AssignmentSubmissionProfessor />}
+                    />
+                    <Route
+                      path="materials/:id/:category"
+                      element={<Materials />}
+                    />
+                    <Route
+                      path="materials/view/:id"
+                      element={<MaterialViewer />}
                     />
                   </Route>
                 </Route>

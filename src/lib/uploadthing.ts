@@ -1,18 +1,24 @@
 import { createUploadthing, type FileRouter } from "uploadthing/express";
 
 const f = createUploadthing();
+
 export const uploadRouter = {
-  imageUploader: f({
-    image: {
-      maxFileSize: "4MB",
-      maxFileCount: 1,
-    },
+  materialUploader: f({
     pdf: {
       maxFileSize: "4MB",
       maxFileCount: 1,
     },
-  }).onUploadComplete((data) => {
-    console.log("upload completed", data);
+    video: {
+      maxFileSize: "256MB",
+      maxFileCount: 1,
+    },
+  }).onUploadComplete(async () => {
+    try {
+      return { success: true, file_id: "" };
+    } catch {
+      return { success: false };
+    }
   }),
 } satisfies FileRouter;
+
 export type OurFileRouter = typeof uploadRouter;

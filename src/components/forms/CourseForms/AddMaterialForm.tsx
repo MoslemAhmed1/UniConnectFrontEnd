@@ -18,6 +18,8 @@ import {
 
 import { useAddMaterialForm } from "@/hooks/student/use-add-material-form";
 import type { InferredAddMaterialFormSchema } from "@/validations/AddMaterialFormSchema";
+import { UploadButton } from "@/components/global/UploadButton";
+import { toast } from "sonner";
 
 type AddMaterialFormProps = {
   courseCode: string;
@@ -30,16 +32,19 @@ export default function AddMaterialForm({
   onClose,
   defaultValues,
 }: AddMaterialFormProps) {
-
-  const { control, isSubmitting, onSubmit } = useAddMaterialForm({
-    courseCode,
-    defaultValues: defaultValues
-  });
+  const { control, isSubmitting, onSubmit, chooseFile, isFileChosen, isValid } =
+    useAddMaterialForm({
+      courseCode,
+      defaultValues: defaultValues,
+    });
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit} aria-busy={isSubmitting}>
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={onSubmit}
+      aria-busy={isSubmitting}
+    >
       <FieldGroup>
-
         {/* Title */}
         <Controller
           name="title"
@@ -66,7 +71,10 @@ export default function AddMaterialForm({
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel>Folder</FieldLabel>
 
-              <Select value={field.value ?? "lecture"} onValueChange={field.onChange}>
+              <Select
+                value={field.value ?? "lecture"}
+                onValueChange={field.onChange}
+              >
                 <SelectTrigger aria-invalid={fieldState.invalid}>
                   <SelectValue placeholder="Select a folder" />
                 </SelectTrigger>
@@ -86,31 +94,27 @@ export default function AddMaterialForm({
         />
 
         {/* File Upload */}
-        <Controller
-          name="file"
-          control={control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="material-file">Attach File</FieldLabel>
-              <input
-                id="material-file"
-                type="file"
-                accept=".pdf,.docx,.txt,.zip,.png,.jpeg,.jpg"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  field.onChange(file);
-                }}
-                aria-invalid={fieldState.invalid}
-                className="block w-full text-sm text-slate-500
-                  file:mr-4 file:py-2 file:px-4
-                  file:rounded-md file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-blue-50 file:text-blue-600
-                  hover:file:bg-blue-100"
-              />
-              {fieldState.error && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
+
+        <UploadButton
+          endpoint="materialUploader"
+          disabled={isFileChosen}
+          onClientUploadComplete={(res) => {
+            console.log(res);
+            const [file] = res;
+
+            if (!file.serverData.file_id) {
+              toast.error("Server couldn't upload the file properly.");
+              return;
+            }
+
+            chooseFile({
+              file_id: file.serverData.file_id,
+              file_key: file.key,
+            });
+          }}
+          onUploadError={() => {
+            toast.error("An error has occurred while uploading the file.");
+          }}
         />
 
         {/* Action Buttons */}
@@ -125,13 +129,12 @@ export default function AddMaterialForm({
               Cancel
             </Button>
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || !isValid}>
               {isSubmitting ? "Adding..." : "Add Material"}
               {isSubmitting && <Spinner />}
             </Button>
           </div>
         </Field>
-
       </FieldGroup>
     </form>
   );

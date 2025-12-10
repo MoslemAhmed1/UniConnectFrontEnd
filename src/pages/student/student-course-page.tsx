@@ -11,23 +11,20 @@ import { useAuth } from "@/providers/context/authContext";
 // Components
 import CoursePage from "@/components/common/course/CoursePage";
 
-
 export const StudentCoursePage = () => {
   const { auth } = useAuth();
   const { id } = useParams<{ id: string }>();
   const { courses } = useStudentCourses();
   const { announcements } = useStudentAnnouncements();
   const { assignments } = useStudentAssignments();
-  const { materials } = useStudentMaterials();
 
   // Find the selected course by code (id from URL)
   const course = courses.find((c) => c.code === id);
 
+  const { materials } = useStudentMaterials(course?.code);
   if (!course) {
     // TODO: Use Lottie React 404 page
-    return (
-      <></>
-    )
+    return <></>;
   }
 
   const studentRole = auth.user?.role;
@@ -45,9 +42,8 @@ export const StudentCoursePage = () => {
     featureFlags.showAddMaterialBtn = true;
     featureFlags.showAddAnnouncementBtn = true;
     featureFlags.showAddCalendarEventBtn = true;
-  }
-  else if (studentRole === "course_head") {
-    const isTeamHeadForThisCourse = (course.representative_id === auth.user?.id);
+  } else if (studentRole === "course_head") {
+    const isTeamHeadForThisCourse = course.representative_id === auth.user?.id;
 
     if (isTeamHeadForThisCourse) {
       featureFlags.showModifyCourseBtn = true;
@@ -59,10 +55,10 @@ export const StudentCoursePage = () => {
 
   return (
     <CoursePage
-      course = {course}
-      materials = {materials}
-      announcements = {announcements}
-      assignments = {assignments}
+      course={course}
+      materials={materials}
+      announcements={announcements}
+      assignments={assignments}
       featureFlags={featureFlags}
     />
   );

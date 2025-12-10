@@ -1,9 +1,13 @@
-import { Card , CardTitle , CardDescription , CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { FileText } from "lucide-react";
 import MaterialItem from "./MaterialItem";
 import type { Material } from "@/types/student/material";
-
 import AddMaterialModal from "@/components/common/course/modals/AddMaterialModal";
 
 type MaterialsSectionProps = {
@@ -12,7 +16,11 @@ type MaterialsSectionProps = {
   allowModifyMaterials: boolean;
 };
 
-export default function MaterialsSection({ materials, courseCode, allowModifyMaterials }: MaterialsSectionProps) {
+export default function MaterialsSection({
+  materials,
+  courseCode,
+  allowModifyMaterials,
+}: MaterialsSectionProps) {
   const categoryFolders = [
     { name: "Lecture Slides", category: "lecture", color: "bg-blue-600" },
     { name: "Problem Sheets", category: "sheet", color: "bg-teal-600" },
@@ -25,29 +33,41 @@ export default function MaterialsSection({ materials, courseCode, allowModifyMat
   const recentMaterials = materials.slice(0, 3);
 
   const getMaterialCount = (category: string) => {
-    return materials.filter((m) => m.courseCode === courseCode && m.category === category).length;
-  }
+    return materials.filter((m) => m.category === category).length;
+  };
 
   return (
     <div className="space-y-6">
       {/* Folders */}
       <div>
         <div className="flex justify-between">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Folders</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">
+            Folders
+          </h3>
           {allowModifyMaterials && (
             <div className="flex justify-end mb-3">
               <AddMaterialModal courseCode={courseCode} />
             </div>
           )}
         </div>
+
         <div className="grid md:grid-cols-3 gap-4">
           {/* TODO: Hide Past Quizzes for Instructor */}
           {categoryFolders.map((folder) => (
-            <Link key={folder.category} to={allowModifyMaterials ? `/instructor/materials/${courseCode}/${folder.category}` : `/student/materials/${courseCode}/${folder.category}`}>
+            <Link
+              key={folder.category}
+              to={
+                allowModifyMaterials
+                  ? `/instructor/materials/${courseCode}/${folder.category}`
+                  : `/student/materials/${courseCode}/${folder.category}`
+              }
+            >
               <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02]">
                 <CardContent className="p-0">
                   <div className="flex items-center gap-4 pl-6">
-                    <div className={`w-12 h-12 bg-linear-to-br ${folder.color} rounded-xl flex items-center justify-center`}>
+                    <div
+                      className={`w-12 h-12 bg-linear-to-br ${folder.color} rounded-xl flex items-center justify-center`}
+                    >
                       <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -78,7 +98,11 @@ export default function MaterialsSection({ materials, courseCode, allowModifyMat
             </p>
           ) : (
             recentMaterials.map((material) => (
-              <MaterialItem key={material.id} material={material} allowModifyMaterials={allowModifyMaterials}/>
+              <MaterialItem
+                key={material.id}
+                material={material}
+                allowModifyMaterials={allowModifyMaterials}
+              />
             ))
           )}
         </Card>
