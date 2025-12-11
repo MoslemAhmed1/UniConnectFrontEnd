@@ -46,7 +46,8 @@ export const useAddMaterialForm = ({
     reset,
     handleSubmit,
     setValue,
-    getValues,
+    watch,
+    trigger,
   } = form;
   console.log(errors);
   const { mutate: createMaterial, isPending } = useMutation({
@@ -85,6 +86,7 @@ export const useAddMaterialForm = ({
 
   const chooseFile = (file: UploadFile) => {
     setValue("file_id", file.file_id);
+    trigger("file_id");
   };
 
   return {
@@ -94,6 +96,6 @@ export const useAddMaterialForm = ({
     isSubmitting: isPending || isSubmitting,
     onSubmit,
     chooseFile,
-    isFileChosen: getValues("file_id") !== undefined,
+    isFileChosen: watch("file_id") !== undefined,
   };
 };

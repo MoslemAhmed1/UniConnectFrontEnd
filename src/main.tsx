@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import "@uploadthing/react/styles.css";
 import "./main.css";
 
 import Calendar from "@/pages/student/calendar";
