@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,25 +8,22 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import AddMaterialForm from "@/components/forms/CourseForms/AddMaterialForm";
+import MaterialForm from "@/components/forms/CourseForms/MaterialForm";
 
 type AddMaterialModalProps = {
   courseCode: string;
-  trigger?: React.ReactNode;
 };
 
-export default function AddMaterialModal({ courseCode, trigger }: AddMaterialModalProps) {
-  const [open, setOpen] = React.useState(false);
+export default function AddMaterialModal({ courseCode }: AddMaterialModalProps) {
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {trigger ?? (
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Material
-          </Button>
-        )}
+        <Button>
+          <Plus className="w-4 h-4 mr-2" />
+          Add Material
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-2xl">
@@ -34,7 +31,8 @@ export default function AddMaterialModal({ courseCode, trigger }: AddMaterialMod
           <DialogTitle>Add Material</DialogTitle>
         </DialogHeader>
 
-        <AddMaterialForm
+        <MaterialForm
+          mode="create"
           courseCode={courseCode}
           onClose={() => setOpen(false)}
         />

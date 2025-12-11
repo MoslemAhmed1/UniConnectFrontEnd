@@ -1,8 +1,22 @@
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { FileText, Eye, Download, Edit, Trash2 } from "lucide-react";
+import { FileText, Eye, Download, Trash2, Loader2 } from "lucide-react";
 import type { Material } from "@/types/student/material";
 import { CardTitle , CardDescription , CardContent } from "@/components/ui/card";
 import { formatDistanceToNow, format } from "date-fns";
+import EditMaterialModal from "../modals/EditMaterialModal";
+import { useState } from "react";
+import { useDeleteMaterial } from "@/hooks/student/use-delete-material";
 
 type MaterialItemProps = {
   material: Material;
@@ -10,6 +24,18 @@ type MaterialItemProps = {
 };
 
 export default function MaterialItem({ material, allowModifyMaterials }: MaterialItemProps) {
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const { handleDeleteMaterial, isDeleting } = useDeleteMaterial();
+
+  const handleDelete = async (eventId: number) => {
+    try {
+      setPendingDeleteId(eventId);
+      await handleDeleteMaterial(eventId);
+    } finally {
+      setPendingDeleteId(null);
+    }
+  };
+  
   const uploadedAt = new Date(material.uploaded_at);
   const now = new Date();
   const diffInMs = now.getTime() - uploadedAt.getTime();
@@ -52,12 +78,48 @@ export default function MaterialItem({ material, allowModifyMaterials }: Materia
           <div className="flex items-center gap-3">
             {allowModifyMaterials && (
               <>
-                <Button variant="ghost" size="icon">
-                  <Edit className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <EditMaterialModal material={material} />
+
+                {/* Delete Modal */}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                      disabled={isDeleting && pendingDeleteId === material.id}
+                    >
+                      {isDeleting && pendingDeleteId === material.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete this material?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently remove the material
+                        <span className="font-semibold"> "{material.title}"</span>.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-destructive text-white hover:bg-destructive/90"
+                        onClick={() => handleDelete(material.id)}
+                      >
+                        {isDeleting && pendingDeleteId === material.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        ) : null}
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </>
             )}
             <Button variant="ghost" size="icon" className="cursor-pointer">

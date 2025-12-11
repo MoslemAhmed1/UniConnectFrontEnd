@@ -30,12 +30,12 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
     mode: "onBlur",
   });
 
-  const { 
-    register, 
-    control, 
-    formState: { isSubmitting }, 
-    handleSubmit, 
-    reset } = form;
+  const {
+    control,
+    formState: { isSubmitting },
+    handleSubmit,
+    reset,
+  } = form;
 
   const mutation = useMutation({
     mutationKey: ["event", mode, eventId],
@@ -57,6 +57,7 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
     },
     onSuccess: () => {
       toast.success(`Event has been ${mode === "create" ? "created" : "updated"} successfully.`);
+      
       queryClient.invalidateQueries({ queryKey: ["calendar-events"] });
 
       if (mode === "create") {
@@ -84,7 +85,6 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
   const onSubmit = handleSubmit((values) => mutation.mutate(values));
 
   return {
-    register,
     control,
     isSubmitting: isSubmitting || mutation.isPending,
     onSubmit,

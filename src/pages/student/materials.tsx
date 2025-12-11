@@ -17,9 +17,15 @@ export default function Materials() {
   const { id, category } = useParams<{ id: string; category: string }>();
   const { materials } = useStudentMaterials();
 
+  if (!id) {
+    return (
+      <></>
+    );
+  }
+
   const filterMaterialsByCategory = (tabCategory: string): Material[] => {
     return materials.filter(
-      (m) => m.category === tabCategory && m.courseCode === id
+      (m) => m.category === tabCategory && m.course_code === id
     );
   };
 
@@ -44,6 +50,7 @@ export default function Materials() {
             <MaterialSection
               materials={filterMaterialsByCategory(cat.category)}
               sectionName={cat.label}
+              courseCode={id}
             />
           </TabsContent>
         ))}

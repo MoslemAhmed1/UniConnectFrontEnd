@@ -1,20 +1,15 @@
 import { useParams } from "react-router-dom";
 
 // Hooks
-import { useStudentAnnouncements } from "@/hooks/student/use-student-announcements";
-import { useStudentAssignments } from "@/hooks/student/use-student-assignments";
-import { useStudentMaterials } from "@/hooks/student/use-student-materials";
+import { useCourseData } from "@/hooks/professor/use-course-data";
 
 // Components
 import CoursePage from "@/components/common/course/CoursePage";
 import type { FeatureFlags } from "@/constants/user/feature-flags";
-import { useCourseData } from "@/hooks/professor/use-course-data";
+
 
 export const InstructorCoursePage = () => {
   const { id } = useParams<{ id: string }>();
-  const { announcements } = useStudentAnnouncements();
-  const { assignments } = useStudentAssignments();
-  const { materials } = useStudentMaterials();
 
   // Find the selected course by code (id from URL)
   const { courseData } = useCourseData(id);
@@ -34,9 +29,6 @@ export const InstructorCoursePage = () => {
   return (
     <CoursePage
       course={courseData}
-      materials={materials}
-      announcements={announcements}
-      assignments={assignments}
       featureFlags={featureFlags}
     />
   );

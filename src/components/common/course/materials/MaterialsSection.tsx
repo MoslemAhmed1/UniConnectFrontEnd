@@ -24,8 +24,12 @@ export default function MaterialsSection({ materials, courseCode, allowModifyMat
 
   const recentMaterials = materials.slice(0, 3);
 
+  allowModifyMaterials = true;
+
+  // TODO: Remove courseCode if backend route handles it
+  // TODO: do we instead create a backend route which returns an array with the material count for each category ??
   const getMaterialCount = (category: string) => {
-    return materials.filter((m) => m.courseCode === courseCode && m.category === category).length;
+    return materials.filter((m) => m.course_code === courseCode && m.category === category).length;
   }
 
   return (

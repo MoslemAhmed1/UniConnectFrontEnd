@@ -24,6 +24,8 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
   const [filterDate, setFilterDate] = useState<Date>();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  allowModifyAssignments = true;
+
   const filteredAndSortedAssignments = [...assignments]
     .filter((assignment) => {
       // filter by search bar
@@ -73,6 +75,7 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
               className="pl-10 w-[200px]"
             />
           </div>
+
           {/* Sort Order */}
           <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
             <SelectTrigger className="w-[180px]">
@@ -97,6 +100,7 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
               <SelectItem value="7">Due in 7 days</SelectItem>
             </SelectContent>
           </Select>
+
           {/* Filter Date */}
           <Popover>
             <PopoverTrigger asChild>
@@ -129,6 +133,8 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
             </Button>
           )}
         </div>
+
+        {/* Add Assignment Form */}
         {allowModifyAssignments && (
           <div className="flex justify-end">
             <AddAssignmentModal courseCode={courseCode} />

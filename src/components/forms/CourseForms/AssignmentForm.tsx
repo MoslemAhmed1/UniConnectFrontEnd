@@ -5,34 +5,38 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { useAddAssignmentForm } from "@/hooks/student/use-add-assignment-form";
-import type { InferredAddAssignmentFormSchema } from "@/validations/AddAssignmentFormSchema";
+import { useAssignmentForm } from "@/hooks/student/use-assignment-form";
+import type { InferredAssignmentFormSchema } from "@/validations/AssignmentFormSchema";
 import { FileText, Trash2 } from "lucide-react";
+// import type { File } from "@/types/student/file";
 
-type AddAssignmentFormProps = {
+type AssignmentFormProps = {
+  mode?: "create" | "edit";
+  assignmentId?: number;
   courseCode: string;
   onClose: () => void;
-  defaultValues?: Partial<InferredAddAssignmentFormSchema>;
+  defaultValues?: Partial<InferredAssignmentFormSchema>;
 };
 
 export default function AddAssignmentForm({
+  mode = "create",
+  assignmentId,
   courseCode,
   onClose,
   defaultValues,
-}: AddAssignmentFormProps) {
+}: AssignmentFormProps) {
 
-  const { control, isSubmitting, onSubmit } = useAddAssignmentForm({
+  const { control, isSubmitting, onSubmit } = useAssignmentForm({
+    mode,
+    assignmentId,
     courseCode,
     defaultValues,
   });
 
+  const isEditMode = mode === "edit";
+
   // State for attached files
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
-
-  // Remove file by index
-  const handleRemoveFile = (index: number) => {
-    setAttachedFiles(attachedFiles.filter((_, i) => i !== index));
-  };
 
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit} aria-busy={isSubmitting}>
@@ -113,6 +117,7 @@ export default function AddAssignmentForm({
         </div>
 
         {/* Upload Attach Files */}
+        {/* TODO: Fix the File type problem here */}
         <Controller
           name="attachedFiles"
           control={control}
@@ -129,9 +134,11 @@ export default function AddAssignmentForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (e.target.files) {
                       const newFiles = Array.from(e.target.files);
-                      setAttachedFiles((prev) => [...prev, ...newFiles]);
-                      // Update react-hook-form field value
-                      field.onChange([...attachedFiles, ...newFiles]);
+                      setAttachedFiles((prev) => {
+                        const updated = [...prev, ...newFiles];
+                        field.onChange(updated);
+                        return updated;
+                      });
                     }
                   }}
                   aria-invalid={fieldState.invalid}
@@ -155,10 +162,11 @@ export default function AddAssignmentForm({
                         variant="ghost"
                         size="icon"
                         onClick={() => {
-                          handleRemoveFile(index);
-                          // Update react-hook-form field value
-                          const updatedFiles = attachedFiles.filter((_, i) => i !== index);
-                          field.onChange(updatedFiles);
+                          setAttachedFiles((prev) => {
+                            const updated = prev.filter((_, i) => i !== index);
+                            field.onChange(updated);
+                            return updated;
+                          });
                         }}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -188,11 +196,11 @@ export default function AddAssignmentForm({
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  Creating...
+                  {isEditMode ? "Updating..." : "Adding..."}
                   <Spinner />
                 </>
               ) : (
-                "Create Assignment"
+                <>{isEditMode ? "Update Assignment" : "Add Assignment"}</>
               )}
             </Button>
           </div>

@@ -16,7 +16,7 @@ export const useStudentMaterials = () => {
                 category: "lecture",
                 uploaded_at: Date.now() - 2 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 1,
                   name: "Lecture 10 - Fourier Transform.pdf",
@@ -32,7 +32,7 @@ export const useStudentMaterials = () => {
                 category: "lecture",
                 uploaded_at: Date.now() - 3 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 2,
                   name: "Lecture 9 - Laplace Transform.pdf",
@@ -48,7 +48,7 @@ export const useStudentMaterials = () => {
                 category: "lecture",
                 uploaded_at: Date.now() - 7 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 3,
                   name: "Lecture 8 - Z-Transform.pdf",
@@ -66,7 +66,7 @@ export const useStudentMaterials = () => {
                 category: "sheet",
                 uploaded_at: Date.now() - 4 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 4,
                   name: "Problem Sheet 5 - Solutions.pdf",
@@ -84,7 +84,7 @@ export const useStudentMaterials = () => {
                 category: "sheet",
                 uploaded_at: Date.now() - 4 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 5,
                   name: "Problem Sheet 5.pdf",
@@ -100,7 +100,7 @@ export const useStudentMaterials = () => {
                 category: "sheet",
                 uploaded_at: Date.now() - 7 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 6,
                   name: "Problem Sheet 4 - Solutions.pdf",
@@ -116,7 +116,7 @@ export const useStudentMaterials = () => {
                 category: "quiz",
                 uploaded_at: Date.now() - 5 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 7,
                   name: "Quiz 3 - Fall 2024.pdf",
@@ -132,7 +132,7 @@ export const useStudentMaterials = () => {
                 category: "quiz",
                 uploaded_at: Date.now() - 14 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 8,
                   name: "Quiz 2 - Fall 2024.pdf",
@@ -148,7 +148,7 @@ export const useStudentMaterials = () => {
                 category: "quiz",
                 uploaded_at: Date.now() - 21 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 9,
                   name: "Quiz 1 - Fall 2024.pdf",
@@ -164,7 +164,7 @@ export const useStudentMaterials = () => {
                 category: "tutorial",
                 uploaded_at: Date.now() - 7 * 24 * 60 * 60 * 1000,
                 uploader: "TA Mahmoud",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 10,
                   name: "Tutorial 8 - System Analysis.pdf",
@@ -180,7 +180,7 @@ export const useStudentMaterials = () => {
                 category: "tutorial",
                 uploaded_at: Date.now() - 14 * 24 * 60 * 60 * 1000,
                 uploader: "TA Mahmoud",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 11,
                   name: "Tutorial 7 - Frequency Response.pdf",
@@ -196,7 +196,7 @@ export const useStudentMaterials = () => {
                 category: "tutorial",
                 uploaded_at: Date.now() - 21 * 24 * 60 * 60 * 1000,
                 uploader: "TA Mahmoud",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 12,
                   name: "Tutorial 6 - Transfer Functions.pdf",
@@ -212,7 +212,7 @@ export const useStudentMaterials = () => {
                 category: "textbook",
                 uploaded_at: Date.now() - 30 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 13,
                   name: "Signals and Systems - Oppenheim (Chapter 5-8).pdf",
@@ -228,7 +228,7 @@ export const useStudentMaterials = () => {
                 category: "textbook",
                 uploaded_at: Date.now() - 30 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 14,
                   name: "Signals and Systems - Oppenheim (Chapter 1-4).pdf",
@@ -244,7 +244,7 @@ export const useStudentMaterials = () => {
                 category: "textbook",
                 uploaded_at: Date.now() - 30 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 15,
                   name: "Signals and Systems - Solutions Manual.pdf",
@@ -260,7 +260,7 @@ export const useStudentMaterials = () => {
                 category: "assignment",
                 uploaded_at: Date.now() - 6 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 16,
                   name: "Assignment 4 - Signal Processing.pdf",
@@ -276,7 +276,7 @@ export const useStudentMaterials = () => {
                 category: "assignment",
                 uploaded_at: Date.now() - 14 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 17,
                   name: "Assignment 3 - Fourier Analysis.pdf",
@@ -292,7 +292,7 @@ export const useStudentMaterials = () => {
                 category: "assignment",
                 uploaded_at: Date.now() - 21 * 24 * 60 * 60 * 1000,
                 uploader: "Dr. Abdelghany",
-                courseCode: "EEC-225",
+                course_code: "EEC-225",
                 file: {
                   id: 18,
                   name: "Assignment 2 - Time Domain Analysis.pdf",

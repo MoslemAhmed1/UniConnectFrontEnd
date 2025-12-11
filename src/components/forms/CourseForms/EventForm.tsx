@@ -23,28 +23,33 @@ import { useAuth } from "@/providers/context/authContext";
 import { useStudentCourses } from "@/hooks/student/use-student-courses";
 
 type EventFormProps = {
-  mode: "create" | "edit";
+  mode?: "create" | "edit";
+  eventId?: number;
   onClose: () => void;
   defaultValues?: Partial<InferredEventFormSchema>;
-  eventId?: number;
 };
 
 export default function EventForm({
-  mode,
+  mode = "create",
+  eventId,
   onClose,
   defaultValues,
-  eventId,
 }: EventFormProps) {
-  const { control, isSubmitting, onSubmit } = useEventForm({ mode, defaultValues, eventId });
+  const { control, isSubmitting, onSubmit } = useEventForm({
+    mode,
+    eventId,
+    defaultValues,
+  });
   const { auth } = useAuth();
   const { courses } = useStudentCourses();
 
   const isEditMode = mode === "edit";
 
   // should use .find() since relation is 1-1 but it displayed error, so i used .filter()
-  const availableCourses = (auth.user?.role == "course_head") 
-    ? courses.filter((course) => course.representative_id == auth.user?.id) 
-    : courses;
+  const availableCourses =
+    auth.user?.role === "course_head"
+      ? courses.filter((course) => course.representative_id === auth.user?.id)
+      : courses;
 
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit}>
