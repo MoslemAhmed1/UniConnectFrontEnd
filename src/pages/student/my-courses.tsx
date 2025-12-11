@@ -1,14 +1,23 @@
 import { useStudentCourses } from "@/hooks/student/use-student-courses";
 import CourseCard from "@/components/student/dashboard/CourseCard";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 export default function MyStudentCourses() {
   const { courses, isLoading } = useStudentCourses();
 
   return (
     <div className="container mx-auto px-6 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-blue-600 mb-2">All Courses</h1>
-        <p className="text-slate-500">Browse all your enrolled courses</p>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-blue-600 mb-2">All Courses</h1>
+          <p className="text-slate-500">Browse all your enrolled courses</p>
+        </div>
+
+        <Button>
+          <Plus />
+          Join Course
+        </Button>
       </div>
 
       {isLoading ? (
@@ -18,7 +27,7 @@ export default function MyStudentCourses() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
-            <CourseCard key={course.code + course.class} course={course} />
+            <CourseCard key={course.code} course={course} />
           ))}
         </div>
       )}

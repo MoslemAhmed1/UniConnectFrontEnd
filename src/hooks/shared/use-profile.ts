@@ -1,21 +1,23 @@
 import api from "@/lib/axios";
+import type { Course } from "@/types/student/course";
+import type { StudentUser } from "@/types/student/student-user";
 import type { User } from "@/types/user/user";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-export const useProfileData = () => {
-  // TODO: Use useAuth in all places instead of this, or make the hook receive an id to fetch the specified user.
-  const { data: profileData, isLoading } = useQuery({
-    queryKey: ["profile-data"],
+const useProfile = (id: string | undefined) => {
+  const { data: profile, isLoading: isLoadingProfile } = useQuery<
+    (User | StudentUser) & {
+      courses: Course[];
+    }
+  >({
+    queryKey: ["profile", id],
     queryFn: async () => {
       try {
-        const res = await api.get<User>("/api/users/me");
+        const res = await api.get(`/api/users/${id}?include=courses`);
 
-        if (!res.data.family_name) res.data.family_name = "";
-        if (!res.data.grandparent_name) res.data.grandparent_name = "";
-
-        return res.data;
+        return res.data.data;
       } catch (err) {
         if (err instanceof AxiosError) {
           if (err.response?.data && "message" in err.response.data) {
@@ -31,7 +33,9 @@ export const useProfileData = () => {
   });
 
   return {
-    profileData,
-    isLoading,
+    profile,
+    isLoadingProfile,
   };
 };
+
+export default useProfile;

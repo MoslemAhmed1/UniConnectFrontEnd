@@ -18,7 +18,7 @@ type AddAnnouncementModalProps = {
 
 export default function AddAnnouncementModal({
   courseCode,
-  trigger
+  trigger,
 }: AddAnnouncementModalProps) {
   const [open, setOpen] = useState(false);
 
@@ -34,7 +34,7 @@ export default function AddAnnouncementModal({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl overflow-y-auto max-h-144">
         <DialogHeader>
           <DialogTitle>Create Announcement</DialogTitle>
           <DialogDescription>

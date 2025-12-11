@@ -32,7 +32,7 @@ export default function DashboardCourses({
           courses
             .slice(0, 2)
             .map((course) => (
-              <CourseCard key={course.code + course.class} course={course} />
+              <CourseCard key={course.code + course.year} course={course} />
             ))
         )}
       </div>

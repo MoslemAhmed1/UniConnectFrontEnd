@@ -1,18 +1,13 @@
-import { AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemTitle,
-} from "@/components/ui/item";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Spinner } from "@/components/ui/spinner";
 import { useClassMembers } from "@/hooks/student/use-class-members";
 
-import { useState } from "react";
+import Member from "@/components/common/course/members/CourseMember";
+import Heading from "@/components/global/Heading";
+import SubtleParagraph from "@/components/global/SubtleParagraph";
 import { ClassMembersModal } from "@/components/student/members/class-members-modal";
 import type { StudentUser } from "@/types/student/student-user";
+import { useState } from "react";
 
 export const ClassMembers = () => {
   const { classMembers, isLoading } = useClassMembers();
@@ -26,26 +21,47 @@ export const ClassMembers = () => {
 
   return (
     <div className="w-full h-full">
+      <Heading>Class Members</Heading>
+      <SubtleParagraph className="mb-8">
+        The following is a list of your class mates, you can assign them as
+        heads to different courses
+      </SubtleParagraph>
       {isLoading || !classMembers ? (
         <div className="w-full h-full flex items-center justify-center">
           <Spinner className="size-8" />
         </div>
       ) : (
         classMembers.map((classMember) => (
-          <Item key={classMember.id} variant="outline" className="m-3">
-            <Avatar>
-              <AvatarImage src={classMember.image_url} />
-              <AvatarFallback>
-                {classMember.first_name[0].toUpperCase()}
-                {classMember.parent_name[0].toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <ItemContent>
-              <ItemTitle>
-                {classMember.first_name} {classMember.parent_name}
-              </ItemTitle>
-            </ItemContent>
-            <ItemActions>
+          // TODO: Ask Jalal if he's ok with replacing this with the reusable Member component with an extraActions prop
+
+          // <Item key={classMember.id} variant="outline" className="m-3">
+          //   <Avatar>
+          //     <AvatarImage src={classMember.image_url} />
+          //     <AvatarFallback>
+          //       {classMember.first_name[0].toUpperCase()}
+          //       {classMember.parent_name[0].toUpperCase()}
+          //     </AvatarFallback>
+          //   </Avatar>
+          //   <ItemContent>
+          //     <ItemTitle>
+          //       {classMember.first_name} {classMember.parent_name}
+          //     </ItemTitle>
+          //   </ItemContent>
+          //   <ItemActions>
+          //     <Button
+          //       variant="outline"
+          //       size="sm"
+          //       onClick={() => handleModalOpen(classMember)}
+          //     >
+          //       Assign Course Head
+          //     </Button>
+          //   </ItemActions>
+          // </Item>
+
+          <Member
+            currentPageAbsoluteUrl={window.location.toString()}
+            member={classMember}
+            extraActions={
               <Button
                 variant="outline"
                 size="sm"
@@ -53,8 +69,8 @@ export const ClassMembers = () => {
               >
                 Assign Course Head
               </Button>
-            </ItemActions>
-          </Item>
+            }
+          ></Member>
         ))
       )}
       <ClassMembersModal open={open} setOpen={setOpen} user={selectedUser} />

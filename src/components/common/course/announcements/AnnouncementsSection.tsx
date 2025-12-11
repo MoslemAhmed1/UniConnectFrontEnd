@@ -7,10 +7,16 @@ import AddAnnouncementModal from "@/components/common/course/modals/AddAnnouncem
 type AnnouncementsSectionProps = {
   announcements: Announcement[];
   courseCode: string;
+  courseStudentsCount: number;
   allowModifyAnnouncements: boolean;
 };
 
-export default function AnnouncementsSection({ announcements, courseCode, allowModifyAnnouncements }: AnnouncementsSectionProps) {
+export default function AnnouncementsSection({
+  announcements,
+  courseCode,
+  allowModifyAnnouncements,
+  courseStudentsCount,
+}: AnnouncementsSectionProps) {
   return (
     <div>
       {allowModifyAnnouncements && (
@@ -25,10 +31,11 @@ export default function AnnouncementsSection({ announcements, courseCode, allowM
           </Card>
         ) : (
           announcements.map((announcement) => (
-            <AnnouncementCard 
-              key={announcement.id} 
-              announcement={announcement} 
+            <AnnouncementCard
+              key={announcement.id}
+              announcement={announcement}
               allowModifyAnnouncements={allowModifyAnnouncements}
+              courseStudentsCount={courseStudentsCount}
             />
           ))
         )}

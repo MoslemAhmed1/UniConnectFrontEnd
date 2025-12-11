@@ -1,30 +1,25 @@
 // Hooks
-import { useProfileData } from "@/hooks/use-profile-data";
-import { useStudentCalendar } from "@/hooks/student/use-student-calendar";
-import { useStudentCourses } from "@/hooks/student/use-student-courses";
 import { useStudentAnnouncements } from "@/hooks/student/use-student-announcements";
+import { useStudentCourses } from "@/hooks/student/use-student-courses";
+import { useProfileData } from "@/hooks/use-profile-data";
 import deadlineUtils from "@/utils/time/deadline-utils";
 
 // Components
-import DashboardStats from "@/components/student/dashboard/DashboardStats";
-import DashboardCourses from "@/components/student/dashboard/DashboardCourses";
 import DashboardAnnouncements from "@/components/student/dashboard/DashboardAnnouncements";
+import DashboardCourses from "@/components/student/dashboard/DashboardCourses";
 import DashboardDeadlines from "@/components/student/dashboard/DashboardDeadlines";
+import DashboardStats from "@/components/student/dashboard/DashboardStats";
+import useUpcomingEvents from "@/hooks/student/use-upcoming-events";
 
 export default function Dashboard() {
+  // TODO: Why not use useAuth instead?
   const { profileData, isLoading: isLoadingProfile } = useProfileData();
-  const { calendarEvents, isLoading: isLoadingCalendar } = useStudentCalendar();
   const { courses, isLoading: isLoadingCourses } = useStudentCourses();
-  const { announcements, isLoading: isLoadingAnnouncements } = useStudentAnnouncements();
-  const { getUpcomingDeadlines, formatDeadlineDate } = deadlineUtils();
+  const { announcements, isLoadingAnnouncements } = useStudentAnnouncements();
+  const { isLoadingUpcomingEvents, upcomingEvents } = useUpcomingEvents();
+  const { formatDeadlineDate } = deadlineUtils();
 
-  const studentName = profileData
-    ? profileData.first_name
-      ? profileData.first_name
-      : "Student"
-    : "Student";
-  const upcomingDeadlines = getUpcomingDeadlines(calendarEvents);
-  const upcomingEventsCount = calendarEvents.filter((event) => event.deadline_at >= Date.now()).length;
+  const studentName = profileData?.first_name ?? "Student";
 
   return (
     <div className="container mx-auto px-6 py-8">
@@ -38,11 +33,10 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Quick Stats */}
       <DashboardStats
-        upcomingEventsCount={upcomingEventsCount}
-        isLoadingCalendar={isLoadingCalendar}
+        upcomingEventsCount={upcomingEvents.length}
         activeCoursesCount={courses.length}
+        isLoadingUpcomingEvents={isLoadingUpcomingEvents}
       />
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -60,12 +54,7 @@ export default function Dashboard() {
 
         {/* Right Section */}
         <div className="space-y-6">
-          {/* Deadlines Widget */}
-          <DashboardDeadlines
-            upcomingDeadlines={upcomingDeadlines}
-            isLoadingCalendar={isLoadingCalendar}
-            formatDeadlineDate={formatDeadlineDate}
-          />
+          <DashboardDeadlines formatDeadlineDate={formatDeadlineDate} />
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { useProfileData } from "@/hooks/use-profile-data";
 import { Lock, UserRoundPen } from "lucide-react";
 
 export const ProfilePage = () => {
+  // TODO: Why not use useAuth instead?
   const { profileData, isLoading } = useProfileData();
 
   return (

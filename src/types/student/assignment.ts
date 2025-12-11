@@ -1,15 +1,15 @@
 import type { File } from "@/types/student/file";
+import type { User } from "../user/user";
 
 type Assignment = {
-  id: number;
+  id: string;
   title: string;
-  description: string;
-  courseCode: string;
-  uploaded_at: number;
-  deadline_at: number;
-  uploader: string;
+  description?: string;
+  course_id: string;
+  created_at: string;
+  deadline_at: string;
   attached_files?: File[];
+  assigner?: User;
 };
 
 export { type Assignment };
-

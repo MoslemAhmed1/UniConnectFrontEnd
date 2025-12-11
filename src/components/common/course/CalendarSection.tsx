@@ -1,8 +1,20 @@
 import DOMPurify from "dompurify";
 
 // Components
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Item, ItemMedia, ItemContent, ItemTitle, ItemDescription } from "@/components/ui/item";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+import {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+} from "@/components/ui/item";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 
@@ -10,27 +22,26 @@ import { Badge } from "@/components/ui/badge";
 import type { CalendarEvent } from "@/types/student/calendar-event";
 import { EVENT_TYPE_TO_STYLINGS } from "@/constants/student/calendar";
 
-
 type CalendarSectionProps = {
   calendarEvents: CalendarEvent[];
-}
+};
 
-export default function CalendarSection({ calendarEvents }: CalendarSectionProps) {
+export default function CalendarSection({
+  calendarEvents,
+}: CalendarSectionProps) {
   return (
     <div className="space-y-4">
       <Card className="p-8 text-center gap-0">
         <CardHeader>
-          <CardTitle>
-            Hello
-          </CardTitle>
-          <CardDescription>
-            All deadlines
-          </CardDescription>
+          <CardTitle>Hello</CardTitle>
+          <CardDescription>All deadlines</CardDescription>
         </CardHeader>
         <CardContent>
           <ScrollArea className="max-h-72 h-72 rounded-md border">
             {calendarEvents.length === 0 && (
-              <p className="ms-3 mt-3">There are no events yet for this course.</p>
+              <p className="ms-3 mt-3">
+                There are no events yet for this course.
+              </p>
             )}
             {calendarEvents?.map((event, index) => (
               <Item key={event.title + index}>
@@ -50,7 +61,7 @@ export default function CalendarSection({ calendarEvents }: CalendarSectionProps
                     {/* Sanitize incoming HTML to prevent XSS */}
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(event.stringified_notes),
+                        __html: DOMPurify.sanitize(event.notes),
                       }}
                     />
                   </ItemDescription>

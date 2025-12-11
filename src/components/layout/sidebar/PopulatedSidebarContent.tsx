@@ -23,6 +23,7 @@ const PopulatedSidebarContent = () => {
     return [];
   };
 
+  // TODO: Highlight the selected sidebar item to deliver a better UX
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -31,7 +32,7 @@ const PopulatedSidebarContent = () => {
             {getSidebarItems().map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url}>
+                  <a href={`/student/${item.url}`}>
                     <item.icon />
                     <span>{item.title}</span>
                   </a>

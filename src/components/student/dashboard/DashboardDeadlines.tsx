@@ -1,22 +1,26 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "lucide-react"
-import { Link } from "react-router-dom"
-import DeadlineItem from "./DeadlineItem"
-import type { CalendarEvent } from "@/types/student/calendar-event"
-import { EVENT_TYPE_TO_STYLINGS } from "@/constants/student/calendar"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { EVENT_TYPE_TO_STYLINGS } from "@/constants/student/calendar";
+import useDashboardDeadlines from "@/hooks/student/use-dashboard-deadlines";
+import { Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
+import DeadlineItem from "./DeadlineItem";
 
 type DashboardDeadlinesProps = {
-  upcomingDeadlines: CalendarEvent[]
-  isLoadingCalendar: boolean
-  formatDeadlineDate: (timestamp: number) => string
-}
+  formatDeadlineDate: (timestamp: number) => string;
+};
 
 export default function DashboardDeadlines({
-  upcomingDeadlines,
-  isLoadingCalendar,
-  formatDeadlineDate
+  formatDeadlineDate,
 }: DashboardDeadlinesProps) {
+  const { isLoadingDashboardDeadlines, dashboardDeadlines } =
+    useDashboardDeadlines();
+
   return (
     <Card className="p-6 gap-0">
       <CardHeader className="space-y-4 p-0">
@@ -26,18 +30,20 @@ export default function DashboardDeadlines({
         </h3>
       </CardHeader>
       <CardContent className="space-y-4 p-0">
-        {isLoadingCalendar ? (
+        {isLoadingDashboardDeadlines ? (
           <p className="text-sm text-slate-500">Loading deadlines...</p>
-        ) : upcomingDeadlines.length === 0 ? (
+        ) : dashboardDeadlines.length === 0 ? (
           <p className="text-sm text-slate-500">No upcoming deadlines</p>
         ) : (
-          upcomingDeadlines.map((event: CalendarEvent, index) => (
+          dashboardDeadlines.map((event, index) => (
             <DeadlineItem
               key={index} // Should i use "index" from the .map() instead ?
               title={event.title}
               date={formatDeadlineDate(event.deadline_at)}
               eventType={event.type}
-              backgroundColorClassName={EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName}
+              backgroundColorClassName={
+                EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName
+              }
             />
           ))
         )}
@@ -50,5 +56,5 @@ export default function DashboardDeadlines({
         </Link>
       </CardFooter>
     </Card>
-  )
+  );
 }

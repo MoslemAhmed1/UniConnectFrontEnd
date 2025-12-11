@@ -73,7 +73,7 @@ createRoot(document.getElementById("root")!).render(
                         <AuthGuard allowedRoles={["class_representative"]} />
                       }
                     >
-                      <Route path="members" element={<ClassMembers />} />
+                      <Route path="class-members" element={<ClassMembers />} />
                     </Route>
                   </Route>
                 </Route>
@@ -96,6 +96,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/admin">
                 <Route path="create" element={<CreateAdminPage />} />
               </Route>
+              <Route path="/profiles/:profile_id" element={<ProfilePage />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
             </Routes>
             <Toaster position="top-center" />
