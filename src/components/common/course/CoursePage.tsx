@@ -6,28 +6,27 @@ import MaterialsSection from "@/components/common/course/materials/MaterialsSect
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CourseMembersSection from "./members/CourseMembersSection";
 
+// Hooks
+import { useStudentAnnouncements } from "@/hooks/student/use-student-announcements";
+import { useStudentAssignments } from "@/hooks/student/use-student-assignments";
+import { useStudentMaterials } from "@/hooks/student/use-student-materials";
+
 // Types
 import type { FeatureFlags } from "@/constants/user/feature-flags";
-import type { Announcement } from "@/types/student/announcement";
-import type { Assignment } from "@/types/student/assignment";
 import type { Course } from "@/types/student/course";
-import type { Material } from "@/types/student/material";
 
 type CoursePageProps = {
   course: Course;
-  materials: Material[];
-  announcements: Announcement[];
-  assignments: Assignment[];
   featureFlags: FeatureFlags;
 };
 
-export default function CoursePage({
-  course,
-  materials,
-  announcements,
-  assignments,
-  featureFlags,
-}: CoursePageProps) {
+export default function CoursePage({ course, featureFlags }: CoursePageProps) {
+  const { announcements } = useStudentAnnouncements();
+  const { assignments } = useStudentAssignments(course.code);
+
+  // TODO: backend route returns only 3-4 recent materials + returns an array with the material count for each category ??
+  const { materials } = useStudentMaterials();  
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-6 py-8">
@@ -46,6 +45,7 @@ export default function CoursePage({
             <TabsTrigger value="members">Members</TabsTrigger>
           </TabsList>
 
+          {/* TODO: Remove courseCode Props in all sections if backend route handles them */}
           <TabsContent value="materials">
             <MaterialsSection
               materials={materials}

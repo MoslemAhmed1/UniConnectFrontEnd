@@ -16,30 +16,36 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useAddMaterialForm } from "@/hooks/student/use-add-material-form";
-import type { InferredAddMaterialFormSchema } from "@/validations/AddMaterialFormSchema";
+import { useMaterialForm } from "@/hooks/student/use-material-form";
+import type { InferredMaterialFormSchema } from "@/validations/MaterialFormSchema";
 
-type AddMaterialFormProps = {
+type MaterialFormProps = {
+  mode?: "create" | "edit";
+  materialId?: number;
   courseCode: string;
   onClose: () => void;
-  defaultValues?: Partial<InferredAddMaterialFormSchema>;
+  defaultValues?: Partial<InferredMaterialFormSchema>;
 };
 
-export default function AddMaterialForm({
+export default function MaterialForm({
+  mode = "create",
+  materialId,
   courseCode,
   onClose,
   defaultValues,
-}: AddMaterialFormProps) {
-
-  const { control, isSubmitting, onSubmit } = useAddMaterialForm({
+}: MaterialFormProps) {
+  const { control, isSubmitting, onSubmit } = useMaterialForm({
+    mode,
+    materialId,
     courseCode,
-    defaultValues: defaultValues
+    defaultValues,
   });
+
+  const isEditMode = mode === "edit";
 
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit} aria-busy={isSubmitting}>
       <FieldGroup>
-
         {/* Title */}
         <Controller
           name="title"
@@ -64,10 +70,10 @@ export default function AddMaterialForm({
           control={control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Folder</FieldLabel>
+              <FieldLabel htmlFor="material-folder">Folder</FieldLabel>
 
               <Select value={field.value ?? "lecture"} onValueChange={field.onChange}>
-                <SelectTrigger aria-invalid={fieldState.invalid}>
+                <SelectTrigger id="material-folder" aria-invalid={fieldState.invalid}>
                   <SelectValue placeholder="Select a folder" />
                 </SelectTrigger>
                 <SelectContent>
@@ -86,6 +92,7 @@ export default function AddMaterialForm({
         />
 
         {/* File Upload */}
+        {/* TODO: Replace this with your new file upload */}
         <Controller
           name="file"
           control={control}
@@ -126,12 +133,17 @@ export default function AddMaterialForm({
             </Button>
 
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Adding..." : "Add Material"}
-              {isSubmitting && <Spinner />}
+              {isSubmitting ? (
+                <>
+                  {isEditMode ? "Updating..." : "Adding..."}
+                  <Spinner />
+                </>
+              ) : (
+                <>{isEditMode ? "Update Material" : "Add Material"}</>
+              )}
             </Button>
           </div>
         </Field>
-
       </FieldGroup>
     </form>
   );

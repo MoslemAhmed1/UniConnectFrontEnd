@@ -1,10 +1,6 @@
 import type { FeatureFlags } from "@/constants/user/feature-flags";
-import { useParams } from "react-router-dom";
 
 // Hooks
-import { useCourseAnnouncements } from "@/hooks/student/use-course-announcements";
-import { useStudentAssignments } from "@/hooks/student/use-student-assignments";
-import { useStudentMaterials } from "@/hooks/student/use-student-materials";
 import { useAuth } from "@/providers/context/authContext";
 
 // Components
@@ -13,12 +9,8 @@ import useStudentCourse from "@/hooks/student/use-student-course";
 
 export const StudentCoursePage = () => {
   const { auth } = useAuth();
-  const { id } = useParams<{ id: string }>();
-  const { announcements } = useCourseAnnouncements(id);
-  const { assignments } = useStudentAssignments(id);
-  const { materials } = useStudentMaterials();
   const { course } = useStudentCourse();
-
+  
   if (!course) {
     // TODO: Use Lottie React 404 page
     return <></>;
@@ -52,10 +44,7 @@ export const StudentCoursePage = () => {
 
   return (
     <CoursePage
-      course={course}
-      materials={materials}
-      announcements={announcements}
-      assignments={assignments}
+      course = {course}
       featureFlags={featureFlags}
     />
   );
