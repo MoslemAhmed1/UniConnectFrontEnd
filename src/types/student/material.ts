@@ -1,11 +1,11 @@
 import type { File } from "@/types/student/file";
 
 type Material = {
-  id: number | string;
+  id: number;
   title: string;
   category: MaterialCategory;
   uploaded_at: number;
-  courseCode: string;
+  course_code: string;
   uploader: string;
   file: File;
 };

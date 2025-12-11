@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ConfiguredCalendar from "@/components/student/calendar/ConfiguredCalendar";
-import Legend from "@/components/student/calendar/Legend";
-import SelectedDayDetails from "@/components/student/calendar/SelectedDayDetails";
+import ConfiguredCalendar from "@/components/common/calendar/ConfiguredCalendar";
+import Legend from "@/components/common/calendar/Legend";
+import SelectedDayDetails from "@/components/common/calendar/SelectedDayDetails";
 import { useStudentCalendar } from "@/hooks/student/use-student-calendar";
 import { useStudentCourses } from "@/hooks/student/use-student-courses";
 import AddEventModal from "@/components/common/calendar/AddEventModal";
