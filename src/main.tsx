@@ -36,29 +36,49 @@ createRoot(document.getElementById("root")!).render(
         <ModalProvider>
           <BrowserRouter>
             <Routes>
-              <Route>
+              <Route element={<UnAuthGuard />}>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
               </Route>
 
               <Route element={<GlobalLayout />}>
-                <Route>
+                <Route
+                  element={
+                    <AuthGuard
+                      allowedRoles={[
+                        "student",
+                        "class_representative",
+                        "course_head",
+                      ]}
+                    />
+                  }
+                >
                   <Route path="/student">
                     <Route path="calendar" element={<Calendar />} />
                     <Route path="groups/:id" element={<Group />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="courses" element={<MyStudentCourses />} />
                     <Route path="courses/:id" element={<StudentCoursePage />} />
-                    <Route path="courses/:id/assignment/:assignmentId" element={<AssignmentSubmission />} />
-                    <Route path="materials/:id/:category" element={<Materials />} />
+                    <Route
+                      path="courses/:id/assignment/:assignmentId"
+                      element={<AssignmentSubmission />}
+                    />
+                    <Route
+                      path="materials/:id/:category"
+                      element={<Materials />}
+                    />
                     <Route path="profile" element={<ProfilePage />} />
-                    <Route>
+                    <Route
+                      element={
+                        <AuthGuard allowedRoles={["class_representative"]} />
+                      }
+                    >
                       <Route path="members" element={<ClassMembers />} />
                     </Route>
                   </Route>
                 </Route>
 
-                <Route>
+                <Route element={<AuthGuard allowedRoles={["professor/ta"]} />}>
                   <Route path="/instructor">
                     <Route path="profile" element={<ProfilePage />} />
                     <Route
