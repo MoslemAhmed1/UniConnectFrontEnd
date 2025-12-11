@@ -1,16 +1,28 @@
-import { Card , CardTitle , CardDescription , CardContent , CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Trash2, Edit } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { Announcement } from "@/types/student/announcement"
-import { formatDistanceToNow, format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import type { Announcement } from "@/types/student/announcement";
+import { format, formatDistanceToNow } from "date-fns";
+import { Edit, Trash2 } from "lucide-react";
+import PollItem from "./PollItem";
 
 type AnnouncementCardProps = {
-  announcement: Announcement
-  allowModifyAnnouncements: boolean
-}
+  announcement: Announcement;
+  allowModifyAnnouncements: boolean;
+  courseStudentsCount: number;
+};
 
-export default function AnnouncementCard({ announcement, allowModifyAnnouncements }: AnnouncementCardProps) {
+export default function AnnouncementCard({
+  announcement,
+  allowModifyAnnouncements,
+  courseStudentsCount,
+}: AnnouncementCardProps) {
   const createdAt = new Date(announcement.created_at);
   const now = new Date();
   const diffInMs = now.getTime() - createdAt.getTime();
@@ -22,7 +34,7 @@ export default function AnnouncementCard({ announcement, allowModifyAnnouncement
   } else {
     formattedDate = format(createdAt, "MMM d, h:mma");
   }
-  
+
   return (
     <Card className="p-6">
       <CardHeader className="p-0">
@@ -30,10 +42,8 @@ export default function AnnouncementCard({ announcement, allowModifyAnnouncement
           <div className="flex items-center gap-3">
             {/* Replace with uploader's profile photo */}
             <Avatar className="w-10 h-10 rounded-full">
-              <AvatarImage src="https://tr.rbxcdn.com/180DAY-d4a6d1564bf7c0e65447501bdb3cc584/420/420/FaceAccessory/Webp/noFilter" />
-              <AvatarFallback className="rounded-full">
-                ST
-              </AvatarFallback>
+              <AvatarImage src={announcement.announcer.image_url} />
+              <AvatarFallback className="rounded-full capitalize">{`${announcement.announcer.first_name[0]}${announcement.announcer.parent_name[0]}`}</AvatarFallback>
             </Avatar>
 
             <div>
@@ -41,7 +51,8 @@ export default function AnnouncementCard({ announcement, allowModifyAnnouncement
                 {announcement.title}
               </CardTitle>
               <CardDescription className="text-sm text-slate-500">
-                {announcement.uploader} • {formattedDate}
+                {`${announcement.announcer.first_name} ${announcement.announcer.parent_name}`}{" "}
+                • {formattedDate}
               </CardDescription>
             </div>
           </div>
@@ -58,8 +69,19 @@ export default function AnnouncementCard({ announcement, allowModifyAnnouncement
         </div>
       </CardHeader>
       <CardContent className="p-0">
-          {announcement.content}
+        {announcement.content}
+
+        {announcement.type === "poll" && (
+          <CardContent className="space-y-6">
+            {announcement.pollItems.map((pollItem) => (
+              <PollItem
+                pollItem={pollItem}
+                courseStudentsCount={courseStudentsCount}
+              />
+            ))}
+          </CardContent>
+        )}
       </CardContent>
     </Card>
-  )
+  );
 }

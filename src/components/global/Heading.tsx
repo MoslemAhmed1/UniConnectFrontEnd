@@ -5,7 +5,7 @@ type HeadingProps = {
 };
 
 const Heading = ({ children }: HeadingProps) => {
-  return <h1 className="text-4xl font-bold mb-1">{children}</h1>;
+  return <h1 className="text-4xl font-bold mb-2">{children}</h1>;
 };
 
 export default Heading;

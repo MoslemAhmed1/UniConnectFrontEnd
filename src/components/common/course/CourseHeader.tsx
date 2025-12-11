@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-import { Users } from "lucide-react";
+import { Users, Edit } from "lucide-react";
 import type { Course } from "@/types/student/course";
 import { UpdateCourseModal } from "@/components/professor/course/UpdateCourseModal";
+import Teachers from "@/components/student/dashboard/Teachers";
 
 type CourseHeaderProps = {
   course: Course;
@@ -15,25 +16,19 @@ export default function CourseHeader({
   return (
     <div className="mb-8">
       <div className="container mx-auto h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2 mb-3">
-          <Badge variant="secondary" className="bg-emerald-400 text-white">
-            {course.class}
-          </Badge>
-          <Badge variant="outline">{course.code}</Badge>
-        </div>
+        <Badge variant="outline">{course.code}</Badge>
         <div className="flex items-center gap-3">
           {showModifyCourseBtn && <UpdateCourseModal courseData={course} />}
         </div>
       </div>
       <h1 className="text-4xl font-bold text-slate-800 mb-3">{course.name}</h1>
       <div className="flex items-center gap-6 text-slate-500 flex-wrap">
-        {" "}
         {/* flex-wrap extra */}
-        <span>{course.instructor}</span>
+        <Teachers teachers={course.teachers} showAll />
         <span>•</span>
         <span className="flex items-center gap-1">
           <Users className="w-4 h-4" />
-          124 students
+          {course.students_number}
         </span>
       </div>
     </div>

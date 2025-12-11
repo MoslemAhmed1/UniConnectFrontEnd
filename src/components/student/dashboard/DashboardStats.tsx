@@ -1,21 +1,19 @@
-import { BookOpen, Calendar, Bell, Users } from "lucide-react"
-import StatCard from "./StatCard"
+import { BookOpen, Calendar, Clock } from "lucide-react";
+import StatCard from "./StatCard";
 
 type DashboardStatsProps = {
-  upcomingEventsCount: number
-  activeCoursesCount: number
-  studyGroupsCount?: number
-  unreadAnnouncementsCount?: number
-  isLoadingCalendar: boolean
-}
+  activeCoursesCount: number;
+  upcomingEventsCount: number;
+  isLoadingUpcomingEvents: boolean;
+};
 
 export default function DashboardStats({
-  upcomingEventsCount,
   activeCoursesCount,
-  isLoadingCalendar,
+  upcomingEventsCount,
+  isLoadingUpcomingEvents,
 }: DashboardStatsProps) {
   return (
-    <div className="grid md:grid-cols-4 gap-6 mb-8">
+    <div className="grid md:grid-cols-3 gap-6 mb-8">
       <StatCard
         icon={BookOpen}
         label="Active Courses"
@@ -27,23 +25,16 @@ export default function DashboardStats({
         icon={Calendar}
         label="Upcoming Events"
         value={upcomingEventsCount.toString()}
-        color="from-teal-600 to-blue-600"
-        isLoading={isLoadingCalendar}
+        color="from-yellow-400 to-yellow-400"
+        isLoading={isLoadingUpcomingEvents}
       />
       <StatCard
-        icon={Bell}
-        label="Unread Announcements"
-        value="7"
-        color="from-teal-600 to-teal-600"
-        isLoading={false}
-      />
-      <StatCard
-        icon={Users}
-        label="Study Groups"
+        icon={Clock}
+        label="Due assignments"
         value="2"
-        color="from-blue-600 to-teal-600"
+        color="from-red-600 to-red-600"
         isLoading={false}
       />
     </div>
-  )
+  );
 }

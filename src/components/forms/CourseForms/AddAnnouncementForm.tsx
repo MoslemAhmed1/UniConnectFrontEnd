@@ -1,12 +1,28 @@
-import { Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Textarea } from "@/components/ui/textarea";
 import { useAddAnnouncementForm } from "@/hooks/student/use-add-announcement-form";
 import type { InferredAddAnnouncementFormSchema } from "@/validations/AddAnnouncementFormSchema";
+import { Plus, Trash } from "lucide-react";
+import { Controller } from "react-hook-form";
 
 type AddAnnouncementFormProps = {
   courseCode: string;
@@ -19,16 +35,22 @@ export default function AddAnnouncementForm({
   onClose,
   defaultValues,
 }: AddAnnouncementFormProps) {
-  const { control, isSubmitting, onSubmit } = useAddAnnouncementForm({
+  const {
+    control,
+    isSubmitting,
+    onSubmit,
+    selectedType,
+    appendPollField,
+    pollFields,
+    removePollField,
+  } = useAddAnnouncementForm({
     courseCode,
     defaultValues,
   });
-  
-  // TODO: Add Poll Option here
+
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit}>
       <FieldGroup>
-
         {/* Title */}
         <Controller
           name="title"
@@ -87,6 +109,64 @@ export default function AddAnnouncementForm({
           )}
         />
 
+        {selectedType === "poll" && (
+          <>
+            <FieldSeparator />
+            <FieldSet>
+              <FieldLegend>Poll Items</FieldLegend>
+              <FieldDescription>
+                Add poll items so students can vote, make sure you have at least
+                2.
+              </FieldDescription>
+              <FieldGroup>
+                {pollFields.map((field, index) => (
+                  <Controller
+                    name={`pollItems.${index}.value`}
+                    key={field.id}
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={`poll-item-${index}`}>
+                          Poll item {index + 1}
+                        </FieldLabel>
+
+                        <div className="flex items-center gap-1">
+                          <Input
+                            {...field}
+                            id={`poll-item-${index}`}
+                            placeholder={`Item ${index + 1}`}
+                            aria-invalid={fieldState.invalid}
+                          />
+                          {pollFields.length > 2 && (
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              onClick={() => removePollField(index)}
+                            >
+                              <Trash aria-label="Delete poll item." />
+                            </Button>
+                          )}
+                        </div>
+                        {fieldState.error && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                ))}
+
+                <Button
+                  variant="outline"
+                  onClick={() => appendPollField({ value: "" })}
+                >
+                  <Plus />
+                  Add Poll Item
+                </Button>
+              </FieldGroup>
+            </FieldSet>
+          </>
+        )}
+
         {/* Action Buttons */}
         <Field>
           <div className="flex justify-end gap-2">
@@ -111,7 +191,6 @@ export default function AddAnnouncementForm({
             </Button>
           </div>
         </Field>
-
       </FieldGroup>
     </form>
   );
