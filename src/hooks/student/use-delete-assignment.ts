@@ -8,7 +8,7 @@ export const useDeleteAssignment = () => {
 
   const { mutateAsync: deleteAssignment, isPending: isDeleting } = useMutation({
     mutationKey: ["delete-assignment"],
-    mutationFn: async (assignmentId: number) => {
+    mutationFn: async (assignmentId: string) => {
       return api.delete(`/api/assignments/${assignmentId}`);
     },
     onSuccess: () => {
@@ -27,7 +27,7 @@ export const useDeleteAssignment = () => {
     },
   });
 
-  const handleDeleteAssignment = async (assignmentId: number) => {
+  const handleDeleteAssignment = async (assignmentId: string) => {
     try {
       await deleteAssignment(assignmentId);
     } catch (err) {

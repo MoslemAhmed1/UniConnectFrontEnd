@@ -47,13 +47,13 @@ const getStatusColor = (status: string) => {
 };
 
 export default function AssignmentItem({ assignment, allowModifyAssignments = false }: AssignmentItemProps) {
-  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const { handleDeleteAssignment, isDeleting } = useDeleteAssignment();
 
-  const handleDelete = async (eventId: number) => {
+  const handleDelete = async (assignmentId: string) => {
     try {
-      setPendingDeleteId(eventId);
-      await handleDeleteAssignment(eventId);
+      setPendingDeleteId(assignmentId);
+      await handleDeleteAssignment(assignmentId);
     } finally {
       setPendingDeleteId(null);
     }
