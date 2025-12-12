@@ -10,11 +10,13 @@ import {
 import { INSTRUCTOR_SIDEBAR_ITEMS } from "@/constants/instructor/layout";
 import { STUDENT_SIDEBAR_ITEMS } from "@/constants/student/layout";
 import { useHasRole } from "@/hooks/use-has-role";
+import { Link } from "react-router-dom";
 
 const PopulatedSidebarContent = () => {
   const { hasRole } = useHasRole();
 
   const getSidebarItems = () => {
+    // TODO: Filter some its by role
     if (hasRole("student", "class_representative", "course_head"))
       return STUDENT_SIDEBAR_ITEMS;
     else if (hasRole("system_admin", "professor/ta"))
@@ -32,10 +34,13 @@ const PopulatedSidebarContent = () => {
             {getSidebarItems().map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={`${item.url}`}>
+                  <p>
                     <item.icon />
-                    <span>{item.title}</span>
-                  </a>
+
+                    <Link to={item.url}>
+                      <span>{item.title}</span>
+                    </Link>
+                  </p>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}

@@ -18,6 +18,7 @@ import { handleDownload } from "@/utils/download-handler";
 import EditMaterialModal from "../modals/EditMaterialModal";
 import { useState } from "react";
 import { useDeleteMaterial } from "@/hooks/student/use-delete-material";
+import { getDisplayFileType } from "@/utils/files/getDisplayFileType";
 
 type MaterialItemProps = {
   material: Material;
@@ -71,7 +72,7 @@ export default function MaterialItem({
             </CardTitle>
 
             <CardDescription className="flex items-center gap-2 text-sm mt-1">
-              <span>{material.file.type.toUpperCase()}</span>
+              <span>{getDisplayFileType(material.file.type)}</span>
               <span>•</span>
               <span>{material.file.size}</span>
               <span>•</span>

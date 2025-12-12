@@ -8,6 +8,6 @@ type File = {
   uploaded_at: number;
 };
 
-type FileType = "application/pdf"; // more could be added later
+export type FileType = "application/pdf"; // more could be added later
 
 export { type File };

@@ -4,7 +4,6 @@ import type { PollItem } from "@/types/student/announcement";
 import { useMutation } from "@tanstack/react-query";
 
 const usePollItem = (pollItem: PollItem) => {
-  console.log(pollItem);
   const { auth } = useAuth();
   const pollItemChecked = pollItem.votersIds.some(
     (voteId) => voteId === auth.user?.id

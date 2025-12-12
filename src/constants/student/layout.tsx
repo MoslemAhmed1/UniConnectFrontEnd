@@ -18,26 +18,26 @@ export const STUDENT_SIDEBAR_ITEMS: {
   {
     icon: LayoutDashboard,
     title: "Dashboard",
-    url: "dashboard",
+    url: "/student/dashboard",
   },
   {
     icon: Calendar,
-    url: "calendar",
+    url: "/student/calendar",
     title: "Deadlines Calendar",
   },
   {
     icon: Book,
-    url: "courses",
+    url: "/student/courses",
     title: "My Courses",
   },
   {
     icon: Megaphone,
-    url: "class-announcements",
+    url: "/student/class-announcements",
     title: "Class Announcements",
   },
   {
     icon: Users,
-    url: "class-members",
+    url: "/student/class-members",
     title: "Class Members",
   },
 ] as const;
