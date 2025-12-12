@@ -10,8 +10,8 @@ import { useProfileData } from "@/hooks/use-profile-data";
 import { Lock, UserRoundPen } from "lucide-react";
 
 export const ProfilePage = () => {
+  // TODO: Why not use useAuth instead?
   const { profileData, isLoading } = useProfileData();
-
   return (
     <div className="w-full flex flex-col items-center  m-auto p-10 h-full md:w-full xl:w-6/10">
       <div className="flex flex-row justify-start w-full">

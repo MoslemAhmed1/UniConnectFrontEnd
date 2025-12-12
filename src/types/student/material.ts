@@ -1,13 +1,13 @@
 import type { File } from "@/types/student/file";
-import type { GlobalUser } from "../user/user";
+import type { User } from "../user/user";
 
 type Material = {
-  id: number | string;
+  id: number;
   title: string;
   category: MaterialCategory;
   uploaded_at: number;
-  courseCode: string;
-  uploader: GlobalUser;
+  course_code: string;
+  uploader: User;
   file: File;
 };
 

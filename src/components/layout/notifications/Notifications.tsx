@@ -15,7 +15,7 @@ const Notifications = () => {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" onClick={markAllAsRead}>
           <BellAndIndicator
             unreadNotificationsCount={unreadNotificationsCount}

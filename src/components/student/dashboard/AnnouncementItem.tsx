@@ -1,13 +1,15 @@
 import type { Announcement } from "@/types/student/announcement";
-import { CardHeader , CardDescription , CardTitle } from "@/components/ui/card";
+import { CardHeader, CardDescription, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow, format } from "date-fns";
+import { Link } from "react-router";
 
 type AnnouncementItemProps = {
-  announcement: Announcement
-}
+  announcement: Announcement;
+};
 
-export default function AnnouncementItem({ announcement }: AnnouncementItemProps) {
-  
+export default function AnnouncementItem({
+  announcement,
+}: AnnouncementItemProps) {
   const createdAt = new Date(announcement.created_at);
   const now = new Date();
   const diffInMs = now.getTime() - createdAt.getTime();
@@ -25,11 +27,30 @@ export default function AnnouncementItem({ announcement }: AnnouncementItemProps
       <div className="flex items-start justify-between gap-4">
         <div>
           <CardDescription className="text-xs font-medium text-blue-600 mb-1">
-            {announcement.courseCode}
+            {"course_id" in announcement ? (
+              <Link to={`courses/${announcement.course_id}`}>
+                {announcement.course_id}
+              </Link>
+            ) : (
+              `Year ${announcement.class}`
+            )}
           </CardDescription>
 
           <CardTitle className="text-sm font-medium text-slate-800">
-            {announcement.title}
+            {announcement.type === "announcement" &&
+              (announcement.title ||
+                `${announcement.content.slice(0, 200)}${announcement.content.length > 200 ? "..." : ""}`)}
+
+            {announcement.type === "poll" && (
+              <div className="flex flex-col">
+                <span>{announcement.title}</span>
+                {"course_id" in announcement && (
+                  <span className="text-xs text-gray-400">
+                    This is a poll. To vote, please visit the course page.
+                  </span>
+                )}
+              </div>
+            )}
           </CardTitle>
 
           <CardDescription className="text-xs text-slate-500 mt-1">
@@ -38,5 +59,5 @@ export default function AnnouncementItem({ announcement }: AnnouncementItemProps
         </div>
       </div>
     </CardHeader>
-  )
+  );
 }

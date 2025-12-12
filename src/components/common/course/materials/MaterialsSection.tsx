@@ -32,6 +32,9 @@ export default function MaterialsSection({
 
   const recentMaterials = materials.slice(0, 3);
 
+  allowModifyMaterials = true;
+
+  // TODO: do we instead create a backend route which returns an array with the material count for each category ?? + maybe add the recent materials
   const getMaterialCount = (category: string) => {
     return materials.filter((m) => m.category === category).length;
   };

@@ -9,31 +9,23 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import AddAssignmentForm from "@/components/forms/CourseForms/AddAssignmentForm";
+import AssignmentForm from "@/components/forms/CourseForms/AssignmentForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 type AddAssignmentModalProps = {
   courseCode: string;
-  trigger?: React.ReactNode;
 };
 
-export default function AddAssignmentModal({
-  courseCode,
-  trigger
-}: AddAssignmentModalProps) {
+export default function AddAssignmentModal({ courseCode }: AddAssignmentModalProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {trigger ? (
-          <>{trigger}</>
-        ) : (
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Assignment
-          </Button>
-        )}
+        <Button>
+          <Plus className="w-4 h-4 mr-2" />
+          Add Assignment
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
@@ -43,7 +35,8 @@ export default function AddAssignmentModal({
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="max-h-[70vh] pr-4">
-          <AddAssignmentForm
+          <AssignmentForm
+            mode="create"
             courseCode={courseCode}
             onClose={() => setOpen(false)}
           />

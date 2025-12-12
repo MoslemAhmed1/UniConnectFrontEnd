@@ -12,7 +12,7 @@ const MessageAvatar = ({ sender }: MessageAvatarProps) => {
 
   return (
     <Avatar className={styles.avatar}>
-      <AvatarImage src={sender.profileUrl} />
+      <AvatarImage src={sender.image_url} />
       <AvatarFallback>
         {firstLetterInFirstName + firstLetterInSecondName}
       </AvatarFallback>

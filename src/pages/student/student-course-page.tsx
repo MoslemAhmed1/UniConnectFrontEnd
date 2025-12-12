@@ -1,28 +1,19 @@
-import { useParams } from "react-router-dom";
 import type { FeatureFlags } from "@/constants/user/feature-flags";
 
 // Hooks
-import { useStudentCourses } from "@/hooks/student/use-student-courses";
-import { useStudentAnnouncements } from "@/hooks/student/use-student-announcements";
-import { useStudentAssignments } from "@/hooks/student/use-student-assignments";
-import { useStudentMaterials } from "@/hooks/student/use-student-materials";
 import { useAuth } from "@/providers/context/authContext";
 
 // Components
 import CoursePage from "@/components/common/course/CoursePage";
+import { useCourseData } from "@/hooks/professor/use-course-data";
+import { useParams } from "react-router";
 
 export const StudentCoursePage = () => {
   const { auth } = useAuth();
   const { id } = useParams<{ id: string }>();
-  const { courses } = useStudentCourses();
-  const { announcements } = useStudentAnnouncements();
-  const { assignments } = useStudentAssignments();
+  const { courseData } = useCourseData(id);
 
-  // Find the selected course by code (id from URL)
-  const course = courses.find((c) => c.code === id);
-
-  const { materials } = useStudentMaterials(course?.code);
-  if (!course) {
+  if (!courseData) {
     // TODO: Use Lottie React 404 page
     return <></>;
   }
@@ -43,7 +34,8 @@ export const StudentCoursePage = () => {
     featureFlags.showAddAnnouncementBtn = true;
     featureFlags.showAddCalendarEventBtn = true;
   } else if (studentRole === "course_head") {
-    const isTeamHeadForThisCourse = course.representative_id === auth.user?.id;
+    const isTeamHeadForThisCourse =
+      courseData.representative_id === auth.user?.id;
 
     if (isTeamHeadForThisCourse) {
       featureFlags.showModifyCourseBtn = true;
@@ -53,13 +45,5 @@ export const StudentCoursePage = () => {
     }
   }
 
-  return (
-    <CoursePage
-      course={course}
-      materials={materials}
-      announcements={announcements}
-      assignments={assignments}
-      featureFlags={featureFlags}
-    />
-  );
+  return <CoursePage course={courseData} featureFlags={featureFlags} />;
 };

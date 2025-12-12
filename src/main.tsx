@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import "./main.css";
 
-import Calendar from "@/pages/student/calendar";
+import Calendar from "@/components/common/calendar/calendar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
@@ -19,7 +19,6 @@ import Dashboard from "./pages/student/dashboard";
 import Group from "./pages/student/group";
 import Materials from "./pages/student/materials";
 import { ProfilePage } from "./pages/profile";
-import { MaterialViewer } from "./pages/student/material-viewer";
 import LoginPage from "./pages/user/login";
 import SignupPage from "./pages/user/signup";
 import AuthProvider from "./providers/AuthProvider";
@@ -70,6 +69,7 @@ createRoot(document.getElementById("root")!).render(
                       element={<Materials />}
                     />
                     <Route path="profile" element={<ProfilePage />} />
+                    <Route path="profile" element={<ProfilePage />} />
                     <Route
                       element={
                         <AuthGuard allowedRoles={["class_representative"]} />
@@ -83,6 +83,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route element={<AuthGuard allowedRoles={["professor/ta"]} />}>
                   <Route path="/instructor">
                     <Route path="profile" element={<ProfilePage />} />
+                    <Route path="profile" element={<ProfilePage />} />
                     <Route
                       path="courses/:id"
                       element={<InstructorCoursePage />}
@@ -95,10 +96,6 @@ createRoot(document.getElementById("root")!).render(
                     <Route
                       path="materials/:id/:category"
                       element={<Materials />}
-                    />
-                    <Route
-                      path="materials/view/:id"
-                      element={<MaterialViewer />}
                     />
                   </Route>
                 </Route>

@@ -1,8 +1,9 @@
 import {
   Book,
-  BookA,
   Calendar,
   LayoutDashboard,
+  Megaphone,
+  Users,
   type LucideProps,
 } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
@@ -30,8 +31,13 @@ export const STUDENT_SIDEBAR_ITEMS: {
     title: "My Courses",
   },
   {
-    icon: BookA,
-    url: "/student/assignments",
-    title: "Assignments",
+    icon: Megaphone,
+    url: "class-announcements",
+    title: "Class Announcements",
+  },
+  {
+    icon: Users,
+    url: "class-members",
+    title: "Class Members",
   },
 ] as const;

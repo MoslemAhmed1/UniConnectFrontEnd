@@ -1,15 +1,18 @@
 import { YEARS } from "@/constants/student/student";
+import type { User } from "../user/user";
+import type { serverRolesType } from "../api/auth";
 
-type StudentUser = {
-  image_url?: string;
+type Subset<T extends K, K> = T;
+
+type StudentRole = Subset<
+  "student" | "class_representative" | "course_head",
+  serverRolesType
+>;
+
+type StudentUser = User & {
   code: string;
-  first_name: string;
-  parent_name: string;
-  grandparent_name?: string;
-  family_name?: string;
-  email: string;
   year: (typeof YEARS)[number];
-  id: string;
+  role: StudentRole;
 };
 
 export { type StudentUser };

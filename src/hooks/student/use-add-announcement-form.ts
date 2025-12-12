@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/lib/axios";
 import { toast } from "sonner";
@@ -15,23 +15,41 @@ type UseAddAnnouncementFormArgs = {
   defaultValues?: Partial<InferredAddAnnouncementFormSchema>;
 };
 
-export const useAddAnnouncementForm = ({ courseCode, defaultValues }: UseAddAnnouncementFormArgs) => {
+export const useAddAnnouncementForm = ({
+  courseCode,
+  defaultValues,
+}: UseAddAnnouncementFormArgs) => {
   const form = useForm<InferredAddAnnouncementFormSchema>({
     resolver: zodResolver(addAnnouncementSchema),
     defaultValues: {
       title: defaultValues?.title ?? "",
       content: defaultValues?.content ?? "",
       type: defaultValues?.type ?? "announcement",
+      pollItems: [{ value: "" }, { value: "" }],
     },
-    mode: "onBlur",
+    mode: "onSubmit",
   });
 
   const {
-    register,
     control,
     formState: { isSubmitting },
+    watch,
     handleSubmit,
   } = form;
+
+  const {
+    fields: pollFields,
+    append: appendPollField,
+    remove: removePollField,
+  } = useFieldArray({
+    control,
+    rules: {
+      minLength: 2,
+    },
+    name: "pollItems",
+  });
+
+  const selectedType = watch("type");
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -40,11 +58,19 @@ export const useAddAnnouncementForm = ({ courseCode, defaultValues }: UseAddAnno
         content: values.content,
         courseCode,
         type: values.type,
+        pollItems:
+          values.type === "poll" &&
+          values.pollItems.map((pollItem) => pollItem.value),
       };
 
-      await api.post<Announcement>("/api/announcements", newAnnouncement);
+      await api.post<Announcement>(
+        `/api/courses/${courseCode}/announcements`,
+        newAnnouncement
+      );
 
       toast.success("Announcement has been added successfully.");
+
+      // TODO: Close the form instead and (refresh the page to fetch the new announcement or add it optimistically)
       form.reset({
         title: "",
         content: "",
@@ -59,9 +85,12 @@ export const useAddAnnouncementForm = ({ courseCode, defaultValues }: UseAddAnno
   });
 
   return {
-    register,
     control,
     isSubmitting,
     onSubmit,
+    selectedType,
+    pollFields,
+    appendPollField,
+    removePollField,
   };
 };
