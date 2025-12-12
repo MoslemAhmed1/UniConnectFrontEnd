@@ -19,14 +19,15 @@ import {
 import { UploadButton } from "@/components/global/UploadButton";
 import { toast } from "sonner";
 import { useMaterialForm } from "@/hooks/student/use-material-form";
-import type { InferredMaterialFormSchema } from "@/validations/MaterialFormSchema";
+import { FileText, Trash2 } from "lucide-react";
+import type { Material } from "@/types/student/material";
 
 type MaterialFormProps = {
   mode?: "create" | "edit";
   materialId?: number;
   courseCode: string;
   onClose: () => void;
-  defaultValues?: Partial<InferredMaterialFormSchema>;
+  materialData?: Material;
 };
 
 export default function MaterialForm({
@@ -34,15 +35,23 @@ export default function MaterialForm({
   materialId,
   courseCode,
   onClose,
-  defaultValues,
+  materialData,
 }: MaterialFormProps) {
-  const { control, isSubmitting, onSubmit, chooseFile, isFileChosen, isValid } =
-    useMaterialForm({
-      mode,
-      materialId,
-      courseCode,
-      defaultValues,
-    });
+  const {
+    control,
+    isSubmitting,
+    onSubmit,
+    chooseFile,
+    chosenFile,
+    isValid,
+    handleDeleteFile,
+    isDeletingFile,
+  } = useMaterialForm({
+    mode,
+    materialId,
+    courseCode,
+    materialData,
+  });
 
   const isEditMode = mode === "edit";
 
@@ -106,27 +115,46 @@ export default function MaterialForm({
 
         {/* File Upload */}
 
-        <UploadButton
-          endpoint="materialUploader"
-          disabled={isFileChosen}
-          onClientUploadComplete={(res) => {
-            console.log(res);
-            const [file] = res;
+        {!chosenFile ? (
+          <UploadButton
+            endpoint="materialUploader"
+            onClientUploadComplete={(res) => {
+              console.log(res);
+              const [file] = res;
 
-            if (!file.serverData.file_id) {
-              toast.error("Server couldn't upload the file properly.");
-              return;
-            }
+              if (!file.serverData.file_data) {
+                toast.error("Server couldn't upload the file properly.");
+                return;
+              }
 
-            chooseFile({
-              file_id: file.serverData.file_id,
-              file_key: file.key,
-            });
-          }}
-          onUploadError={() => {
-            toast.error("An error has occurred while uploading the file.");
-          }}
-        />
+              chooseFile(file.serverData.file_data);
+            }}
+            onUploadError={() => {
+              toast.error("An error has occurred while uploading the file.");
+            }}
+          />
+        ) : (
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-primary" />
+                <span className="text-sm text-foreground">
+                  {chosenFile.name}
+                </span>
+              </div>
+              <Button
+                hidden={mode === "edit"}
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={handleDeleteFile}
+                disabled={isDeletingFile}
+              >
+                {!isDeletingFile ? <Trash2 className="w-4 h-4" /> : <Spinner />}
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <Field>

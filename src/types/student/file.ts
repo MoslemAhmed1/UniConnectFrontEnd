@@ -1,8 +1,9 @@
 type File = {
-  id: number;
+  id: string;
   name: string;
   type: FileType;
   size: string;
+  key: string;
   url: string;
   uploaded_at: number;
 };

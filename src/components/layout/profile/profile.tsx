@@ -11,7 +11,6 @@ import api from "@/lib/axios";
 import { useAuth } from "@/providers/context/authContext";
 import { LogOut, User } from "lucide-react";
 import { Link } from "react-router";
-import { Link } from "react-router";
 
 const Profile = () => {
   const { auth, setAuth } = useAuth();

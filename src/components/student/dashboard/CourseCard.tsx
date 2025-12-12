@@ -8,6 +8,7 @@ type CourseCardProps = {
 };
 
 export default function CourseCard({ course }: CourseCardProps) {
+  // TODO: Fix this
   return (
     <Link to={`/student/courses/${course.code}`}>
       <Card className="overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer p-0 gap-0">

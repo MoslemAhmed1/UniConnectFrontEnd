@@ -13,8 +13,10 @@ export const useCourseData = (courseCode: string | undefined) => {
     queryKey: ["get-course", courseCode],
     queryFn: async () => {
       try {
-        const res = await api.get<Course>(`/api/courses/${courseCode}`);
-        return res.data;
+        const res = await api.get<{ data: Course }>(
+          `/api/courses/${courseCode}`
+        );
+        return res.data.data;
       } catch (err) {
         if (err instanceof AxiosError) {
           if (err.response?.data && "message" in err.response.data) {

@@ -11,7 +11,7 @@ export const MyInstructorCourses = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-6 py-8">
         {/* TODO: implement Available Courses logic */}
-        <AvailableCoursesSheet availableCourses={courses}/>
+        <AvailableCoursesSheet availableCourses={courses} />
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Loading courses...</p>
@@ -20,7 +20,7 @@ export const MyInstructorCourses = () => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map((course) => (
-              <CourseCard key={course.code + course.class} course={course} />
+              <CourseCard key={course.code} course={course} />
             ))}
           </div>
         )}

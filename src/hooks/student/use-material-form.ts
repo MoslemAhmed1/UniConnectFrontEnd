@@ -9,36 +9,50 @@ import {
   materialFormSchema,
   type InferredMaterialFormSchema,
 } from "@/validations/MaterialFormSchema";
+import { useEffect, useState } from "react";
+import type { Material } from "@/types/student/material";
 
 type UseMaterialFormArgs = {
   mode: "create" | "edit";
   courseCode: string;
   materialId?: number;
-  defaultValues?: Partial<InferredMaterialFormSchema>;
+  materialData?: Material;
 };
 
 type UploadFile = {
-  file_id: string;
-  file_key: string;
+  name: string;
+  size: string;
+  key: string;
+  id: string;
 };
 
 export const useMaterialForm = ({
   mode,
   courseCode,
   materialId,
-  defaultValues,
+  materialData,
 }: UseMaterialFormArgs) => {
   const queryClient = useQueryClient();
 
-  // TODO: will use it to delete the file later on
-  // const [fileKey, setFileKey] = useState<string | undefined>();
+  const [chosenFile, setChosenFile] = useState<UploadFile | undefined>();
+
+  useEffect(() => {
+    if (materialData) {
+      setChosenFile({
+        id: materialData.file.id,
+        key: materialData.file.key,
+        name: materialData.file.name,
+        size: materialData.file.size,
+      });
+    }
+  }, [materialData]);
 
   const form = useForm<InferredMaterialFormSchema>({
     resolver: zodResolver(materialFormSchema),
     defaultValues: {
-      title: defaultValues?.title ?? "",
-      folder: defaultValues?.folder ?? "lecture",
-      file_id: defaultValues?.file_id ?? undefined,
+      title: materialData?.title ?? "",
+      folder: materialData?.category ?? "lecture",
+      file_id: materialData?.file.id ?? undefined,
     },
     mode: "onBlur",
   });
@@ -48,12 +62,10 @@ export const useMaterialForm = ({
     formState: { isSubmitting, isValid },
     handleSubmit,
     reset,
-    watch,
     trigger,
     setValue,
   } = form;
 
-  // TODO: handle attaching file
   const mutation = useMutation({
     mutationKey: ["material", mode, materialId],
     mutationFn: async (values: InferredMaterialFormSchema) => {
@@ -68,7 +80,10 @@ export const useMaterialForm = ({
         return api.post("/api/materials", newMaterial);
       } else {
         if (!materialId) throw new Error("Material ID is required for edit.");
-        return api.put(`/api/materials/${materialId}`, newMaterial);
+        return api.patch(`/api/materials/${materialId}`, {
+          title: newMaterial.title,
+          category: newMaterial.category,
+        });
       }
     },
     onSuccess: () => {
@@ -76,7 +91,9 @@ export const useMaterialForm = ({
         `Material has been ${mode === "create" ? "created" : "updated"} successfully.`
       );
 
-      queryClient.invalidateQueries({ queryKey: ["materials", courseCode] });
+      queryClient.invalidateQueries({
+        queryKey: ["student-materials", courseCode],
+      });
 
       if (mode === "create") {
         reset({
@@ -84,6 +101,7 @@ export const useMaterialForm = ({
           folder: "lecture",
           file_id: undefined,
         });
+        setChosenFile(undefined);
       }
     },
     onError: (err) => {
@@ -99,11 +117,44 @@ export const useMaterialForm = ({
     },
   });
 
+  const { mutateAsync: deleteFile, isPending: isDeletingFile } = useMutation({
+    mutationKey: ["delete-file"],
+    mutationFn: (fileId: string) => {
+      return api.delete(`/api/files/${fileId}`);
+    },
+    onSuccess: () => {
+      if (!chosenFile) return;
+
+      toast.success(`${chosenFile.name} has been deleted successfully`);
+      toast.success(`You can now upload a different file for the material`);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.data && "message" in err.response.data) {
+          toast.error(err.response.data.message);
+          return;
+        }
+      }
+      toast.error(
+        `An error occurred while deleting the file. Please try again.`
+      );
+    },
+  });
+
   const onSubmit = handleSubmit((values) => mutation.mutate(values));
 
   const chooseFile = (file: UploadFile) => {
-    setValue("file_id", file.file_id);
+    setValue("file_id", file.id);
+    setChosenFile(file);
     trigger("file_id");
+  };
+
+  const handleDeleteFile = async () => {
+    if (isDeletingFile || !chosenFile) return;
+
+    await deleteFile(chosenFile.id);
+
+    setChosenFile(undefined);
   };
 
   return {
@@ -111,7 +162,9 @@ export const useMaterialForm = ({
     isSubmitting: isSubmitting || mutation.isPending,
     onSubmit,
     chooseFile,
-    isFileChosen: watch("file_id") !== undefined,
+    chosenFile,
     isValid,
+    handleDeleteFile,
+    isDeletingFile,
   };
 };

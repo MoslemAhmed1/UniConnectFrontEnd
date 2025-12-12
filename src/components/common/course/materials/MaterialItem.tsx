@@ -10,12 +10,11 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { FileText, Eye, Download, Trash2, Loader2, Edit } from "lucide-react";
+import { FileText, Eye, Download, Trash2, Loader2 } from "lucide-react";
 import type { Material } from "@/types/student/material";
 import { CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { formatDistanceToNow, format } from "date-fns";
 import { handleDownload } from "@/utils/download-handler";
-import { useNavigate } from "react-router";
 import EditMaterialModal from "../modals/EditMaterialModal";
 import { useState } from "react";
 import { useDeleteMaterial } from "@/hooks/student/use-delete-material";
@@ -29,14 +28,15 @@ export default function MaterialItem({
   material,
   allowModifyMaterials,
 }: MaterialItemProps) {
-  const navigate = useNavigate();
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
-  const { handleDeleteMaterial, isDeleting } = useDeleteMaterial();
+  const { handleDeleteMaterial, isDeleting } = useDeleteMaterial(
+    material.course_code
+  );
 
-  const handleDelete = async (eventId: number) => {
+  const handleDelete = async (materialId: number) => {
     try {
-      setPendingDeleteId(eventId);
-      await handleDeleteMaterial(eventId);
+      setPendingDeleteId(materialId);
+      await handleDeleteMaterial(materialId);
     } finally {
       setPendingDeleteId(null);
     }
@@ -83,94 +83,64 @@ export default function MaterialItem({
                   material.uploader.parent_name}
               </span>
             </CardDescription>
-            {/* Actions */}
-            <div className="flex items-center gap-3">
-              {allowModifyMaterials && (
-                <>
-                  <EditMaterialModal material={material} />
-
-                  {/* Delete Modal */}
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-destructive hover:bg-destructive/10"
-                        disabled={isDeleting && pendingDeleteId === material.id}
-                      >
-                        {isDeleting && pendingDeleteId === material.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <Trash2 className="w-4 h-4" />
-                        )}
-                      </Button>
-                    </AlertDialogTrigger>
-
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Delete this material?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          remove the material
-                          <span className="font-semibold">
-                            {" "}
-                            "{material.title}"
-                          </span>
-                          .
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-destructive text-white hover:bg-destructive/90"
-                          onClick={() => handleDelete(material.id)}
-                        >
-                          {isDeleting && pendingDeleteId === material.id ? (
-                            <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                          ) : null}
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </>
-              )}
-              <Button variant="ghost" size="icon" className="cursor-pointer">
-                <Eye className="w-5 h-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="cursor-pointer">
-                <Download className="w-5 h-5" />
-              </Button>
-            </div>
           </div>
-
           {/* Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ">
             {allowModifyMaterials && (
               <>
-                <Button variant="ghost" size="icon">
-                  <Edit className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <EditMaterialModal material={material} />
+
+                {/* Delete Modal */}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                      disabled={isDeleting && pendingDeleteId === material.id}
+                    >
+                      {isDeleting && pendingDeleteId === material.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete this material?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        remove the material
+                        <span className="font-semibold">
+                          {" "}
+                          "{material.title}"
+                        </span>
+                        .
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-destructive text-white hover:bg-destructive/90"
+                        onClick={() => handleDelete(material.id)}
+                      >
+                        {isDeleting && pendingDeleteId === material.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        ) : null}
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </>
             )}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="cursor-pointer"
-              onClick={() =>
-                navigate(`/instructor/materials/view/${material.id}`, {
-                  replace: true,
-                })
-              }
-            >
+            <Button variant="ghost" size="icon" className="cursor-pointer">
               <Eye className="w-5 h-5" />
             </Button>
+
             <Button
               variant="ghost"
               size="icon"

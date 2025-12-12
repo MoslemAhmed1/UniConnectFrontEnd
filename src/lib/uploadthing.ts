@@ -14,7 +14,15 @@ export const uploadRouter = {
     },
   }).onUploadComplete(async () => {
     try {
-      return { success: true, file_id: "" };
+      return {
+        success: true,
+        file_data: {
+          name: "",
+          size: "",
+          key: "",
+          id: "",
+        },
+      };
     } catch {
       return { success: false };
     }

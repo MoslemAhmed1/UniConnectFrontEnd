@@ -3,7 +3,7 @@ import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-export const useDeleteMaterial = () => {
+export const useDeleteMaterial = (course_code: string) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: deleteMaterial, isPending: isDeleting } = useMutation({
@@ -13,8 +13,10 @@ export const useDeleteMaterial = () => {
     },
     onSuccess: () => {
       toast.success("Material has been deleted successfully.");
-      
-      queryClient.invalidateQueries({ queryKey: ["materials"] });
+
+      queryClient.invalidateQueries({
+        queryKey: ["student-materials", course_code],
+      });
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -23,7 +25,9 @@ export const useDeleteMaterial = () => {
           return;
         }
       }
-      toast.error("An error occurred while deleting this material. Please try again.");
+      toast.error(
+        "An error occurred while deleting this material. Please try again."
+      );
     },
   });
 

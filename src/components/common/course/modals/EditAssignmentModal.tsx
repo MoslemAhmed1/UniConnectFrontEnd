@@ -23,15 +23,17 @@ const toInputDate = (timestamp: number) =>
 const toInputTime = (timestamp: number) =>
   new Date(timestamp).toISOString().slice(11, 16);
 
-export default function EditAssignmentModal({ assignment }: EditAssignmentModalProps) {
+export default function EditAssignmentModal({
+  assignment,
+}: EditAssignmentModalProps) {
   const [open, setOpen] = useState(false);
 
   const defaultValues = {
-      title: assignment.title,
-      description: assignment.description,
-      dueDate: toInputDate(assignment.deadline_at),
-      dueTime: toInputTime(assignment.deadline_at),
-      attachedFiles: assignment.attached_files
+    title: assignment.title,
+    description: assignment.description,
+    dueDate: toInputDate(assignment.deadline_at),
+    dueTime: toInputTime(assignment.deadline_at),
+    attachedFiles: assignment.attached_files,
   };
 
   return (
