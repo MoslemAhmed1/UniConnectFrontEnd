@@ -17,24 +17,40 @@ type UseMaterialFormArgs = {
   defaultValues?: Partial<InferredMaterialFormSchema>;
 };
 
-export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }: UseMaterialFormArgs) => {
+type UploadFile = {
+  file_id: string;
+  file_key: string;
+};
+
+export const useMaterialForm = ({
+  mode,
+  courseCode,
+  materialId,
+  defaultValues,
+}: UseMaterialFormArgs) => {
   const queryClient = useQueryClient();
+
+  // TODO: will use it to delete the file later on
+  // const [fileKey, setFileKey] = useState<string | undefined>();
 
   const form = useForm<InferredMaterialFormSchema>({
     resolver: zodResolver(materialFormSchema),
     defaultValues: {
       title: defaultValues?.title ?? "",
       folder: defaultValues?.folder ?? "lecture",
-      file: defaultValues?.file ?? undefined,
+      file_id: defaultValues?.file_id ?? undefined,
     },
     mode: "onBlur",
   });
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     reset,
+    watch,
+    trigger,
+    setValue,
   } = form;
 
   // TODO: handle attaching file
@@ -45,7 +61,7 @@ export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }:
         title: values.title,
         category: values.folder,
         course_code: courseCode,
-        file: values.file,
+        file_id: values.file_id,
       };
 
       if (mode === "create") {
@@ -56,7 +72,9 @@ export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }:
       }
     },
     onSuccess: () => {
-      toast.success(`Material has been ${mode === "create" ? "created" : "updated"} successfully.`);
+      toast.success(
+        `Material has been ${mode === "create" ? "created" : "updated"} successfully.`
+      );
 
       queryClient.invalidateQueries({ queryKey: ["materials", courseCode] });
 
@@ -64,7 +82,7 @@ export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }:
         reset({
           title: "",
           folder: "lecture",
-          file: undefined,
+          file_id: undefined,
         });
       }
     },
@@ -83,9 +101,17 @@ export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }:
 
   const onSubmit = handleSubmit((values) => mutation.mutate(values));
 
+  const chooseFile = (file: UploadFile) => {
+    setValue("file_id", file.file_id);
+    trigger("file_id");
+  };
+
   return {
     control,
     isSubmitting: isSubmitting || mutation.isPending,
     onSubmit,
+    chooseFile,
+    isFileChosen: watch("file_id") !== undefined,
+    isValid,
   };
 };

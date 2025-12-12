@@ -25,7 +25,7 @@ export default function CoursePage({ course, featureFlags }: CoursePageProps) {
   const { assignments } = useStudentAssignments(course.code);
 
   // TODO: backend route returns only 3-4 recent materials + returns an array with the material count for each category ??
-  const { materials } = useStudentMaterials();  
+  const { materials } = useStudentMaterials(course.code);
 
   return (
     <div className="min-h-screen">

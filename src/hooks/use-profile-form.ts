@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { GlobalUser } from "@/types/user/user";
+import type { User } from "@/types/user/user";
 import {
   type InferredStudentProfileSchema,
   StudentProfileFormSchema,
@@ -10,7 +10,7 @@ import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export const useProfileForm = (userData: GlobalUser) => {
+export const useProfileForm = (userData: User) => {
   const client = useQueryClient();
   const {
     handleSubmit,

@@ -1,5 +1,6 @@
 import type { ROLES } from "@/constants/user/role";
 import type { serverRolesType } from "../api/auth";
+import type { YEARS } from "@/constants/student/student";
 
 export type Role = (typeof ROLES)[number];
 
@@ -12,4 +13,9 @@ export type User = {
   email: string;
   id: string;
   role: serverRolesType;
+  // Since global user is deleted
+  // It is needed for the stuff that used globalUser
+  // optional shouldn't cause anything right?  :)
+  code?: string;
+  year?: (typeof YEARS)[number];
 };
