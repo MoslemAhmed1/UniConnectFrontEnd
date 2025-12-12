@@ -7,7 +7,6 @@ import { useCourseData } from "@/hooks/professor/use-course-data";
 import CoursePage from "@/components/common/course/CoursePage";
 import type { FeatureFlags } from "@/constants/user/feature-flags";
 
-
 export const InstructorCoursePage = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -26,10 +25,5 @@ export const InstructorCoursePage = () => {
     showAddCalendarEventBtn: true,
   };
 
-  return (
-    <CoursePage
-      course={courseData}
-      featureFlags={featureFlags}
-    />
-  );
+  return <CoursePage course={courseData} featureFlags={featureFlags} />;
 };

@@ -9,35 +9,63 @@ import {
   materialFormSchema,
   type InferredMaterialFormSchema,
 } from "@/validations/MaterialFormSchema";
+import { useEffect, useState } from "react";
+import type { Material } from "@/types/student/material";
 
 type UseMaterialFormArgs = {
   mode: "create" | "edit";
   courseCode: string;
   materialId?: number;
-  defaultValues?: Partial<InferredMaterialFormSchema>;
+  materialData?: Material;
 };
 
-export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }: UseMaterialFormArgs) => {
+type UploadFile = {
+  name: string;
+  size: string;
+  key: string;
+  id: string;
+};
+
+export const useMaterialForm = ({
+  mode,
+  courseCode,
+  materialId,
+  materialData,
+}: UseMaterialFormArgs) => {
   const queryClient = useQueryClient();
+
+  const [chosenFile, setChosenFile] = useState<UploadFile | undefined>();
+
+  useEffect(() => {
+    if (materialData) {
+      setChosenFile({
+        id: materialData.file.id,
+        key: materialData.file.key,
+        name: materialData.file.name,
+        size: materialData.file.size,
+      });
+    }
+  }, [materialData]);
 
   const form = useForm<InferredMaterialFormSchema>({
     resolver: zodResolver(materialFormSchema),
     defaultValues: {
-      title: defaultValues?.title ?? "",
-      folder: defaultValues?.folder ?? "lecture",
-      file: defaultValues?.file ?? undefined,
+      title: materialData?.title ?? "",
+      folder: materialData?.category ?? "lecture",
+      file_id: materialData?.file.id ?? undefined,
     },
     mode: "onBlur",
   });
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     reset,
+    trigger,
+    setValue,
   } = form;
 
-  // TODO: handle attaching file
   const mutation = useMutation({
     mutationKey: ["material", mode, materialId],
     mutationFn: async (values: InferredMaterialFormSchema) => {
@@ -45,27 +73,35 @@ export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }:
         title: values.title,
         category: values.folder,
         course_code: courseCode,
-        file: values.file,
+        file_id: values.file_id,
       };
 
       if (mode === "create") {
         return api.post("/api/materials", newMaterial);
       } else {
         if (!materialId) throw new Error("Material ID is required for edit.");
-        return api.put(`/api/materials/${materialId}`, newMaterial);
+        return api.patch(`/api/materials/${materialId}`, {
+          title: newMaterial.title,
+          category: newMaterial.category,
+        });
       }
     },
     onSuccess: () => {
-      toast.success(`Material has been ${mode === "create" ? "created" : "updated"} successfully.`);
+      toast.success(
+        `Material has been ${mode === "create" ? "created" : "updated"} successfully.`
+      );
 
-      queryClient.invalidateQueries({ queryKey: ["materials", courseCode] });
+      queryClient.invalidateQueries({
+        queryKey: ["student-materials", courseCode],
+      });
 
       if (mode === "create") {
         reset({
           title: "",
           folder: "lecture",
-          file: undefined,
+          file_id: undefined,
         });
+        setChosenFile(undefined);
       }
     },
     onError: (err) => {
@@ -81,11 +117,54 @@ export const useMaterialForm = ({ mode, courseCode, materialId, defaultValues }:
     },
   });
 
+  const { mutateAsync: deleteFile, isPending: isDeletingFile } = useMutation({
+    mutationKey: ["delete-file"],
+    mutationFn: (fileId: string) => {
+      return api.delete(`/api/files/${fileId}`);
+    },
+    onSuccess: () => {
+      if (!chosenFile) return;
+
+      toast.success(`${chosenFile.name} has been deleted successfully`);
+      toast.success(`You can now upload a different file for the material`);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.data && "message" in err.response.data) {
+          toast.error(err.response.data.message);
+          return;
+        }
+      }
+      toast.error(
+        `An error occurred while deleting the file. Please try again.`
+      );
+    },
+  });
+
   const onSubmit = handleSubmit((values) => mutation.mutate(values));
+
+  const chooseFile = (file: UploadFile) => {
+    setValue("file_id", file.id);
+    setChosenFile(file);
+    trigger("file_id");
+  };
+
+  const handleDeleteFile = async () => {
+    if (isDeletingFile || !chosenFile) return;
+
+    await deleteFile(chosenFile.id);
+
+    setChosenFile(undefined);
+  };
 
   return {
     control,
     isSubmitting: isSubmitting || mutation.isPending,
     onSubmit,
+    chooseFile,
+    chosenFile,
+    isValid,
+    handleDeleteFile,
+    isDeletingFile,
   };
 };

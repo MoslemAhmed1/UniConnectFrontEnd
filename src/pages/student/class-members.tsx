@@ -32,32 +32,6 @@ export const ClassMembers = () => {
         </div>
       ) : (
         classMembers.map((classMember) => (
-          // TODO: Ask Jalal if he's ok with replacing this with the reusable Member component with an extraActions prop
-
-          // <Item key={classMember.id} variant="outline" className="m-3">
-          //   <Avatar>
-          //     <AvatarImage src={classMember.image_url} />
-          //     <AvatarFallback>
-          //       {classMember.first_name[0].toUpperCase()}
-          //       {classMember.parent_name[0].toUpperCase()}
-          //     </AvatarFallback>
-          //   </Avatar>
-          //   <ItemContent>
-          //     <ItemTitle>
-          //       {classMember.first_name} {classMember.parent_name}
-          //     </ItemTitle>
-          //   </ItemContent>
-          //   <ItemActions>
-          //     <Button
-          //       variant="outline"
-          //       size="sm"
-          //       onClick={() => handleModalOpen(classMember)}
-          //     >
-          //       Assign Course Head
-          //     </Button>
-          //   </ItemActions>
-          // </Item>
-
           <Member
             key={classMember.code}
             currentPageAbsoluteUrl={window.location.toString()}

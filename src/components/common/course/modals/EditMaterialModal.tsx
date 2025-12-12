@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogDescription
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
@@ -17,14 +17,10 @@ type EditMaterialModalProps = {
   material: Material;
 };
 
-export default function EditMaterialModal({ material }: EditMaterialModalProps) {
+export default function EditMaterialModal({
+  material,
+}: EditMaterialModalProps) {
   const [open, setOpen] = useState(false);
-
-  const defaultValues = {
-      title: material.title,
-      folder: material.category,
-      file: material.file // TODO: handle this
-  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -42,13 +38,13 @@ export default function EditMaterialModal({ material }: EditMaterialModalProps) 
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="max-h-[70vh] pr-4">
-            <MaterialForm
-                mode="edit"
-                materialId={material.id}
-                courseCode={material.course_code}
-                defaultValues={defaultValues}
-                onClose={() => setOpen(false)}
-            />
+          <MaterialForm
+            mode="edit"
+            materialId={material.id}
+            courseCode={material.course_code}
+            materialData={material}
+            onClose={() => setOpen(false)}
+          />
         </ScrollArea>
       </DialogContent>
     </Dialog>

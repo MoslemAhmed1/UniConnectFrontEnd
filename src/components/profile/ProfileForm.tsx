@@ -12,10 +12,10 @@ import { useProfileForm } from "@/hooks/use-profile-form";
 import { Controller } from "react-hook-form";
 import { Spinner } from "@/components/ui/spinner";
 import { useHasRole } from "@/hooks/use-has-role";
-import type { GlobalUser } from "@/types/user/user";
+import type { User } from "@/types/user/user";
 
 type ProfileFormProps = {
-  userData: GlobalUser;
+  userData: User;
 };
 
 export const ProfileForm = ({ userData }: ProfileFormProps) => {

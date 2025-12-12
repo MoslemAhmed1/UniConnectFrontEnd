@@ -16,15 +16,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { UploadButton } from "@/components/global/UploadButton";
+import { toast } from "sonner";
 import { useMaterialForm } from "@/hooks/student/use-material-form";
-import type { InferredMaterialFormSchema } from "@/validations/MaterialFormSchema";
+import { FileText, Trash2 } from "lucide-react";
+import type { Material } from "@/types/student/material";
 
 type MaterialFormProps = {
   mode?: "create" | "edit";
   materialId?: number;
   courseCode: string;
   onClose: () => void;
-  defaultValues?: Partial<InferredMaterialFormSchema>;
+  materialData?: Material;
 };
 
 export default function MaterialForm({
@@ -32,19 +35,32 @@ export default function MaterialForm({
   materialId,
   courseCode,
   onClose,
-  defaultValues,
+  materialData,
 }: MaterialFormProps) {
-  const { control, isSubmitting, onSubmit } = useMaterialForm({
+  const {
+    control,
+    isSubmitting,
+    onSubmit,
+    chooseFile,
+    chosenFile,
+    isValid,
+    handleDeleteFile,
+    isDeletingFile,
+  } = useMaterialForm({
     mode,
     materialId,
     courseCode,
-    defaultValues,
+    materialData,
   });
 
   const isEditMode = mode === "edit";
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit} aria-busy={isSubmitting}>
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={onSubmit}
+      aria-busy={isSubmitting}
+    >
       <FieldGroup>
         {/* Title */}
         <Controller
@@ -72,8 +88,14 @@ export default function MaterialForm({
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="material-folder">Folder</FieldLabel>
 
-              <Select value={field.value ?? "lecture"} onValueChange={field.onChange}>
-                <SelectTrigger id="material-folder" aria-invalid={fieldState.invalid}>
+              <Select
+                value={field.value ?? "lecture"}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger
+                  id="material-folder"
+                  aria-invalid={fieldState.invalid}
+                >
                   <SelectValue placeholder="Select a folder" />
                 </SelectTrigger>
                 <SelectContent>
@@ -92,33 +114,47 @@ export default function MaterialForm({
         />
 
         {/* File Upload */}
-        {/* TODO: Replace this with your new file upload */}
-        <Controller
-          name="file"
-          control={control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="material-file">Attach File</FieldLabel>
-              <input
-                id="material-file"
-                type="file"
-                accept=".pdf,.docx,.txt,.zip,.png,.jpeg,.jpg"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  field.onChange(file);
-                }}
-                aria-invalid={fieldState.invalid}
-                className="block w-full text-sm text-slate-500
-                  file:mr-4 file:py-2 file:px-4
-                  file:rounded-md file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-blue-50 file:text-blue-600
-                  hover:file:bg-blue-100"
-              />
-              {fieldState.error && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
+
+        {!chosenFile ? (
+          <UploadButton
+            endpoint="materialUploader"
+            onClientUploadComplete={(res) => {
+              console.log(res);
+              const [file] = res;
+
+              if (!file.serverData.file_data) {
+                toast.error("Server couldn't upload the file properly.");
+                return;
+              }
+
+              chooseFile(file.serverData.file_data);
+            }}
+            onUploadError={() => {
+              toast.error("An error has occurred while uploading the file.");
+            }}
+          />
+        ) : (
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-primary" />
+                <span className="text-sm text-foreground">
+                  {chosenFile.name}
+                </span>
+              </div>
+              <Button
+                hidden={mode === "edit"}
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={handleDeleteFile}
+                disabled={isDeletingFile}
+              >
+                {!isDeletingFile ? <Trash2 className="w-4 h-4" /> : <Spinner />}
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <Field>
@@ -132,7 +168,7 @@ export default function MaterialForm({
               Cancel
             </Button>
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || !isValid}>
               {isSubmitting ? (
                 <>
                   {isEditMode ? "Updating..." : "Adding..."}

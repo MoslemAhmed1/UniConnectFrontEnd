@@ -7,13 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CourseMembersSection from "./members/CourseMembersSection";
 
 // Hooks
-import { useStudentAnnouncements } from "@/hooks/student/use-student-announcements";
 import { useStudentAssignments } from "@/hooks/student/use-student-assignments";
 import { useStudentMaterials } from "@/hooks/student/use-student-materials";
 
 // Types
 import type { FeatureFlags } from "@/constants/user/feature-flags";
 import type { Course } from "@/types/student/course";
+import { useCourseAnnouncements } from "@/hooks/student/use-course-announcements";
 
 type CoursePageProps = {
   course: Course;
@@ -21,11 +21,11 @@ type CoursePageProps = {
 };
 
 export default function CoursePage({ course, featureFlags }: CoursePageProps) {
-  const { announcements } = useStudentAnnouncements();
+  const { announcements } = useCourseAnnouncements(course.code);
   const { assignments } = useStudentAssignments(course.code);
 
   // TODO: backend route returns only 3-4 recent materials + returns an array with the material count for each category ??
-  const { materials } = useStudentMaterials();  
+  const { materials } = useStudentMaterials(course.code);
 
   return (
     <div className="min-h-screen">
@@ -72,7 +72,6 @@ export default function CoursePage({ course, featureFlags }: CoursePageProps) {
           </TabsContent>
 
           <TabsContent value="members">
-            {/* TODO: Create profile page */}
             <CourseMembersSection />
           </TabsContent>
         </Tabs>

@@ -1,13 +1,13 @@
 type File = {
-  id: number;
+  id: string;
   name: string;
   type: FileType;
   size: string;
+  key: string;
   url: string;
   uploaded_at: number;
 };
 
-type FileType = "pdf" | "docx" | "plain" | "zip" | "png" | "jpeg"; // more could be added later
+export type FileType = "application/pdf"; // more could be added later
 
 export { type File };
-

@@ -5,13 +5,15 @@ import { useAuth } from "@/providers/context/authContext";
 
 // Components
 import CoursePage from "@/components/common/course/CoursePage";
-import useStudentCourse from "@/hooks/student/use-student-course";
+import { useCourseData } from "@/hooks/professor/use-course-data";
+import { useParams } from "react-router";
 
 export const StudentCoursePage = () => {
   const { auth } = useAuth();
-  const { course } = useStudentCourse();
-  
-  if (!course) {
+  const { id } = useParams<{ id: string }>();
+  const { courseData } = useCourseData(id);
+
+  if (!courseData) {
     // TODO: Use Lottie React 404 page
     return <></>;
   }
@@ -32,7 +34,8 @@ export const StudentCoursePage = () => {
     featureFlags.showAddAnnouncementBtn = true;
     featureFlags.showAddCalendarEventBtn = true;
   } else if (studentRole === "course_head") {
-    const isTeamHeadForThisCourse = course.representative_id === auth.user?.id;
+    const isTeamHeadForThisCourse =
+      courseData.representative_id === auth.user?.id;
 
     if (isTeamHeadForThisCourse) {
       featureFlags.showModifyCourseBtn = true;
@@ -42,10 +45,5 @@ export const StudentCoursePage = () => {
     }
   }
 
-  return (
-    <CoursePage
-      course = {course}
-      featureFlags={featureFlags}
-    />
-  );
+  return <CoursePage course={courseData} featureFlags={featureFlags} />;
 };

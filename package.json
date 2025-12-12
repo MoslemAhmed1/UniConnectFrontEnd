@@ -30,6 +30,7 @@
     "@react-router/dev": "^7.9.5",
     "@tailwindcss/vite": "^4.1.16",
     "@tanstack/react-query": "^5.90.5",
+    "@uploadthing/react": "^7.3.3",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -49,6 +50,7 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.16",
+    "uploadthing": "^7.7.4",
     "zod": "^4.1.12"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import type { StudentUser } from "../student/student-user";
+import type { User } from "../user/user";
 export type serverRolesType =
   | "student"
   | "professor/ta"
@@ -8,7 +8,7 @@ export type serverRolesType =
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
-export type AuthUser = PartialBy<StudentUser, "year" | "code"> & {
+export type AuthUser = PartialBy<User, "year" | "code"> & {
   role: serverRolesType;
 };
 

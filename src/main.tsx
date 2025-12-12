@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+
 import "./main.css";
 
 import Calendar from "@/components/common/calendar/calendar";
@@ -17,7 +18,7 @@ import AssignmentSubmissionProfessor from "./components/common/course/assignment
 import Dashboard from "./pages/student/dashboard";
 import Group from "./pages/student/group";
 import Materials from "./pages/student/materials";
-import { ProfilePage } from "./pages/profile";
+import { PersonalProfilePage } from "./pages/profile";
 import LoginPage from "./pages/user/login";
 import SignupPage from "./pages/user/signup";
 import AuthProvider from "./providers/AuthProvider";
@@ -26,6 +27,7 @@ import { AuthGuard } from "./components/guards/AuthGuard";
 import { ClassMembers } from "./pages/student/class-members";
 import { Unauthorized } from "./pages/Unauthorized";
 import { UnAuthGuard } from "./components/guards/UnAuthGuard";
+import ProfilePage from "./pages/user/profile";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/signup" element={<SignupPage />} />
               </Route>
 
+              <Route path="/profiles/:profile_id" element={<ProfilePage />} />
               <Route element={<GlobalLayout />}>
                 <Route
                   element={
@@ -67,7 +70,7 @@ createRoot(document.getElementById("root")!).render(
                       path="materials/:id/:category"
                       element={<Materials />}
                     />
-                    <Route path="profile" element={<ProfilePage />} />
+                    <Route path="profile" element={<PersonalProfilePage />} />
                     <Route
                       element={
                         <AuthGuard allowedRoles={["class_representative"]} />
@@ -80,7 +83,7 @@ createRoot(document.getElementById("root")!).render(
 
                 <Route element={<AuthGuard allowedRoles={["professor/ta"]} />}>
                   <Route path="/instructor">
-                    <Route path="profile" element={<ProfilePage />} />
+                    <Route path="profile" element={<PersonalProfilePage />} />
                     <Route
                       path="courses/:id"
                       element={<InstructorCoursePage />}
@@ -89,6 +92,10 @@ createRoot(document.getElementById("root")!).render(
                     <Route
                       path="courses/:id/assignment/:assignmentId"
                       element={<AssignmentSubmissionProfessor />}
+                    />
+                    <Route
+                      path="materials/:id/:category"
+                      element={<Materials />}
                     />
                   </Route>
                 </Route>
