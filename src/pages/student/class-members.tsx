@@ -59,6 +59,7 @@ export const ClassMembers = () => {
           // </Item>
 
           <Member
+            key={classMember.code}
             currentPageAbsoluteUrl={window.location.toString()}
             member={classMember}
             extraActions={
