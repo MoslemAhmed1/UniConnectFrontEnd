@@ -9,7 +9,7 @@ const useDashboardDeadlines = () => {
       queryFn: async () => {
         // Logically, deadline is a project or an assignment
         const result = await api.get(
-          "/api/events?eventsTypes=project,assignment"
+          "/api/events?eventsTypes=project,assignment&future=true"
         );
         return result.data.data;
       },

@@ -16,7 +16,7 @@ export const useCourseForm = (initialCourseData?: Course) => {
   const {
     handleSubmit,
     control,
-    formState: { isValid },
+    formState: { isValid, isSubmitting, dirtyFields },
     reset,
   } = useForm({
     //@ts-expect-error For some reason this causes a weird type error when the code: "" is included in default values
@@ -86,5 +86,7 @@ export const useCourseForm = (initialCourseData?: Course) => {
     control,
     isValid,
     reset,
+    isSubmitting,
+    dirtyFields,
   };
 };

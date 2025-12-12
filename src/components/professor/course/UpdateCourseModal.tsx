@@ -16,7 +16,8 @@ import { Edit } from "lucide-react";
 import type { Course } from "@/types/student/course";
 
 export const UpdateCourseModal = ({ courseData }: { courseData: Course }) => {
-  const { control, isValid, onSubmit, isPending } = useCourseForm(courseData);
+  const { control, isValid, onSubmit, isPending, isSubmitting, dirtyFields } =
+    useCourseForm(courseData);
 
   return (
     <Dialog>
@@ -42,7 +43,14 @@ export const UpdateCourseModal = ({ courseData }: { courseData: Course }) => {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" disabled={!isValid}>
+            <Button
+              type="submit"
+              disabled={
+                !isValid ||
+                isSubmitting ||
+                Object.keys(dirtyFields).length === 0
+              }
+            >
               {isPending ? "Updating Course" : "Update Course"}
               {isPending && <Spinner />}
             </Button>

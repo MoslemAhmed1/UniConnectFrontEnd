@@ -73,7 +73,7 @@ createRoot(document.getElementById("root")!).render(
                         <AuthGuard allowedRoles={["class_representative"]} />
                       }
                     >
-                      <Route path="members" element={<ClassMembers />} />
+                      <Route path="class-members" element={<ClassMembers />} />
                     </Route>
                   </Route>
                 </Route>
