@@ -9,6 +9,7 @@ import { FileText } from "lucide-react";
 import MaterialItem from "./MaterialItem";
 import type { Material } from "@/types/student/material";
 import AddMaterialModal from "@/components/common/course/modals/AddMaterialModal";
+import { useGetRoleUrl } from "@/hooks/use-role-url";
 
 type MaterialsSectionProps = {
   materials: Material[];
@@ -21,6 +22,7 @@ export default function MaterialsSection({
   courseCode,
   allowModifyMaterials,
 }: MaterialsSectionProps) {
+  const { getRoleUrl } = useGetRoleUrl();
   const categoryFolders = [
     { name: "Lecture Slides", category: "lecture", color: "bg-blue-600" },
     { name: "Problem Sheets", category: "sheet", color: "bg-teal-600" },
@@ -59,11 +61,7 @@ export default function MaterialsSection({
           {categoryFolders.map((folder) => (
             <Link
               key={folder.category}
-              to={
-                allowModifyMaterials
-                  ? `/instructor/materials/${courseCode}/${folder.category}`
-                  : `/student/materials/${courseCode}/${folder.category}`
-              }
+              to={`/${getRoleUrl()}/materials/${courseCode}/${folder.category}`}
             >
               <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02]">
                 <CardContent className="p-0">

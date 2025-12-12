@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useGetRoleUrl } from "@/hooks/use-role-url";
 import api from "@/lib/axios";
 import { useAuth } from "@/providers/context/authContext";
 import { LogOut, User } from "lucide-react";
@@ -14,6 +15,7 @@ import { Link } from "react-router";
 
 const Profile = () => {
   const { auth, setAuth } = useAuth();
+  const { getRoleUrl } = useGetRoleUrl();
 
   const handleLogout = async () => {
     await api.get("/api/auth/logout");
@@ -21,14 +23,6 @@ const Profile = () => {
       token: null,
       user: null,
     });
-  };
-
-  const getProfilePath = () => {
-    if (!auth.user) return "/";
-
-    return auth.user.role === "professor/ta"
-      ? "/instructor/profile"
-      : "/student/profile";
   };
 
   return (
@@ -49,7 +43,7 @@ const Profile = () => {
       <DropdownMenuContent className="w-40" align="start">
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to={getProfilePath()}>
+            <Link to={`/${getRoleUrl()}/profile`}>
               My Profile <User className="ms-auto" />
             </Link>
           </DropdownMenuItem>
