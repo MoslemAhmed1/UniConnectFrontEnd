@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useDeleteAssignment } from "@/hooks/student/use-delete-assignment";
 import EditAssignmentModal from "../modals/EditAssignmentModal";
 import type { Assignment } from "@/types/student/assignment";
-
+import { useGetRoleUrl } from "@/hooks/use-role-url";
 
 type AssignmentItemProps = {
   assignment: Assignment & { status?: string };
@@ -39,16 +39,20 @@ const getStatusColor = (status: string) => {
       return "bg-red-50 text-red-600";
     case "Submitted": // TODO: should be obtained from submission hook
       return "bg-teal-50 text-teal-600";
-    case "Graded":  // TODO: should be obtained from submission hook
+    case "Graded": // TODO: should be obtained from submission hook
       return "bg-slate-100 text-slate-500";
     default:
       return "bg-slate-100 text-slate-500";
   }
 };
 
-export default function AssignmentItem({ assignment, allowModifyAssignments = false }: AssignmentItemProps) {
+export default function AssignmentItem({
+  assignment,
+  allowModifyAssignments = false,
+}: AssignmentItemProps) {
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const { handleDeleteAssignment, isDeleting } = useDeleteAssignment();
+  const { getRoleUrl } = useGetRoleUrl();
 
   const handleDelete = async (assignmentId: string) => {
     try {
@@ -74,7 +78,6 @@ export default function AssignmentItem({ assignment, allowModifyAssignments = fa
   return (
     <CardContent className="p-4 hover:bg-slate-100/70 transition-colors">
       <div className="flex items-start justify-between gap-4">
-
         {/* Assignment Content */}
         <div className="flex items-start gap-4 flex-1">
           <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
@@ -83,11 +86,7 @@ export default function AssignmentItem({ assignment, allowModifyAssignments = fa
           <div className="flex-1 min-w-0">
             <CardTitle className="font-medium text-slate-800 hover:text-blue-600 transition-colors truncate">
               <Link
-                to={
-                  allowModifyAssignments
-                    ? `/instructor/courses/${assignment.course_id}/assignment/${assignment.id}`
-                    : `/student/courses/${assignment.course_id}/assignment/${assignment.id}`
-                }
+                to={`/${getRoleUrl()}/courses/${assignment.course_id}/assignment/${assignment.id}`}
               >
                 {assignment.title}
               </Link>
@@ -133,7 +132,7 @@ export default function AssignmentItem({ assignment, allowModifyAssignments = fa
           </Badge>
           {allowModifyAssignments && (
             <>
-              <EditAssignmentModal assignment={assignment}/>
+              <EditAssignmentModal assignment={assignment} />
 
               {/* Delete Modal */}
               <AlertDialog>
@@ -156,8 +155,13 @@ export default function AssignmentItem({ assignment, allowModifyAssignments = fa
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete this assignment?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently remove the assignment
-                      <span className="font-semibold"> "{assignment.title}"</span>.
+                      This action cannot be undone. This will permanently remove
+                      the assignment
+                      <span className="font-semibold">
+                        {" "}
+                        "{assignment.title}"
+                      </span>
+                      .
                     </AlertDialogDescription>
                   </AlertDialogHeader>
 
@@ -178,11 +182,7 @@ export default function AssignmentItem({ assignment, allowModifyAssignments = fa
             </>
           )}
           <Link
-            to={
-              allowModifyAssignments
-                ? `/instructor/courses/${assignment.course_id}/assignment/${assignment.id}`
-                : `/student/courses/${assignment.course_id}/assignment/${assignment.id}`
-            }
+            to={`/${getRoleUrl()}/courses/${assignment.course_id}/assignment/${assignment.id}`}
           >
             <Button variant="ghost" size="icon">
               <Eye className="w-4 h-4" />
