@@ -18,16 +18,16 @@ export const STUDENT_SIDEBAR_ITEMS: {
   {
     icon: LayoutDashboard,
     title: "Dashboard",
-    url: "/student/dashboard",
+    url: "dashboard",
   },
   {
     icon: Calendar,
-    url: "/student/calendar",
+    url: "calendar",
     title: "Deadlines Calendar",
   },
   {
     icon: Book,
-    url: "/student/courses",
+    url: "courses",
     title: "My Courses",
   },
   {

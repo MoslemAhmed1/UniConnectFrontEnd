@@ -33,6 +33,7 @@ export const ClassMembers = () => {
       ) : (
         classMembers.map((classMember) => (
           <Member
+            key={classMember.code}
             currentPageAbsoluteUrl={window.location.toString()}
             member={classMember}
             extraActions={

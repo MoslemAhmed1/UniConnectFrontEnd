@@ -1,7 +1,7 @@
-import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -10,10 +10,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
 import type { Course } from "@/types/student/course";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 import { CreateCourseModal } from "../professor/course/CreateCourseModal";
 
 type AvailableCoursesSheetProps = {
@@ -60,7 +59,6 @@ export default function AvailableCoursesSheet({
                       </h3>
                       <div className="flex items-center gap-2 mb-3">
                         <Badge variant="outline">{course.code}</Badge>
-                        <Badge variant="secondary">{course.class}</Badge>
                       </div>
                       <Badge className="bg-muted text-muted-foreground">
                         Not assigned

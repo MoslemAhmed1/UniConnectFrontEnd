@@ -6,7 +6,7 @@ export const useStudentCourses = () => {
   const { data: courses, isLoading } = useQuery<Course[]>({
     queryKey: ["student-courses"],
     queryFn: async () => {
-      const result = await api.get("/api/courses");
+      const result = await api.get("/api/users/courses");
 
       return result.data.data;
     },

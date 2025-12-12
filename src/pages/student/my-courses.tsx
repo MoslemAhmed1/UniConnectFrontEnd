@@ -1,10 +1,11 @@
-import { useStudentCourses } from "@/hooks/student/use-student-courses";
+import JoinCourseSheet from "@/components/student/courses/JoinCourseSheet";
 import CourseCard from "@/components/student/dashboard/CourseCard";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { useStudentCourses } from "@/hooks/student/use-student-courses";
 
 export default function MyStudentCourses() {
   const { courses, isLoading } = useStudentCourses();
+
+  // TODO: Add loading skeleton
 
   return (
     <div className="container mx-auto px-6 py-8">
@@ -14,15 +15,13 @@ export default function MyStudentCourses() {
           <p className="text-slate-500">Browse all your enrolled courses</p>
         </div>
 
-        <Button>
-          <Plus />
-          Join Course
-        </Button>
+        <JoinCourseSheet studentCourses={courses} />
       </div>
 
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Loading courses...</p>
       ) : courses.length === 0 ? (
+        // TODO: Place lottie file
         <p className="text-sm text-muted-foreground">No courses found</p>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

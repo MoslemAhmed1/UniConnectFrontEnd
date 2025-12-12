@@ -1,6 +1,6 @@
 import { CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SidebarMenuButton, useSidebar } from "@/components/ui/sidebar";
-import { ChevronRight, Users } from "lucide-react";
+import { ChevronRight, MessageCircle } from "lucide-react";
 
 const GroupsMenuTrigger = () => {
   const { open, setOpen } = useSidebar();
@@ -13,7 +13,7 @@ const GroupsMenuTrigger = () => {
         }}
       >
         <div className="flex items-center gap-2">
-          <Users className="size-4" />
+          <MessageCircle className="size-4" />
           {open && <span>Scientific Discussion Groups</span>}
         </div>
         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
