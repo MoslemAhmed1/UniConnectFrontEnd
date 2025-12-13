@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStudentMaterials } from "@/hooks/student/use-student-materials";
 import type { Material } from "@/types/student/material";
 import MaterialSection from "@/components/common/course/materials/MaterialSection";
+import { useGetRoleUrl } from "@/hooks/use-role-url";
 
 const categoryList = [
   { id: "lecture", label: "Lecture Slides", category: "lecture" },
@@ -16,6 +17,9 @@ const categoryList = [
 export default function Materials() {
   const { id, category } = useParams<{ id: string; category: string }>();
   const { materials } = useStudentMaterials(id);
+  const { getRoleUrl } = useGetRoleUrl();
+
+  const userRole = getRoleUrl();
 
   if (!id) {
     return <></>;
@@ -34,10 +38,12 @@ export default function Materials() {
 
       <Tabs defaultValue={category || "lecture"} className="space-y-6">
         <TabsList className="bg-slate-100">
-          {categoryList.map((cat) => (
-            <TabsTrigger key={cat.id} value={cat.id}>
-              {cat.label}
-            </TabsTrigger>
+          {categoryList
+            .filter(cat => !(userRole === "instructor" && cat.category === "quiz"))
+            .map((cat) => (
+              <TabsTrigger key={cat.id} value={cat.id}>
+                {cat.label}
+              </TabsTrigger>
           ))}
         </TabsList>
 

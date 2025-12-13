@@ -26,7 +26,7 @@ const AssignmentSubmissionProfessor = () => {
   const { assignments } = useStudentAssignments();
 
   const assignment = assignments.find(
-    (a) => String(a.id) === assignmentId && a.courseCode === id
+    (a) => String(a.id) === assignmentId
   );
 
   if(!assignment){
@@ -58,7 +58,7 @@ const AssignmentSubmissionProfessor = () => {
                 {assignment.title}
               </h1>
               <div className="flex items-center gap-4 text-muted-foreground">
-                <span>{assignment.uploader}</span>
+                <span>{(assignment.assigner?.first_name ?? "") + (assignment.assigner?.parent_name ?? "")}</span>
                 <span>•</span>
                 <span>Posted {format(new Date(Number((assignment as any).uploaded_at) || (assignment as any).uploaded_at), "MMM d, yyyy")}</span>
                 <span>•</span>

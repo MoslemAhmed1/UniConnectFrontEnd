@@ -1,4 +1,5 @@
 import type { FeatureFlags } from "@/constants/user/feature-flags";
+import { useParams } from "react-router";
 
 // Hooks
 import { useAuth } from "@/providers/context/authContext";
@@ -6,7 +7,8 @@ import { useAuth } from "@/providers/context/authContext";
 // Components
 import CoursePage from "@/components/common/course/CoursePage";
 import { useCourseData } from "@/hooks/professor/use-course-data";
-import { useParams } from "react-router";
+import notFoundAnimation from "@/assets/lottie/Error 404.json";
+import CustomLottie from "@/components/global/CustomLottie";
 
 export const StudentCoursePage = () => {
   const { auth } = useAuth();
@@ -14,8 +16,12 @@ export const StudentCoursePage = () => {
   const { courseData } = useCourseData(id);
 
   if (!courseData) {
-    // TODO: Use Lottie React 404 page
-    return <></>;
+    return (
+      <CustomLottie
+        message="Oops, this course doesn't exist."
+        animationData={notFoundAnimation}
+      />
+    );
   }
 
   const studentRole = auth.user?.role;

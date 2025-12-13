@@ -7,6 +7,10 @@ type TeachersProps = {
 const teachersCountIfNotShowAll = 2;
 
 const Teachers = ({ teachers, showAll = false }: TeachersProps) => {
+  if(!teachers)
+  {
+    return <></>
+  }
   return (
     <div className="text-sm text-slate-500 mb-2">
       {!showAll && (

@@ -9,6 +9,7 @@ type Assignment = {
   created_at: string;
   deadline_at: string;
   attached_files?: File[];
+  max_grade?: number | null;
   assigner?: User;
 };
 
