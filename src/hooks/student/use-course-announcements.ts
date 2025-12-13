@@ -1,12 +1,17 @@
 import api from "@/lib/axios";
 import type { Announcement } from "@/types/student/announcement";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import openSocket from "socket.io-client";
 
 export const useCourseAnnouncements = (courseCode: string | undefined) => {
+  const courseAnnouncementsQueryKey = useMemo(
+    () => ["course-announcements", courseCode],
+    [courseCode]
+  );
+
   const { data: announcements, isLoading } = useQuery<Announcement[]>({
-    queryKey: ["course-announcements", courseCode],
+    queryKey: courseAnnouncementsQueryKey,
     queryFn: async () => {
       // TODO: handle fetching errors
       if (!courseCode) throw new Error("courseCode is undefined.");
@@ -25,7 +30,7 @@ export const useCourseAnnouncements = (courseCode: string | undefined) => {
     socket.on(`courses-${courseCode}-polls`, ({ data, action }) => {
       console.log(data, action);
       queryClient.setQueryData(
-        ["course-announcements", courseCode],
+        courseAnnouncementsQueryKey,
         (announcements: Announcement[]) => {
           return announcements.map((announcement) => {
             if (announcement.type !== "poll") return announcement;
@@ -70,10 +75,11 @@ export const useCourseAnnouncements = (courseCode: string | undefined) => {
     return () => {
       socket.off(`courses-${courseCode}-polls`);
     };
-  }, [courseCode, queryClient]);
+  }, [courseCode, queryClient, courseAnnouncementsQueryKey]);
 
   return {
     announcements,
     isLoading,
+    courseAnnouncementsQueryKey,
   };
 };

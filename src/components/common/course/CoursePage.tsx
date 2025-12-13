@@ -21,7 +21,9 @@ type CoursePageProps = {
 };
 
 export default function CoursePage({ course, featureFlags }: CoursePageProps) {
-  const { announcements } = useCourseAnnouncements(course.code);
+  const { announcements, courseAnnouncementsQueryKey } = useCourseAnnouncements(
+    course.code
+  );
   const { assignments } = useStudentAssignments(course.code);
 
   // TODO: backend route returns only 3-4 recent materials + returns an array with the material count for each category ??
@@ -60,6 +62,7 @@ export default function CoursePage({ course, featureFlags }: CoursePageProps) {
               courseCode={course.code}
               courseStudentsCount={course.students_number}
               allowModifyAnnouncements={featureFlags.showAddAnnouncementBtn}
+              courseAnnouncementsQueryKey={courseAnnouncementsQueryKey}
             />
           </TabsContent>
 

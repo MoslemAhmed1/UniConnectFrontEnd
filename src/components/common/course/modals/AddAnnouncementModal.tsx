@@ -1,4 +1,5 @@
-import { useState } from "react";
+import AnnouncementForm from "@/components/forms/CourseForms/AnnouncementForm";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,18 +8,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import type { QueryKey } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import AddAnnouncementForm from "@/components/forms/CourseForms/AddAnnouncementForm";
+import { useState } from "react";
 
 type AddAnnouncementModalProps = {
   courseCode: string;
   trigger?: React.ReactNode;
+  queryKey?: QueryKey;
 };
 
 export default function AddAnnouncementModal({
   courseCode,
   trigger,
+  queryKey,
 }: AddAnnouncementModalProps) {
   const [open, setOpen] = useState(false);
 
@@ -41,9 +44,10 @@ export default function AddAnnouncementModal({
             Share important announcements with your class.
           </DialogDescription>
         </DialogHeader>
-        <AddAnnouncementForm
-          courseCode={courseCode}
+        <AnnouncementForm
+          announcementUri={`/api/courses/${courseCode}/announcements`}
           onClose={() => setOpen(false)}
+          queryKey={queryKey}
         />
       </DialogContent>
     </Dialog>
