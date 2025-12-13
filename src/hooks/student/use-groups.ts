@@ -9,7 +9,7 @@ const useGroups = () => {
     queryKey: ["groups"],
     queryFn: async () => {
       const result = await api.get("/api/groups");
-      console.log(result.data.data);
+
       return result.data.data;
     },
   });

@@ -9,6 +9,7 @@ const addAnnouncementSchema = z.discriminatedUnion("type", [
       .array(
         z.object({
           value: z.string().nonempty({ error: "This field can't be empty." }),
+          id: z.uuid().optional(),
         })
       )
       .min(2, { error: "There should be at least 2 poll items." }),
@@ -26,6 +27,6 @@ const addAnnouncementSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
-type InferredAddAnnouncementFormSchema = z.infer<typeof addAnnouncementSchema>;
+type InferredAnnouncementFormSchema = z.infer<typeof addAnnouncementSchema>;
 
-export { addAnnouncementSchema, type InferredAddAnnouncementFormSchema };
+export { addAnnouncementSchema, type InferredAnnouncementFormSchema };

@@ -28,6 +28,7 @@ import { ClassMembers } from "./pages/student/class-members";
 import { Unauthorized } from "./pages/Unauthorized";
 import { UnAuthGuard } from "./components/guards/UnAuthGuard";
 import ProfilePage from "./pages/user/profile";
+import ClassAnnouncementsPage from "./pages/student/class-announcements-page";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +79,10 @@ createRoot(document.getElementById("root")!).render(
                     >
                       <Route path="class-members" element={<ClassMembers />} />
                     </Route>
+                    <Route
+                      path="class-announcements"
+                      element={<ClassAnnouncementsPage />}
+                    />
                   </Route>
                 </Route>
 

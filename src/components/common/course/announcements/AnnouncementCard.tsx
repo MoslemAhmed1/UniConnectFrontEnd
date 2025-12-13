@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,21 +6,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import type { Announcement } from "@/types/student/announcement";
+import type { QueryKey } from "@tanstack/react-query";
 import { format, formatDistanceToNow } from "date-fns";
-import { Edit, Trash2 } from "lucide-react";
+import DeleteAnnouncementButton from "../../announcement/DeleteAnnouncementButton";
+import EditAnnouncementButton from "../../announcement/EditAnnouncementButton";
 import PollItem from "./PollItem";
 
 type AnnouncementCardProps = {
   announcement: Announcement;
   allowModifyAnnouncements: boolean;
   courseStudentsCount: number;
+  className?: string;
+  queryKey?: QueryKey;
+  announcementUri: string;
 };
 
 export default function AnnouncementCard({
   announcement,
   allowModifyAnnouncements,
   courseStudentsCount,
+  className,
+  queryKey,
+  announcementUri,
 }: AnnouncementCardProps) {
   const createdAt = new Date(announcement.created_at);
   const now = new Date();
@@ -36,11 +44,10 @@ export default function AnnouncementCard({
   }
 
   return (
-    <Card className="p-6">
+    <Card className={cn("p-6", className)}>
       <CardHeader className="p-0">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            {/* Replace with uploader's profile photo */}
             <Avatar className="w-10 h-10 rounded-full">
               <AvatarImage src={announcement.announcer.image_url} />
               <AvatarFallback className="rounded-full capitalize">{`${announcement.announcer.first_name[0]}${announcement.announcer.parent_name[0]}`}</AvatarFallback>
@@ -58,12 +65,15 @@ export default function AnnouncementCard({
           </div>
           {allowModifyAnnouncements && (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon">
-                <Edit className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <EditAnnouncementButton
+                announcement={announcement}
+                queryKey={queryKey}
+                announcementUri={announcementUri}
+              />
+              <DeleteAnnouncementButton
+                queryKey={queryKey}
+                announcementUri={announcementUri}
+              />
             </div>
           )}
         </div>
@@ -72,7 +82,7 @@ export default function AnnouncementCard({
         {announcement.content}
 
         {announcement.type === "poll" && (
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 mt-3">
             {announcement.pollItems.map((pollItem) => (
               <PollItem
                 pollItem={pollItem}

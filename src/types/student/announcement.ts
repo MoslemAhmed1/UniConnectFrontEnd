@@ -8,7 +8,7 @@ export type PollItem = {
 };
 
 type PrimitiveAnnouncement = {
-  id: number;
+  id: string;
   created_at: string;
   announcer: User;
 };

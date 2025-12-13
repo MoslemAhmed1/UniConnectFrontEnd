@@ -19,22 +19,27 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { useAddAnnouncementForm } from "@/hooks/student/use-add-announcement-form";
-import type { InferredAddAnnouncementFormSchema } from "@/validations/AddAnnouncementFormSchema";
+import { useAnnouncementForm } from "@/hooks/student/use-announcement-form";
+import type { InferredAnnouncementFormSchema } from "@/validations/AddAnnouncementFormSchema";
+import type { QueryKey } from "@tanstack/react-query";
 import { Plus, Trash } from "lucide-react";
 import { Controller } from "react-hook-form";
 
-type AddAnnouncementFormProps = {
-  courseCode: string;
+type AnnouncementFormProps = {
   onClose: () => void;
-  defaultValues?: Partial<InferredAddAnnouncementFormSchema>;
+  defaultValues?: Partial<InferredAnnouncementFormSchema>;
+  announcementId?: string;
+  announcementUri: string;
+  queryKey?: QueryKey;
 };
 
-export default function AddAnnouncementForm({
-  courseCode,
+export default function AnnouncementForm({
   onClose,
   defaultValues,
-}: AddAnnouncementFormProps) {
+  announcementId,
+  announcementUri,
+  queryKey,
+}: AnnouncementFormProps) {
   const {
     control,
     isSubmitting,
@@ -43,9 +48,11 @@ export default function AddAnnouncementForm({
     appendPollField,
     pollFields,
     removePollField,
-  } = useAddAnnouncementForm({
-    courseCode,
+  } = useAnnouncementForm({
     defaultValues,
+    announcementId,
+    announcementUri,
+    queryKey,
   });
 
   return (
@@ -92,10 +99,15 @@ export default function AddAnnouncementForm({
         <Controller
           name="type"
           control={control}
+          disabled={!!announcementId}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="announcement-type">Type</FieldLabel>
-              <Select value={field.value} onValueChange={field.onChange}>
+              <Select
+                value={field.value}
+                onValueChange={field.onChange}
+                disabled={!!announcementId}
+              >
                 <SelectTrigger aria-invalid={fieldState.invalid}>
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
@@ -180,14 +192,12 @@ export default function AddAnnouncementForm({
             </Button>
 
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  Posting...
-                  <Spinner />
-                </>
-              ) : (
-                "Post Announcement"
-              )}
+              {isSubmitting && announcementId && "Updating"}
+              {isSubmitting && !announcementId && "Posting"}
+              {isSubmitting && <Spinner />}
+
+              {!isSubmitting && announcementId && "Update Announcement"}
+              {!isSubmitting && !announcementId && "Post Announcement"}
             </Button>
           </div>
         </Field>
