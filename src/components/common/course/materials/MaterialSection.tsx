@@ -13,13 +13,12 @@ export default function MaterialSection({ materials, sectionName, courseCode }: 
   const { auth } = useAuth();
   // const { courseRepId } = useCourseData(courseCode)
 
-  /* TODO: Route To Check For Course Head ?? */
+  // TODO: Route To Check For Course Head ??
   const role = auth.user?.role;
   const allowModifyMaterials = (role == "class_representative")
                               || (role == "professor/ta")
                               || (role == "course_head" /* auth.user?.id == courseRepId */);
 
-  
   return (
     <Card className="divide-y gap-0 p-0">
       {materials.length === 0 ? (

@@ -33,8 +33,7 @@ export default function MaterialsSection({
   ];
 
   const recentMaterials = materials.slice(0, 3);
-
-  allowModifyMaterials = true;
+  const userRole = getRoleUrl();
 
   // TODO: do we instead create a backend route which returns an array with the material count for each category ?? + maybe add the recent materials
   const getMaterialCount = (category: string) => {
@@ -58,31 +57,33 @@ export default function MaterialsSection({
 
         <div className="grid md:grid-cols-3 gap-4">
           {/* TODO: Hide Past Quizzes for Instructor */}
-          {categoryFolders.map((folder) => (
-            <Link
-              key={folder.category}
-              to={`/${getRoleUrl()}/materials/${courseCode}/${folder.category}`}
-            >
-              <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02]">
-                <CardContent className="p-0">
-                  <div className="flex items-center gap-4 pl-6">
-                    <div
-                      className={`w-12 h-12 bg-linear-to-br ${folder.color} rounded-xl flex items-center justify-center`}
-                    >
-                      <FileText className="w-6 h-6 text-white" />
+          {categoryFolders
+            .filter(folder => !(userRole === "instructor" && folder.category === "quiz"))
+            .map((folder) => (
+              <Link
+                key={folder.category}
+                to={`/${getRoleUrl()}/materials/${courseCode}/${folder.category}`}
+              >
+                <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02]">
+                  <CardContent className="p-0">
+                    <div className="flex items-center gap-4 pl-6">
+                      <div
+                        className={`w-12 h-12 bg-linear-to-br ${folder.color} rounded-xl flex items-center justify-center`}
+                      >
+                        <FileText className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-base font-semibold text-slate-800">
+                          {folder.name}
+                        </CardTitle>
+                        <CardDescription className="text-sm text-slate-500">
+                          {getMaterialCount(folder.category)} files
+                        </CardDescription>
+                      </div>
                     </div>
-                    <div>
-                      <CardTitle className="text-base font-semibold text-slate-800">
-                        {folder.name}
-                      </CardTitle>
-                      <CardDescription className="text-sm text-slate-500">
-                        {getMaterialCount(folder.category)} files
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+                  </CardContent>
+                </Card>
+              </Link>
           ))}
         </div>
       </div>

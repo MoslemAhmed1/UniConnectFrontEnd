@@ -19,3 +19,6 @@ export type User = {
   code?: string;
   year?: (typeof YEARS)[number];
 };
+
+// serverRolesType : "student" | "professor/ta" | "system_admin" | "class_representative" | "course_head";
+// YEARS: "1" | "2" | "3" | "4" | "5"
