@@ -6,6 +6,7 @@ type Submission = {
   assignment_id: string;
   submitted_at: string;
   grade?: number;
+  feedback?: string;
   status: SubmissionStatus;
   attached_files: File[];
   submitter: User;

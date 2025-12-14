@@ -7,15 +7,37 @@ export const useSubmissionData = (assignmentId: string) => {
     queryFn: () => {
       return new Promise<Submission | null>((resolve) => {
         setTimeout(() => {
+          const now = Date.now();
           const fakeSubmission: Submission =
             {
-              id: "sub-1",
-              assignment_id: "A1",
-              submitted_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+              id: "1",
+              assignment_id: "1",
+              submitted_at: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
               grade: 18,
+              feedback: "Excellent Work",
               status: "graded",
+              attached_files: [
+                {
+                  id: "1",
+                  name: "Assignment1_Solution.pdf",
+                  type: "application/pdf",
+                  size: "1.2 MB",
+                  key: "file-1",
+                  url: "",
+                  uploaded_at: now - 2 * 24 * 60 * 60 * 1000,
+                },
+                {
+                  id: "2",
+                  name: "Assignment2_Solution.pdf",
+                  type: "application/pdf",
+                  size: "4.0 MB",
+                  key: "file-2",
+                  url: "",
+                  uploaded_at: now - 2 * 24 * 60 * 60 * 1000,
+                },
+              ],
               submitter: {
-                id: "S1",
+                id: "1",
                 first_name: "Mohamed",
                 parent_name: "Ali",
                 grandparent_name: "Ibrahim",
@@ -24,18 +46,7 @@ export const useSubmissionData = (assignmentId: string) => {
                 image_url: "https://placehold.co/100x100/png",
                 role: "student",
               },
-              attached_files: [
-                {
-                  id: "1",
-                  name: "Assignment1_Solution.pdf",
-                  type: "application/pdf",
-                  size: "1.2 MB",
-                  key: "1",
-                  url: "",
-                  uploaded_at: Date.now() - 2 * 24 * 60 * 60 * 1000,
-                },
-              ],
-            };
+            }
           resolve(
             fakeSubmission.assignment_id === assignmentId ? fakeSubmission : null
           );
