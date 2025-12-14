@@ -14,7 +14,7 @@ type SubmissionFormProps = {
   submission?: Submission | null;
 };
 
-export default function SubmissionForm({
+export default function StudentSubmissionForm({
   assignmentId,
   submission,
 }: SubmissionFormProps) {

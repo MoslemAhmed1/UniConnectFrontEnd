@@ -9,26 +9,26 @@ export const useAssignmentData = (assignmentId: string | null) => {
         setTimeout(() => {
           const fakeAssignment: Assignment =
             {
-              id: "A1",
+              id: "1",
               title: "Assignment 1 - Introduction to Signals",
               description: "Solve the problems in the attached PDF.",
               course_id: "CSE221",
-              created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-              deadline_at: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+              created_at: "2025-01-10T09:30:00Z",
+              deadline_at: "2025-01-20T23:59:00Z",
               max_grade: 20,
               attached_files: [
-              {
-                id: "1",
-                name: "assignment1.pdf",
-                type: "application/pdf",
-                size: "1.2 MB",
-                key: "1",
-                url: "https://fake-storage.com/files/assignment1.pdf",
-                uploaded_at: 1704880000,
-              },
+                {
+                  id: "1",
+                  name: "assignment1.pdf",
+                  type: "application/pdf",
+                  key: "1",
+                  size: "1.2 MB",
+                  url: "https://fake-storage.com/files/assignment1.pdf",
+                  uploaded_at: 1704880000,
+                },
               ],
               assigner: {
-                id: "T1",
+                id: "1",
                 first_name: "Ahmed",
                 parent_name: "Hassan",
                 grandparent_name: "Ibrahim",
