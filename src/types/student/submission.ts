@@ -6,13 +6,11 @@ type Submission = {
   assignment_id: string;
   submitted_at: string;
   grade?: number;
-  feedback?: string;
-  status: SubmissionStatus;
   attached_files: File[];
   submitter: User;
+  is_turned_in: boolean;
+  turned_in_at?: string;
+  feedback?: string;
 };
 
-type SubmissionStatus = "submitted" | "graded" | "unsubmitted";
-
 export { type Submission };
-

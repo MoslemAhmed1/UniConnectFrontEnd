@@ -1,125 +1,63 @@
-import { Controller } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
-import { FileText, Trash2 } from "lucide-react";
 import { UploadDropZone } from "@/components/global/UploadDropZone";
-import { toast } from "sonner";
-
-import { useSubmissionForm } from "@/hooks/student/use-submission-form";
+import api from "@/lib/axios";
 import type { Submission } from "@/types/student/submission";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { type UploadFile } from "@/types/general/files";
 
 type SubmissionFormProps = {
   assignmentId: string;
-  submission?: Submission | null;
+  submission: Submission | undefined | null;
+  courseId: string;
 };
 
 export default function StudentSubmissionForm({
   assignmentId,
   submission,
+  courseId,
 }: SubmissionFormProps) {
-
-  const mode = (submission && submission.status === "unsubmitted") ? "edit" : "create";
-  const {
-    control,
-    isSubmitting,
-    onSubmit,
-    chooseFiles,
-    chosenFiles,
-    isValid,
-    handleRemoveChosenFile,
-    isDeletingFile,
-  } = useSubmissionForm({
-    mode,
-    assignmentId,
-    submissionId: submission?.id,
-    submissionData: submission ?? undefined,
-  });
+  const queryClient = useQueryClient();
 
   return (
-    <form className="space-y-6" onSubmit={onSubmit} aria-busy={isSubmitting}>
-      <FieldGroup>
+    <UploadDropZone
+      config={{
+        mode: "auto",
+      }}
+      endpoint="materialUploader"
+      uploadProgressGranularity="fine"
+      onClientUploadComplete={async (files) => {
+        if (!files?.length) {
+          toast.error("No files returned from upload.");
+          return;
+        }
 
-        {/* Upload field + validation */}
-        <Controller
-          name="file_ids"
-          control={control}
-          render={({ fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <UploadDropZone
-                endpoint="materialUploader"
-                // appearance={{ button: { display: "none" } }}
-                onClientUploadComplete={(files) => {
-                  if (!files?.length) {
-                    toast.error("No files returned from upload.");
-                    return;
-                  }
+        const uploadedFiles = files
+          .map((f) => f.serverData?.file_data)
+          .filter((file): file is UploadFile => Boolean(file));
 
-                  const uploadedFiles = files
-                    .map((f) => f.serverData?.file_data)
-                    .filter(Boolean)
-                    .map((fd: any) => ({
-                      id: String(fd.id),
-                      key: fd.key,
-                      name: fd.name,
-                      size: fd.size,
-                    }));
+        if (submission?.id) {
+          await api.post(
+            `/api/courses/${courseId}/assignments/${assignmentId}/submissions/${submission.id}/files`,
+            {
+              files_ids: uploadedFiles.map((file) => file.id),
+            }
+          );
+        } else {
+          await api.post(
+            `/api/courses/${courseId}/assignments/${assignmentId}/submissions`,
+            {
+              file_ids: uploadedFiles.map((file) => file.id),
+            }
+          );
+        }
 
-                  chooseFiles(uploadedFiles);
-                }}
-                onUploadError={() => {
-                  toast.error("An error has occurred while uploading the file.");
-                }}
-              />
-
-              {fieldState.error && (
-                <FieldError errors={[fieldState.error]} />
-              )}
-            </Field>
-          )}
-        />
-      
-        {/* Selected files */}
-        <div className="space-y-2">
-          {(chosenFiles ?? []).map((file) => (
-            <div
-              key={file.id}
-              className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-            >
-              <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-primary" />
-                <span className="text-sm text-foreground">{file.name}</span>
-              </div>
-
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleRemoveChosenFile(file.id)}
-                disabled={isDeletingFile}
-              >
-                {!isDeletingFile ? <Trash2 /> : <Spinner />}
-              </Button>
-            </div>
-          ))}
-        </div>
-
-        {/* Submit */}
-        <Button
-          type="submit"
-          disabled={isSubmitting || !isValid}
-          className="w-full"
-        >
-          {isSubmitting ? (
-            <>
-              {mode === "edit" ? "Updating..." : "Submitting..."}
-              <Spinner />
-            </>
-          ) : (
-            <>{mode === "edit" ? "Update Submission" : "Submit"}</>
-          )}
-        </Button>
-
-      </FieldGroup>
-    </form>
+        queryClient.invalidateQueries({
+          queryKey: ["student-submission", assignmentId],
+        });
+      }}
+      onUploadError={() => {
+        toast.error("An error has occurred while uploading the file.");
+      }}
+    />
   );
 }

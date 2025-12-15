@@ -11,19 +11,13 @@ import {
 } from "@/validations/MaterialFormSchema";
 import { useEffect, useState } from "react";
 import type { Material } from "@/types/student/material";
+import type { UploadFile } from "@/types/general/files";
 
 type UseMaterialFormArgs = {
   mode: "create" | "edit";
   courseCode: string;
   materialId?: number;
   materialData?: Material;
-};
-
-type UploadFile = {
-  name: string;
-  size: string;
-  key: string;
-  id: string;
 };
 
 export const useMaterialForm = ({

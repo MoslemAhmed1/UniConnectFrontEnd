@@ -1,59 +1,32 @@
+import api from "@/lib/axios";
+import { useAuth } from "@/providers/context/authContext";
 import type { Submission } from "@/types/student/submission";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-export const useSubmissionData = (assignmentId: string) => {
-  const { data: submission, isLoading } = useQuery<Submission | null>({
+export const useSubmissionData = (
+  assignmentId: string | undefined,
+  courseId: string | undefined
+) => {
+  const { auth, loading: isLoadingAuth } = useAuth();
+
+  const { data: submission, isLoading } = useQuery<Submission | undefined>({
     queryKey: ["student-submission", assignmentId],
-    queryFn: () => {
-      return new Promise<Submission | null>((resolve) => {
-        setTimeout(() => {
-          const now = Date.now();
-          const fakeSubmission: Submission =
-            {
-              id: "1",
-              assignment_id: "1",
-              submitted_at: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
-              grade: 18,
-              feedback: "Excellent Work",
-              status: "graded",
-              attached_files: [
-                {
-                  id: "1",
-                  name: "Assignment1_Solution.pdf",
-                  type: "application/pdf",
-                  size: "1.2 MB",
-                  key: "file-1",
-                  url: "",
-                  uploaded_at: now - 2 * 24 * 60 * 60 * 1000,
-                },
-                {
-                  id: "2",
-                  name: "Assignment2_Solution.pdf",
-                  type: "application/pdf",
-                  size: "4.0 MB",
-                  key: "file-2",
-                  url: "",
-                  uploaded_at: now - 2 * 24 * 60 * 60 * 1000,
-                },
-              ],
-              submitter: {
-                id: "1",
-                first_name: "Mohamed",
-                parent_name: "Ali",
-                grandparent_name: "Ibrahim",
-                family_name: "Salem",
-                email: "mohamed.ali@university.edu",
-                image_url: "https://placehold.co/100x100/png",
-                role: "student",
-              },
-            }
-          resolve(
-            fakeSubmission.assignment_id === assignmentId ? fakeSubmission : null
-          );
-        }, 500);
-      });
+    queryFn: async () => {
+      try {
+        if (!auth.user?.id) throw new Error("Auth user is undefined");
+
+        const result = await api.get(
+          `/api/courses/${courseId}/assignments/${assignmentId}/submissions?userId=${auth.user.id}`
+        );
+
+        return result.data.data ?? null;
+      } catch (error) {
+        console.error(error);
+        toast.error("An error occurred while loading your submission.");
+      }
     },
-    enabled: !!assignmentId,
+    enabled: !!assignmentId && !isLoadingAuth && !!auth.user,
   });
 
   return {
