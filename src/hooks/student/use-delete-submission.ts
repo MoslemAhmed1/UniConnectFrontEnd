@@ -3,17 +3,31 @@ import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-export const useDeleteSubmission = (submissionId: string | undefined) => {
+type UseDeleteSubmissionArgs = {
+  submissionId: string | undefined;
+  courseId: string | undefined;
+  assignmentId: string | undefined;
+};
+
+export const useDeleteSubmission = ({
+  assignmentId,
+  courseId,
+  submissionId,
+}: UseDeleteSubmissionArgs) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: deleteSubmission, isPending: isDeleting } = useMutation({
-    mutationKey: ["delete-submission"],
-    mutationFn: async (submissionId: string) => {
-      return api.delete(`/api/submissions/${submissionId}`);
+    mutationKey: ["delete-submission", submissionId],
+    mutationFn: (submissionId: string) => {
+      return api.delete(
+        `/api/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}`
+      );
     },
     onSuccess: () => {
       toast.success("Submission has been deleted successfully.");
-      queryClient.invalidateQueries({ queryKey: ["student-submissions", submissionId] });
+      queryClient.invalidateQueries({
+        queryKey: ["student-submission", assignmentId],
+      });
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -22,7 +36,9 @@ export const useDeleteSubmission = (submissionId: string | undefined) => {
           return;
         }
       }
-      toast.error("An error occurred while deleting this submission. Please try again.");
+      toast.error(
+        "An error occurred while deleting this submission. Please try again."
+      );
     },
   });
 

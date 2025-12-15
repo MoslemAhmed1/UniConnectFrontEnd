@@ -1,50 +1,29 @@
+import api from "@/lib/axios";
 import type { Assignment } from "@/types/student/assignment";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-export const useAssignmentData = (assignmentId: string | null) => {
-  const { data: assignment, isLoading } = useQuery<Assignment | null>({
+export const useAssignmentData = (
+  assignmentId: string | undefined,
+  courseId: string | undefined
+) => {
+  const { data: assignment, isLoading } = useQuery<Assignment>({
     queryKey: ["student-assignments", assignmentId],
-    queryFn: () => {
-      return new Promise<Assignment | null>((resolve) => {
-        setTimeout(() => {
-          const fakeAssignment: Assignment =
-            {
-              id: "1",
-              title: "Assignment 1 - Introduction to Signals",
-              description: "Solve the problems in the attached PDF.",
-              course_id: "CSE221",
-              created_at: "2025-01-10T09:30:00Z",
-              deadline_at: "2025-01-20T23:59:00Z",
-              max_grade: 20,
-              attached_files: [
-                {
-                  id: "1",
-                  name: "assignment1.pdf",
-                  type: "application/pdf",
-                  key: "1",
-                  size: "1.2 MB",
-                  url: "https://fake-storage.com/files/assignment1.pdf",
-                  uploaded_at: 1704880000,
-                },
-              ],
-              assigner: {
-                id: "1",
-                first_name: "Ahmed",
-                parent_name: "Hassan",
-                grandparent_name: "Ibrahim",
-                family_name: "Salem",
-                email: "ahmed.hassan@university.edu",
-                image_url: "https://placehold.co/100x100/png",
-                role: "professor/ta",
-              },
-            }
-          resolve(
-            fakeAssignment.id === assignmentId ? fakeAssignment : null
-          );
-        }, 500);
-      });
+    queryFn: async () => {
+      try {
+        const result = await api.get(
+          `/api/courses/${courseId}/assignments/${assignmentId}`
+        );
+        return result.data.data;
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          "An error occurred while fetching the assignment, please try again."
+        );
+      }
     },
-    enabled: !!assignmentId,
+
+    enabled: !!assignmentId && !!courseId,
   });
 
   return {

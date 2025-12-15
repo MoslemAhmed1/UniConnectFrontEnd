@@ -7,6 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { ADMIN_SIDEBAR_ITEMS } from "@/constants/admin/layout";
 import { INSTRUCTOR_SIDEBAR_ITEMS } from "@/constants/instructor/layout";
 import { STUDENT_SIDEBAR_ITEMS } from "@/constants/student/layout";
 import { useHasRole } from "@/hooks/use-has-role";
@@ -19,8 +20,8 @@ const PopulatedSidebarContent = () => {
     // TODO: Filter some its by role
     if (hasRole("student", "class_representative", "course_head"))
       return STUDENT_SIDEBAR_ITEMS;
-    else if (hasRole("system_admin", "professor/ta"))
-      return INSTRUCTOR_SIDEBAR_ITEMS;
+    else if (hasRole("professor/ta")) return INSTRUCTOR_SIDEBAR_ITEMS;
+    else if (hasRole("system_admin")) return ADMIN_SIDEBAR_ITEMS;
 
     return [];
   };

@@ -14,10 +14,15 @@ type SubmissionCardProps = {
   maxGrade?: number | null;
 };
 
-export default function SubmissionCard({ submission, assignmentId, maxGrade }: SubmissionCardProps) {
+export default function SubmissionCard({
+  submission,
+  assignmentId,
+  maxGrade,
+}: SubmissionCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isAssigningGrade, setIsAssigningGrade] = useState(false);
-  const { handleDeleteSubmissionGrade, isDeleting } = useDeleteSubmissionGrade(assignmentId);
+  const { handleDeleteSubmissionGrade, isDeleting } =
+    useDeleteSubmissionGrade(assignmentId);
 
   return (
     <Card className="p-4">
@@ -35,7 +40,12 @@ export default function SubmissionCard({ submission, assignmentId, maxGrade }: S
             {`${submission.submitter.first_name ?? ""} ${submission.submitter.parent_name ?? ""}`.trim()}
           </h4>
           <p className="text-sm text-muted-foreground">
-            Submitted at {submission.submitted_at ? format(new Date(submission.submitted_at), "MMM d, yyyy h:mm a").replace("am", "AM").replace("pm", "PM") : "—"}
+            Submitted at{" "}
+            {submission.submitted_at
+              ? format(new Date(submission.submitted_at), "MMM d, yyyy h:mm a")
+                  .replace("am", "AM")
+                  .replace("pm", "PM")
+              : "—"}
           </p>
         </div>
       </div>
@@ -44,17 +54,30 @@ export default function SubmissionCard({ submission, assignmentId, maxGrade }: S
       <div className="space-y-2 mb-4">
         <p className="text-sm font-medium text-foreground">Files:</p>
         {submission.attached_files?.map((file) => (
-          <div key={file.id} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+          <div
+            key={file.id}
+            className="flex items-center justify-between p-2 bg-muted/50 rounded"
+          >
             <div className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-primary" />
               <span className="text-sm">{file.name}</span>
-              <span className="text-xs text-muted-foreground">({file.size})</span>
+              <span className="text-xs text-muted-foreground">
+                ({file.size})
+              </span>
             </div>
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" aria-label={`view-${file.name}`}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`view-${file.name}`}
+              >
                 <Eye className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" aria-label={`download-${file.name}`}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`download-${file.name}`}
+              >
                 <Download className="w-4 h-4" />
               </Button>
             </div>
@@ -64,8 +87,12 @@ export default function SubmissionCard({ submission, assignmentId, maxGrade }: S
 
       {submission.status === "graded" ? (
         <div className="p-3 pt-0 bg-accent/5 rounded border border-accent/20 mb-3">
-          <p className="text-sm font-medium text-foreground mb-1">Grade: {submission.grade}/{maxGrade}</p>
-          <p className="text-sm text-muted-foreground mb-2">{submission.feedback}</p>
+          <p className="text-sm font-medium text-foreground mb-1">
+            Grade: {submission.grade}/{maxGrade}
+          </p>
+          <p className="text-sm text-muted-foreground mb-2">
+            {submission.feedback}
+          </p>
 
           {isEditing ? (
             <GradeSubmissionForm
@@ -73,12 +100,26 @@ export default function SubmissionCard({ submission, assignmentId, maxGrade }: S
               submissionId={submission.id}
               assignmentId={assignmentId}
               onClose={() => setIsEditing(false)}
-              defaultValues={{ grade: String(submission.grade), feedback: submission.feedback ?? undefined }}
+              defaultValues={{
+                grade: String(submission.grade),
+                feedback: submission.feedback ?? undefined,
+              }}
             />
           ) : (
             <>
-              <Button variant="outline" className="w-full mt-4" onClick={() => setIsEditing(true)}>Edit Grade</Button>
-              <Button variant="destructive" className="w-full mt-4" onClick={() => handleDeleteSubmissionGrade(submission.id)} disabled={isDeleting}>
+              <Button
+                variant="outline"
+                className="w-full mt-4"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit Grade
+              </Button>
+              <Button
+                variant="destructive"
+                className="w-full mt-4"
+                onClick={() => handleDeleteSubmissionGrade(submission.id)}
+                disabled={isDeleting}
+              >
                 {isDeleting ? "Removing..." : "Remove Grade"}
               </Button>
             </>
@@ -94,7 +135,11 @@ export default function SubmissionCard({ submission, assignmentId, maxGrade }: S
               onClose={() => setIsAssigningGrade(false)}
             />
           ) : (
-            <Button variant="outline" className="w-full" onClick={() => setIsAssigningGrade(true)}>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsAssigningGrade(true)}
+            >
               Assign Grade
             </Button>
           )}

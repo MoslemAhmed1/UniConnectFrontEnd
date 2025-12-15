@@ -104,10 +104,15 @@ createRoot(document.getElementById("root")!).render(
                     />
                   </Route>
                 </Route>
+
+                <Route
+                  path="/admin"
+                  element={<AuthGuard allowedRoles={["system_admin"]} />}
+                >
+                  <Route path="create-admin" element={<CreateAdminPage />} />
+                </Route>
               </Route>
-              <Route path="/admin">
-                <Route path="create" element={<CreateAdminPage />} />
-              </Route>
+
               <Route path="/unauthorized" element={<Unauthorized />} />
             </Routes>
             <Toaster position="top-center" />
