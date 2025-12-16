@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import AdminSignupForm from "../forms/AdminForms/AdminSignupForm";
+import AdminCreateUserForm from "../forms/AdminForms/AdminCreateUserForm";
 // import SignupForm from "../forms/SignupForm/SignupForm";
 
 export const CreateUserModal = () => {
@@ -36,7 +36,7 @@ export const CreateUserModal = () => {
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="max-h-[70vh]">
-          <AdminSignupForm onSuccess={handleSuccess} />
+          <AdminCreateUserForm onSuccess={handleSuccess} />
           {/* <SignupForm /> */}
         </ScrollArea>
       </DialogContent>

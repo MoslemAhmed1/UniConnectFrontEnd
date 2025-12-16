@@ -16,15 +16,15 @@ import PasswordField from "../reusable-fields/PasswordField";
 import RoleField from "../SignupForm/RoleField";
 import StudentCodeField from "../SignupForm/StudentCodeField";
 import StudentYearField from "../SignupForm/StudentYearField";
-import useAdminSignupForm from "@/hooks/admin/use-admin-signup-form";
+import useAdminCreateUserForm from "@/hooks/admin/use-admin-create-user-form";
 
-type AdminSignupFormProps = {
+type AdminCreateUserFormProps = {
   onSuccess?: () => void;
 };
 
-const AdminSignupForm = ({ onSuccess }: AdminSignupFormProps) => {
+const AdminCreateUserForm = ({ onSuccess }: AdminCreateUserFormProps) => {
   const { onSubmit, control, isValid, selectedRole, isSubmitting, trigger } =
-    useAdminSignupForm({ onSuccess });
+    useAdminCreateUserForm({ onSuccess });
 
   return (
     <>
@@ -72,5 +72,5 @@ const AdminSignupForm = ({ onSuccess }: AdminSignupFormProps) => {
   );
 };
 
-export default AdminSignupForm;
+export default AdminCreateUserForm;
 

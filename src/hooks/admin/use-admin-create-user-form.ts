@@ -9,11 +9,11 @@ import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-type UseAdminSignupFormArgs = {
+type UseAdminCreateUserFormArgs = {
   onSuccess?: () => void;
 };
 
-export const useAdminSignupForm = ({ onSuccess }: UseAdminSignupFormArgs = {}) => {
+export const useAdminCreateUserForm = ({ onSuccess }: UseAdminCreateUserFormArgs = {}) => {
   const queryClient = useQueryClient();
 
   const form = useForm<InferredFormSchema>({
@@ -103,5 +103,5 @@ export const useAdminSignupForm = ({ onSuccess }: UseAdminSignupFormArgs = {}) =
   };
 };
 
-export default useAdminSignupForm;
+export default useAdminCreateUserForm;
 
