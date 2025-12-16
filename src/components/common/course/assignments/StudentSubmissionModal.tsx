@@ -1,4 +1,4 @@
-import SubmissionForm from "@/components/forms/CourseForms/SubmissionForm";
+import StudentFormSubmission from "@/components/forms/CourseForms/StudentSubmissionForm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -75,7 +75,7 @@ export default function SubmissionCard({
       </div>
 
       {!submission?.is_turned_in && (
-        <SubmissionForm
+        <StudentFormSubmission
           submission={submission}
           assignmentId={assignment.id}
           courseId={assignment.course_id}

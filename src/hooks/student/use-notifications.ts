@@ -2,8 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { type Notification } from "@/types/student/notification";
 import api from "@/lib/axios";
 import { useAuth } from "@/providers/context/authContext";
+import type { Course } from "@/types/student/course";
+import { useEffect } from "react";
+import { socket } from "@/lib/socket";
 
-const useNotifications = () => {
+const useNotifications = (enrolledCourses: Course[]) => {
   const { auth, loading: isAuthLoading } = useAuth();
   const queryClient = useQueryClient();
 
@@ -20,6 +23,40 @@ const useNotifications = () => {
     initialData: [],
     enabled: !isAuthLoading,
   });
+
+  useEffect(() => {
+    enrolledCourses.forEach((course) => {
+      socket.on(`notifications-course-${course.code}`, (data: Notification) => {
+        queryClient.setQueryData(
+          ["notifications"],
+          (notifications: Notification[]) => [data, ...notifications]
+        );
+      });
+    });
+
+    return () => {
+      enrolledCourses.forEach((course) => {
+        socket.off(`notifications-course-${course.code}`);
+      });
+    };
+  }, [enrolledCourses, queryClient]);
+
+  useEffect(() => {
+    if (!auth.user) return;
+
+    const year = auth.user.year;
+
+    socket.on(`notifications-year-${year}`, (data: Notification) => {
+      queryClient.setQueryData(
+        ["notifications"],
+        (notifications: Notification[]) => [data, ...notifications]
+      );
+    });
+
+    return () => {
+      socket.off(`notifications-year-${year}`);
+    };
+  }, [queryClient, auth.user]);
 
   const { mutate: markAllAsRead } = useMutation({
     mutationFn: () => {

@@ -3,6 +3,7 @@ import Heading from "@/components/global/Heading";
 import SubtleParagraph from "@/components/global/SubtleParagraph";
 import CreateClassAnnouncementButton from "@/components/student/class/CreateClassAnnouncementButton";
 import useStudentClassAnnouncements from "@/hooks/student/use-student-class-announcements";
+import { useHasRole } from "@/hooks/use-has-role";
 
 const ClassAnnouncementsPage = () => {
   const {
@@ -12,6 +13,8 @@ const ClassAnnouncementsPage = () => {
     announcementsQueryKey,
     getAnnouncementUri,
   } = useStudentClassAnnouncements();
+
+  const { hasRole } = useHasRole();
 
   // TODO: Add loading skeletons and lottie files for empty states
 
@@ -24,7 +27,9 @@ const ClassAnnouncementsPage = () => {
             These are the announcements announced for your class.
           </SubtleParagraph>
         </div>
-        <CreateClassAnnouncementButton queryKey={announcementsQueryKey} />
+        {hasRole("class_representative") && (
+          <CreateClassAnnouncementButton queryKey={announcementsQueryKey} />
+        )}
       </div>
       {classAnnouncements.map((announcement) => (
         <AnnouncementCard

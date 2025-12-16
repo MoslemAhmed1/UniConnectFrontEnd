@@ -8,10 +8,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import useNotifications from "@/hooks/student/use-notifications";
 import BellAndIndicator from "./BellAndIndicator";
 import NotificationList from "./NotificationList";
+import { useStudentCourses } from "@/hooks/student/use-student-courses";
 
 const Notifications = () => {
+  const { courses } = useStudentCourses();
   const { markAllAsRead, notifications, unreadNotificationsCount } =
-    useNotifications();
+    useNotifications(courses);
 
   return (
     <Popover>
