@@ -1,4 +1,5 @@
 import api from "@/lib/axios";
+import { uploadFiles } from "@/lib/uploadthingFn";
 import type { Course } from "@/types/student/course";
 import {
   CourseFormSchema,
@@ -7,7 +8,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -18,36 +19,53 @@ export const useCourseForm = (initialCourseData?: Course) => {
     control,
     formState: { isValid, isSubmitting, dirtyFields },
     reset,
+    trigger,
+    setValue,
   } = useForm({
-    //@ts-expect-error For some reason this causes a weird type error when the code: "" is included in default values
     resolver: zodResolver(CourseFormSchema),
     mode: "onBlur",
     defaultValues: {
-      name: "",
-      code: "",
-      year: "1",
+      image_url: initialCourseData?.image_url,
+      name: initialCourseData?.name,
+      code: initialCourseData?.code,
+      year: initialCourseData?.year,
     },
   });
-
-  useEffect(() => {
-    if (initialCourseData) {
-      reset(initialCourseData);
-    }
-  }, [reset, initialCourseData]);
+  const [imageFile, setChosenFile] = useState<File | undefined>();
 
   const { mutate: createCourse, isPending } = useMutation({
     mutationKey: ["create-course"],
-    mutationFn: (data: ICourseFormSchema) => {
+    mutationFn: async (data: ICourseFormSchema) => {
+      const newImageUrl = imageFile && URL.createObjectURL(imageFile);
+      let image_url = initialCourseData?.image_url;
+
+      if (newImageUrl !== image_url && imageFile) {
+        const res = await uploadFiles("imageUploader", {
+          files: [imageFile],
+        });
+
+        if (!res.length || !res[0].serverData.image_url) {
+          toast.error("Error occurred while uploading course image.");
+          return;
+        }
+
+        image_url = res[0].serverData.image_url;
+      }
+
       if (initialCourseData) {
         const updateData = {
           name: data.name,
           year: data.year,
+          image_url,
         };
 
         return api.patch(`/api/courses/${initialCourseData.code}`, updateData);
       }
 
-      return api.post("/api/courses", data);
+      return api.post("/api/courses", {
+        ...data,
+        image_url,
+      });
     },
     onSuccess: () => {
       let message;
@@ -80,6 +98,13 @@ export const useCourseForm = (initialCourseData?: Course) => {
     createCourse(data);
   });
 
+  const handleImageChange = (file: File | undefined) => {
+    setChosenFile(file);
+    const imageUrl = !file ? "" : URL.createObjectURL(file);
+    setValue("image_url", imageUrl);
+    trigger("image_url");
+  };
+
   return {
     onSubmit,
     isPending,
@@ -88,5 +113,6 @@ export const useCourseForm = (initialCourseData?: Course) => {
     reset,
     isSubmitting,
     dirtyFields,
+    handleImageChange,
   };
 };

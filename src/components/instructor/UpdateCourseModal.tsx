@@ -21,9 +21,18 @@ type UpdateCourseModalProps = {
   courseData: Course;
 };
 
-export const UpdateCourseModal = ({ trigger, courseData }: UpdateCourseModalProps) => {
-  const { control, isValid, onSubmit, isPending, isSubmitting, dirtyFields } =
-    useCourseForm(courseData);
+export const UpdateCourseModal = ({
+  trigger,
+  courseData,
+}: UpdateCourseModalProps) => {
+  const {
+    control,
+    isValid,
+    onSubmit,
+    isPending,
+    isSubmitting,
+    handleImageChange,
+  } = useCourseForm(courseData);
 
   return (
     <Dialog>
@@ -35,7 +44,7 @@ export const UpdateCourseModal = ({ trigger, courseData }: UpdateCourseModalProp
             <Edit className="w-4 h-4 mr-2" />
             Modify Course
           </Button>
-        )}   
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>
@@ -48,7 +57,11 @@ export const UpdateCourseModal = ({ trigger, courseData }: UpdateCourseModalProp
           </DialogHeader>
           <ScrollArea className="max-h-[70vh] pr-4">
             {courseData && (
-              <CourseFieldGroup control={control} disableCode={true} />
+              <CourseFieldGroup
+                control={control}
+                disableCode={true}
+                handleImageChange={handleImageChange}
+              />
             )}
           </ScrollArea>
           <DialogFooter>
@@ -57,11 +70,7 @@ export const UpdateCourseModal = ({ trigger, courseData }: UpdateCourseModalProp
             </DialogClose>
             <Button
               type="submit"
-              disabled={
-                !isValid ||
-                isSubmitting ||
-                Object.keys(dirtyFields).length === 0
-              }
+              disabled={!isValid || isPending || isSubmitting}
             >
               {isPending ? "Updating Course" : "Update Course"}
               {isPending && <Spinner />}

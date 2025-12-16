@@ -13,13 +13,13 @@ import { Spinner } from "@/components/ui/spinner";
 import { useCourseForm } from "@/hooks/instructor/use-course-form";
 import { CourseFieldGroup } from "./CourseFieldGroup";
 import { Plus } from "lucide-react";
-
 type CreateCourseModalProps = {
   trigger?: React.ReactNode;
 };
 
 export const CreateCourseModal = ({ trigger }: CreateCourseModalProps) => {
-  const { control, isValid, onSubmit, reset, isPending } = useCourseForm();
+  const { control, isValid, onSubmit, reset, isPending, handleImageChange } =
+    useCourseForm();
 
   const handleOpenChange = (open: boolean) => {
     if (open) reset();
@@ -34,7 +34,7 @@ export const CreateCourseModal = ({ trigger }: CreateCourseModalProps) => {
             <Plus className="w-4 h-4 mr-2" />
             Create New Course
           </Button>
-        )}   
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>
@@ -45,7 +45,11 @@ export const CreateCourseModal = ({ trigger }: CreateCourseModalProps) => {
               and add the course.
             </DialogDescription>
           </DialogHeader>
-          <CourseFieldGroup control={control} disableCode={false} />
+          <CourseFieldGroup
+            control={control}
+            disableCode={false}
+            handleImageChange={handleImageChange}
+          />
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
