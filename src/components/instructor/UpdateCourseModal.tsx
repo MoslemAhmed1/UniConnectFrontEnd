@@ -10,12 +10,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { useCourseForm } from "@/hooks/professor/use-course-form";
+import { useCourseForm } from "@/hooks/instructor/use-course-form";
 import { CourseFieldGroup } from "./CourseFieldGroup";
 import { Edit } from "lucide-react";
 import type { Course } from "@/types/student/course";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
-export const UpdateCourseModal = ({ courseData }: { courseData: Course }) => {
+type UpdateCourseModalProps = {
+  trigger?: React.ReactNode;
+  courseData: Course;
+};
+
+export const UpdateCourseModal = ({
+  trigger,
+  courseData,
+}: UpdateCourseModalProps) => {
   const {
     control,
     isValid,
@@ -28,10 +37,14 @@ export const UpdateCourseModal = ({ courseData }: { courseData: Course }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="cursor-pointer">
-          <Edit className="w-4 h-4 mr-2" />
-          Modify Course
-        </Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button variant="outline" size="sm" className="cursor-pointer">
+            <Edit className="w-4 h-4 mr-2" />
+            Modify Course
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>
@@ -42,13 +55,15 @@ export const UpdateCourseModal = ({ courseData }: { courseData: Course }) => {
               course.
             </DialogDescription>
           </DialogHeader>
-          {courseData && (
-            <CourseFieldGroup
-              control={control}
-              disableCode={true}
-              handleImageChange={handleImageChange}
-            />
-          )}
+          <ScrollArea className="max-h-[70vh] pr-4">
+            {courseData && (
+              <CourseFieldGroup
+                control={control}
+                disableCode={true}
+                handleImageChange={handleImageChange}
+              />
+            )}
+          </ScrollArea>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>

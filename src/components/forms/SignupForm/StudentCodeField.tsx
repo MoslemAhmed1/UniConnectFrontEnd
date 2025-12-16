@@ -5,7 +5,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { InferedFormSchema } from "@/validations/SignupFormSchama";
+import type { InferedFormSchema } from "@/validations/SignupFormSchema";
 import { Controller, type Control } from "react-hook-form";
 
 const StudentCodeField = ({

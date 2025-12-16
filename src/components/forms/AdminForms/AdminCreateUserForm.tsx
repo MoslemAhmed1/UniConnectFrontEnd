@@ -1,5 +1,5 @@
-import useSignupForm from "@/hooks/use-signup-form";
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Field,
   FieldDescription,
@@ -7,20 +7,24 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "../../ui/field";
-import { Spinner } from "../../ui/spinner";
+} from "@/components/ui/field";
 import ConfirmPasswordField from "../reusable-fields/ConfirmPasswordField";
 import EmailField from "../reusable-fields/EmailField";
 import FirstNameField from "../reusable-fields/FirstNameField";
 import ParentNameField from "../reusable-fields/ParentNameField";
 import PasswordField from "../reusable-fields/PasswordField";
-import RoleField from "./RoleField";
-import StudentCodeField from "./StudentCodeField";
-import StudentYearField from "./StudentYearField";
+import RoleField from "../SignupForm/RoleField";
+import StudentCodeField from "../SignupForm/StudentCodeField";
+import StudentYearField from "../SignupForm/StudentYearField";
+import useAdminCreateUserForm from "@/hooks/admin/use-admin-create-user-form";
 
-const SignupForm = () => {
+type AdminCreateUserFormProps = {
+  onSuccess?: () => void;
+};
+
+const AdminCreateUserForm = ({ onSuccess }: AdminCreateUserFormProps) => {
   const { onSubmit, control, isValid, selectedRole, isSubmitting, trigger } =
-    useSignupForm();
+    useAdminCreateUserForm({ onSuccess });
 
   return (
     <>
@@ -56,7 +60,7 @@ const SignupForm = () => {
 
           <Field>
             <Button type="submit" disabled={!isValid || isSubmitting}>
-              {isSubmitting ? "Creating Account" : "Create Account"}
+              {isSubmitting ? "Creating User" : "Create User"}
               {isSubmitting && <Spinner />}
             </Button>
           </Field>
@@ -68,4 +72,5 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default AdminCreateUserForm;
+

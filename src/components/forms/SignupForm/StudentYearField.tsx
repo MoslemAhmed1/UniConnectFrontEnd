@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { YEARS } from "@/constants/student/student";
-import type { InferedFormSchema } from "@/validations/SignupFormSchama";
+import type { InferedFormSchema } from "@/validations/SignupFormSchema";
 import { Controller, type Control, type UseFormTrigger } from "react-hook-form";
 
 const StudentYearField = ({

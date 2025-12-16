@@ -29,6 +29,9 @@ import { Unauthorized } from "./pages/Unauthorized";
 import { UnAuthGuard } from "./components/guards/UnAuthGuard";
 import ProfilePage from "./pages/user/profile";
 import ClassAnnouncementsPage from "./pages/student/class-announcements-page";
+import CoursesPage from "./pages/admin/CoursesPage";
+import UsersPage from "./pages/admin/UsersPage";
+import PendingUsersPage from "./pages/admin/PendingUsersPage";
 
 const queryClient = new QueryClient();
 
@@ -113,6 +116,12 @@ createRoot(document.getElementById("root")!).render(
                 </Route>
               </Route>
 
+              <Route path="/admin">
+                <Route path="create" element={<CreateAdminPage />} />
+                <Route path="courses" element={<CoursesPage />} />
+                <Route path="users" element={<UsersPage />} />
+                <Route path="pending-users" element={<PendingUsersPage />} />
+              </Route>
               <Route path="/unauthorized" element={<Unauthorized />} />
             </Routes>
             <Toaster position="top-center" />

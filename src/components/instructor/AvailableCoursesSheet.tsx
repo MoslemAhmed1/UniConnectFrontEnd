@@ -13,7 +13,7 @@ import {
 import type { Course } from "@/types/student/course";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { CreateCourseModal } from "../professor/course/CreateCourseModal";
+import { CreateCourseModal } from "./CreateCourseModal";
 
 type AvailableCoursesSheetProps = {
   availableCourses: Course[];

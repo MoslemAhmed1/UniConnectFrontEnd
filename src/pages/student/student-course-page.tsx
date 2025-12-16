@@ -6,7 +6,7 @@ import { useAuth } from "@/providers/context/authContext";
 
 // Components
 import CoursePage from "@/components/common/course/CoursePage";
-import { useCourseData } from "@/hooks/professor/use-course-data";
+import { useCourseData } from "@/hooks/instructor/use-course-data";
 import notFoundAnimation from "@/assets/lottie/Error 404.json";
 import CustomLottie from "@/components/global/CustomLottie";
 

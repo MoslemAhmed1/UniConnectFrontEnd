@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 
 // Hooks
-import { useCourseData } from "@/hooks/professor/use-course-data";
+import { useCourseData } from "@/hooks/instructor/use-course-data";
 
 // Components
 import CoursePage from "@/components/common/course/CoursePage";
