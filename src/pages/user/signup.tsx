@@ -1,5 +1,6 @@
 import SignupForm from "@/components/forms/SignupForm/SignupForm";
 import Logo from "@/components/global/Logo";
+import { Field, FieldDescription } from "@/components/ui/field";
 import { Link } from "react-router";
 
 const SignupPage = () => {
@@ -11,7 +12,20 @@ const SignupPage = () => {
         </Link>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
+            <div className="flex flex-col items-center gap-1 text-center mb-4">
+              <h1 className="text-2xl font-bold">Create your account</h1>
+              <p className="text-muted-foreground text-sm text-balance">
+                Fill in the form below to create your account
+              </p>
+            </div>
+
             <SignupForm />
+
+            <Field>
+              <FieldDescription className="px-6 text-center">
+                Already have an account? <Link to="/login">Log in</Link>
+              </FieldDescription>
+            </Field>
           </div>
         </div>
       </div>
