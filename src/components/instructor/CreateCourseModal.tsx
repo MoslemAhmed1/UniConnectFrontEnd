@@ -10,11 +10,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { useCourseForm } from "@/hooks/professor/use-course-form";
+import { useCourseForm } from "@/hooks/instructor/use-course-form";
 import { CourseFieldGroup } from "./CourseFieldGroup";
 import { Plus } from "lucide-react";
 
-export const CreateCourseModal = () => {
+type CreateCourseModalProps = {
+  trigger?: React.ReactNode;
+};
+
+export const CreateCourseModal = ({ trigger }: CreateCourseModalProps) => {
   const { control, isValid, onSubmit, reset, isPending } = useCourseForm();
 
   const handleOpenChange = (open: boolean) => {
@@ -23,10 +27,14 @@ export const CreateCourseModal = () => {
   return (
     <Dialog onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full">
-          <Plus className="w-4 h-4 mr-2" />
-          Create New Course
-        </Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button variant="outline" className="w-full">
+            <Plus className="w-4 h-4 mr-2" />
+            Create New Course
+          </Button>
+        )}   
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>

@@ -4,13 +4,18 @@ import {
   type InferredFormSchema,
 } from "@/validations/SignupFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
-const useSignupForm = () => {
+type UseAdminSignupFormArgs = {
+  onSuccess?: () => void;
+};
+
+export const useAdminSignupForm = ({ onSuccess }: UseAdminSignupFormArgs = {}) => {
+  const queryClient = useQueryClient();
+
   const form = useForm<InferredFormSchema>({
     resolver: zodResolver(signupFormSchema),
     mode: "onBlur",
@@ -23,22 +28,21 @@ const useSignupForm = () => {
     },
   });
 
-  const navigate = useNavigate();
-
   const {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting },
     trigger,
     watch,
+    reset,
   } = form;
 
   const selectedRole = watch("role");
 
   const { mutateAsync: signup } = useMutation<void, Error, InferredFormSchema>({
-    mutationKey: ["signup"],
+    mutationKey: ["admin-signup"],
     mutationFn: (data) => {
-      if (selectedRole === "student") {
+      if (data.role === "student") {
         const newUser = {
           first_name: data.firstName,
           parent_name: data.parentName,
@@ -50,7 +54,7 @@ const useSignupForm = () => {
         };
 
         return api.post("/api/users/register", newUser);
-      } else if (selectedRole === "professor/ta") {
+      } else if (data.role === "professor/ta") {
         const newUser = {
           first_name: data.firstName,
           parent_name: data.parentName,
@@ -63,23 +67,17 @@ const useSignupForm = () => {
 
       return new Promise((_, reject) => reject("Invalid Role."));
     },
+    onSuccess: () => {
+      toast.success("User has been created successfully.");
+      queryClient.invalidateQueries({ queryKey: ["get-users"] });
+      reset();
+      onSuccess?.();
+    },
   });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       await signup(data);
-
-      let toastMessage;
-      if (selectedRole === "student") {
-        toastMessage =
-          "Your account has been successfully created, to customize it visit your profile page in the dashboard.";
-      } else if (selectedRole === "professor/ta") {
-        toastMessage =
-          "Your request has been sent. Please wait for admins approval.";
-      }
-
-      toast.success(toastMessage);
-      navigate("/login", { replace: true });
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data && "message" in err.response.data) {
@@ -89,7 +87,7 @@ const useSignupForm = () => {
         }
       }
 
-      toast.error("An error occured, please try again.");
+      toast.error("An error occurred, please try again.");
       console.log(err);
     }
   });
@@ -105,4 +103,5 @@ const useSignupForm = () => {
   };
 };
 
-export default useSignupForm;
+export default useAdminSignupForm;
+

@@ -19,6 +19,14 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        
+        // Custom Variants
+        default2: "bg-primary text-primary-foreground hover:bg-primary-hover shadow-md hover:shadow-lg",
+        destructive2: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md hover:shadow-lg",
+        outline2: "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary2: "bg-secondary text-secondary-foreground hover:bg-secondary-hover shadow-md hover:shadow-lg",
+        ghost2: "hover:bg-accent hover:text-accent-foreground",
+        link2: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

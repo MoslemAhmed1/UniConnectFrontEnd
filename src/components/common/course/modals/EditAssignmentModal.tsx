@@ -17,10 +17,10 @@ type EditAssignmentModalProps = {
   assignment: Assignment;
 };
 
-const toInputDate = (timestamp: number) =>
+const toInputDate = (timestamp: string) =>
   new Date(timestamp).toISOString().slice(0, 10);
 
-const toInputTime = (timestamp: number) =>
+const toInputTime = (timestamp: string) =>
   new Date(timestamp).toISOString().slice(11, 16);
 
 export default function EditAssignmentModal({
@@ -53,7 +53,7 @@ export default function EditAssignmentModal({
         <ScrollArea className="max-h-[70vh] pr-4">
           <AssignmentForm
             mode="create"
-            courseCode={assignment.courseCode}
+            courseCode={assignment.course_id}
             defaultValues={defaultValues}
             onClose={() => setOpen(false)}
           />

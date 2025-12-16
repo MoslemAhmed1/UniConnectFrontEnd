@@ -7,15 +7,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SELECTABLE_ROLES } from "@/constants/user/role";
-import type { InferedFormSchema } from "@/validations/SignupFormSchama";
+import type { InferredFormSchema } from "@/validations/SignupFormSchema";
 import { Controller, type Control, type UseFormTrigger } from "react-hook-form";
 
 const RoleField = ({
   control,
   trigger,
 }: {
-  control: Control<InferedFormSchema>;
-  trigger: UseFormTrigger<InferedFormSchema>;
+  control: Control<InferredFormSchema>;
+  trigger: UseFormTrigger<InferredFormSchema>;
 }) => {
   return (
     <Controller
