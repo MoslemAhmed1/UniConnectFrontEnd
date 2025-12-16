@@ -1,84 +1,246 @@
-// ==================== Fake Backend Call ==================== //
+// // ==================== Fake Backend Call ==================== //
 
-import { useQuery } from "@tanstack/react-query";
-import type { Course } from "@/types/student/course";
-import type { User } from "@/types/user/user";
+// import { useQuery } from "@tanstack/react-query";
+// import type { Course } from "@/types/student/course";
+// import type { User } from "@/types/user/user";
 
-const teacher: User[] = [
-  {
-    first_name: "Moslem", parent_name: "Ahmed", email: "m1@gmail.com", id: "1", role: "professor/ta"
-  }
-]
+// const teacher: User[] = [
+//   {
+//     first_name: "Moslem",
+//     parent_name: "Ahmed",
+//     email: "m1@gmail.com",
+//     id: "1",
+//     role: "professor/ta",
+//   },
+// ];
 
-const fakeCourses: Course[] = [
-  { code: "CS301", name: "Database Systems", year: "3", image_url: "", students_number: 120, teachers: teacher },
-  { code: "CS401", name: "Design & Analysis of Algorithms", year: "4", image_url: "", students_number: 95, teachers: teacher },
-  { code: "ECE301", name: "Signals & Systems", year: "3", image_url: "", students_number: 110, teachers: teacher },
-  { code: "CS302", name: "Computer Networks", year: "3", image_url: "", students_number: 105, teachers: teacher },
-  { code: "CS402", name: "Software Engineering", year: "4", image_url: "", students_number: 88, teachers: teacher },
-  { code: "CS501", name: "Database Systems", year: "3", image_url: "", students_number: 120, teachers: teacher },
-  { code: "CS601", name: "Design & Analysis of Algorithms", year: "4", image_url: "", students_number: 95, teachers: teacher },
-  { code: "ECE701", name: "Signals & Systems", year: "3", image_url: "", students_number: 110, teachers: teacher },
-  { code: "CS802", name: "Computer Networks", year: "3", image_url: "", students_number: 105, teachers: teacher },
-  { code: "CS902", name: "Software Engineering", year: "4", image_url: "", students_number: 88, teachers: teacher },
-  { code: "CS001", name: "Database Systems", year: "3", image_url: "", students_number: 120, teachers: teacher },
-  { code: "CS021", name: "Design & Analysis of Algorithms", year: "4", image_url: "", students_number: 95, teachers: teacher },
-  { code: "ECE331", name: "Signals & Systems", year: "3", image_url: "", students_number: 110, teachers: teacher },
-  { code: "CS342", name: "Computer Networks", year: "3", image_url: "", students_number: 105, teachers: teacher },
-  { code: "CS452", name: "Software Engineering", year: "4", image_url: "", students_number: 88, teachers: teacher },
-  { code: "CS361", name: "Database Systems", year: "3", image_url: "", students_number: 120, teachers: teacher },
-  { code: "CS481", name: "Design & Analysis of Algorithms", year: "4", image_url: "", students_number: 95, teachers: teacher },
-  { code: "ECE351", name: "Signals & Systems", year: "3", image_url: "", students_number: 110, teachers: teacher },
-  { code: "CS311", name: "Computer Networks", year: "3", image_url: "", students_number: 105, teachers: teacher },
-  { code: "CS412", name: "Software Engineering", year: "4", image_url: "", students_number: 88, teachers: teacher },
-  { code: "ECE131", name: "Signals & Systems", year: "3", image_url: "", students_number: 110, teachers: teacher },
-  { code: "CS314", name: "Computer Networks", year: "3", image_url: "", students_number: 105, teachers: teacher },
-  { code: "CS461", name: "Software Engineering", year: "4", image_url: "", students_number: 88, teachers: teacher },
-];
+// const fakeCourses: Course[] = [
+//   {
+//     code: "CS301",
+//     name: "Database Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 120,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS401",
+//     name: "Design & Analysis of Algorithms",
+//     year: "4",
+//     image_url: "",
+//     students_number: 95,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "ECE301",
+//     name: "Signals & Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 110,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS302",
+//     name: "Computer Networks",
+//     year: "3",
+//     image_url: "",
+//     students_number: 105,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS402",
+//     name: "Software Engineering",
+//     year: "4",
+//     image_url: "",
+//     students_number: 88,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS501",
+//     name: "Database Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 120,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS601",
+//     name: "Design & Analysis of Algorithms",
+//     year: "4",
+//     image_url: "",
+//     students_number: 95,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "ECE701",
+//     name: "Signals & Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 110,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS802",
+//     name: "Computer Networks",
+//     year: "3",
+//     image_url: "",
+//     students_number: 105,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS902",
+//     name: "Software Engineering",
+//     year: "4",
+//     image_url: "",
+//     students_number: 88,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS001",
+//     name: "Database Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 120,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS021",
+//     name: "Design & Analysis of Algorithms",
+//     year: "4",
+//     image_url: "",
+//     students_number: 95,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "ECE331",
+//     name: "Signals & Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 110,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS342",
+//     name: "Computer Networks",
+//     year: "3",
+//     image_url: "",
+//     students_number: 105,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS452",
+//     name: "Software Engineering",
+//     year: "4",
+//     image_url: "",
+//     students_number: 88,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS361",
+//     name: "Database Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 120,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS481",
+//     name: "Design & Analysis of Algorithms",
+//     year: "4",
+//     image_url: "",
+//     students_number: 95,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "ECE351",
+//     name: "Signals & Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 110,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS311",
+//     name: "Computer Networks",
+//     year: "3",
+//     image_url: "",
+//     students_number: 105,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS412",
+//     name: "Software Engineering",
+//     year: "4",
+//     image_url: "",
+//     students_number: 88,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "ECE131",
+//     name: "Signals & Systems",
+//     year: "3",
+//     image_url: "",
+//     students_number: 110,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS314",
+//     name: "Computer Networks",
+//     year: "3",
+//     image_url: "",
+//     students_number: 105,
+//     teachers: teacher,
+//   },
+//   {
+//     code: "CS461",
+//     name: "Software Engineering",
+//     year: "4",
+//     image_url: "",
+//     students_number: 88,
+//     teachers: teacher,
+//   },
+// ];
 
-type UseStudentCoursesParams = {
-  page?: number;
-  perPage?: number;
-  search?: string;
-};
+// type UseStudentCoursesParams = {
+//   page?: number;
+//   perPage?: number;
+//   search?: string;
+// };
 
-type PaginatedCoursesResponse = {
-  data: Course[];
-  total: number;
-  page: number;
-  perPage: number;
-};
+// type PaginatedCoursesResponse = {
+//   data: Course[];
+//   total: number;
+//   page: number;
+//   perPage: number;
+// };
 
-export const useStudentCourses = (
-  params: UseStudentCoursesParams = {}
-) => {
-  const { page = 1, perPage = 10, search = "" } = params;
+// export const useStudentCourses = (params: UseStudentCoursesParams = {}) => {
+//   const { page = 1, perPage = 10, search = "" } = params;
 
-  return useQuery<PaginatedCoursesResponse>({
-    queryKey: ["student-courses", page, perPage, search],
-    queryFn: async () => {
-      await new Promise((res) => setTimeout(res, 500));
+//   return useQuery<PaginatedCoursesResponse>({
+//     queryKey: ["student-courses", page, perPage, search],
+//     queryFn: async () => {
+//       await new Promise((res) => setTimeout(res, 500));
 
-      // search
-      const filtered = fakeCourses.filter((c) =>
-        c.name.toLowerCase().includes(search.toLowerCase())
-      );
+//       // search
+//       const filtered = fakeCourses.filter((c) =>
+//         c.name.toLowerCase().includes(search.toLowerCase())
+//       );
 
-      // pagination
-      const start = (page - 1) * perPage;
-      const end = start + perPage;
-      const paginated = filtered.slice(start, end);
+//       // pagination
+//       const start = (page - 1) * perPage;
+//       const end = start + perPage;
+//       const paginated = filtered.slice(start, end);
 
-      return {
-        data: paginated,
-        total: filtered.length,
-        page,
-        perPage,
-      };
-    },
-  });
-};
-
+//       return {
+//         data: paginated,
+//         total: filtered.length,
+//         page,
+//         perPage,
+//       };
+//     },
+//   });
+// };
 
 // ==================== Real Backend Call ==================== //
 // import { useQuery } from "@tanstack/react-query";
@@ -102,11 +264,11 @@ export const useStudentCourses = (
 // export const useStudentCourses = (
 //   params: UseStudentCoursesParams = {}
 // ) => {
-//   const { 
-//     page = 1, 
-//     perPage = 10, 
-//     search = "", 
-//     enablePagination = true 
+//   const {
+//     page = 1,
+//     perPage = 10,
+//     search = "",
+//     enablePagination = true
 //   } = params;
 
 //   return useQuery<PaginatedCoursesResponse>({
@@ -114,12 +276,12 @@ export const useStudentCourses = (
 //     queryFn: async () => {
 //       // Build query parameters
 //       const queryParams = new URLSearchParams();
-      
+
 //       if (enablePagination) {
 //         queryParams.append("page", page.toString());
 //         queryParams.append("per_page", perPage.toString());
 //       }
-      
+
 //       if (search) {
 //         queryParams.append("search", search);
 //       }
@@ -158,7 +320,6 @@ export const useStudentCourses = (
 
 // Example usage with just search:
 // const { data } = useStudentCourses({ search: "CS", enablePagination: false });
-
 
 // ====================================================================================== //
 
@@ -202,27 +363,23 @@ export const useStudentCourses = (
 //   };
 // };
 
+import api from "@/lib/axios";
+import type { Course } from "@/types/student/course";
+import { useQuery } from "@tanstack/react-query";
 
+export const useStudentCourses = () => {
+  const { data: courses, isLoading } = useQuery<Course[]>({
+    queryKey: ["student-courses"],
+    queryFn: async () => {
+      const result = await api.get("/api/users/courses");
 
+      return result.data.data;
+    },
+    initialData: [],
+  });
 
-
-// import api from "@/lib/axios";
-// import type { Course } from "@/types/student/course";
-// import { useQuery } from "@tanstack/react-query";
-
-// export const useStudentCourses = () => {
-//   const { data: courses, isLoading } = useQuery<Course[]>({
-//     queryKey: ["student-courses"],
-//     queryFn: async () => {
-//       const result = await api.get("/api/users/courses");
-
-//       return result.data.data;
-//     },
-//     initialData: [],
-//   });
-
-//   return {
-//     courses,
-//     isLoading,
-//   };
-// };
+  return {
+    courses,
+    isLoading,
+  };
+};
