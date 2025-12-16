@@ -1,7 +1,7 @@
 import { ChangePasswordForm } from "@/components/profile/ChangePasswordForm";
+import { ChangeProfileImageModal } from "@/components/profile/ChangeProfileImageModal";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -10,25 +10,21 @@ import { useProfileData } from "@/hooks/use-profile-data";
 import { Lock, UserRoundPen } from "lucide-react";
 
 export const PersonalProfilePage = () => {
-  // TODO: Why not use useAuth instead?
-  // TODO: Invalidate auth
   const { profileData, isLoading } = useProfileData();
   return (
     <div className="w-full flex flex-col items-center  m-auto p-10 h-full md:w-full xl:w-6/10">
       <div className="flex flex-row justify-start w-full">
         <div className="">
           <Avatar className="w-30 h-30 mr-5 rounded-lg">
-            <AvatarImage src={profileData?.image_url} />
+            <AvatarImage
+              src={profileData?.image_url}
+              className="object-cover"
+            />
             <AvatarFallback className="rounded-lg">ST</AvatarFallback>
           </Avatar>
-          <Button
-            size={"sm"}
-            className="mt-2"
-            variant={"outline"}
-            disabled={isLoading}
-          >
-            Change Picture
-          </Button>
+          {!isLoading && (
+            <ChangeProfileImageModal image_url={profileData?.image_url} />
+          )}
         </div>
         <div className="flex flex-col justify-center items-start ml-5">
           <h1 className="font-bold text-4xl mb-2">Profile Settings</h1>

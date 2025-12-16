@@ -1,3 +1,4 @@
+import { ImageUploader } from "@/components/global/ImageUploader";
 import {
   Field,
   FieldError,
@@ -20,24 +21,33 @@ type CourseFieldGroupProps = {
   control: Control<{
     code: string;
     name: string;
-    year: string;
+    year: (typeof YEARS)[number];
+    image_url?: string | undefined;
   }>;
   disableCode: boolean;
+  handleImageChange: (file: File | undefined) => unknown;
 };
 
 export function CourseFieldGroup({
   control,
   disableCode = false,
+  handleImageChange,
 }: CourseFieldGroupProps) {
   return (
     <FieldGroup className="mb-5">
       <FieldSet>
-        {/* TODO: Make it controlled when we integrate with uploadthing */}
         <Field>
           <FieldLabel>Course Image: </FieldLabel>
-          <Input
-            type="file"
-            onChange={(data) => console.log(data.target.value)}
+          <Controller
+            control={control}
+            name="image_url"
+            render={({ field }) => (
+              <ImageUploader
+                value={field.value}
+                handleChooseImage={handleImageChange}
+                className="w-full h-50"
+              />
+            )}
           />
         </Field>
         <Controller

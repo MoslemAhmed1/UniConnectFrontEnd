@@ -15,7 +15,8 @@ import { CourseFieldGroup } from "./CourseFieldGroup";
 import { Plus } from "lucide-react";
 
 export const CreateCourseModal = () => {
-  const { control, isValid, onSubmit, reset, isPending } = useCourseForm();
+  const { control, isValid, onSubmit, reset, isPending, handleImageChange } =
+    useCourseForm();
 
   const handleOpenChange = (open: boolean) => {
     if (open) reset();
@@ -37,7 +38,11 @@ export const CreateCourseModal = () => {
               and add the course.
             </DialogDescription>
           </DialogHeader>
-          <CourseFieldGroup control={control} disableCode={false} />
+          <CourseFieldGroup
+            control={control}
+            disableCode={false}
+            handleImageChange={handleImageChange}
+          />
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>

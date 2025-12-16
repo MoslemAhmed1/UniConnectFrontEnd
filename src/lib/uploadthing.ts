@@ -51,6 +51,22 @@ export const uploadRouter = {
       return { success: false };
     }
   }),
+  imageUploader: f({
+    image: {
+      maxFileSize: "4MB",
+      maxFileCount: 1,
+    },
+  }).onUploadComplete((data) => {
+    try {
+      return {
+        success: true,
+        image_url: data.file.ufsUrl,
+      };
+    } catch (err) {
+      console.log(err);
+      return { success: false };
+    }
+  }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof uploadRouter;

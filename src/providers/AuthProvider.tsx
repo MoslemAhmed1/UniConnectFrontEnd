@@ -28,7 +28,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         const res = await api.get<refreshResponse>("/api/auth/refresh", {
           signal,
         });
-        console.log("AUTH USER SET: ", res.data.user);
         setAuth({ user: res.data.user, token: res.data.accessToken });
         setLoading(false);
       } catch {
