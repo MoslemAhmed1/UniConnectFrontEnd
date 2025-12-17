@@ -32,6 +32,7 @@ import ClassAnnouncementsPage from "./pages/student/class-announcements-page";
 import CoursesPage from "./pages/admin/CoursesPage";
 import UsersPage from "./pages/admin/UsersPage";
 import PendingUsersPage from "./pages/admin/PendingUsersPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -75,13 +76,7 @@ createRoot(document.getElementById("root")!).render(
                       element={<Materials />}
                     />
                     <Route path="profile" element={<PersonalProfilePage />} />
-                    <Route
-                      element={
-                        <AuthGuard allowedRoles={["class_representative"]} />
-                      }
-                    >
-                      <Route path="class-members" element={<ClassMembers />} />
-                    </Route>
+                    <Route path="class-members" element={<ClassMembers />} />
                     <Route
                       path="class-announcements"
                       element={<ClassAnnouncementsPage />}
@@ -113,16 +108,14 @@ createRoot(document.getElementById("root")!).render(
                   path="/admin"
                   element={<AuthGuard allowedRoles={["system_admin"]} />}
                 >
+                  <Route path="dashboard" element={<AdminDashboard />} />
                   <Route path="create-admin" element={<CreateAdminPage />} />
+                  <Route path="courses" element={<CoursesPage />} />
+                  <Route path="users" element={<UsersPage />} />
+                  <Route path="pending-users" element={<PendingUsersPage />} />
                 </Route>
               </Route>
 
-              <Route path="/admin">
-                <Route path="create" element={<CreateAdminPage />} />
-                <Route path="courses" element={<CoursesPage />} />
-                <Route path="users" element={<UsersPage />} />
-                <Route path="pending-users" element={<PendingUsersPage />} />
-              </Route>
               <Route path="/unauthorized" element={<Unauthorized />} />
             </Routes>
             <Toaster position="top-center" />
