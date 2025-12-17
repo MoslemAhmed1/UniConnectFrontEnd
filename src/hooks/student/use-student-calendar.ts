@@ -9,7 +9,7 @@ export const useStudentCalendar = () => {
   const { data: calendarEvents, isLoading } = useQuery<CalendarEvent[]>({
     queryKey: ["calendar-events"],
     queryFn: async () => {
-      const result = await api.get("/api/events");
+      const result = await api.get("/api/me/events");
       const events = result.data.data;
       return events;
     },

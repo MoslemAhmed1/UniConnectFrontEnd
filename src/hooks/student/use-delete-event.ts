@@ -8,7 +8,7 @@ export const useDeleteEvent = () => {
 
   const { mutateAsync: deleteEvent, isPending: isDeleting } = useMutation({
     mutationKey: ["delete-event"],
-    mutationFn: async (eventId: number) => {
+    mutationFn: (eventId: string) => {
       return api.delete(`/api/events/${eventId}`);
     },
     onSuccess: () => {
@@ -16,17 +16,20 @@ export const useDeleteEvent = () => {
       queryClient.invalidateQueries({ queryKey: ["calendar-events"] });
     },
     onError: (err) => {
+      console.error(err);
       if (err instanceof AxiosError) {
         if (err.response?.data && "message" in err.response.data) {
           toast.error(err.response.data.message);
           return;
         }
       }
-      toast.error("An error occurred while deleting this event. Please try again.");
+      toast.error(
+        "An error occurred while deleting this event. Please try again."
+      );
     },
   });
 
-  const handleDeleteEvent = async (eventId: number) => {
+  const handleDeleteEvent = async (eventId: string) => {
     try {
       await deleteEvent(eventId);
     } catch (err) {

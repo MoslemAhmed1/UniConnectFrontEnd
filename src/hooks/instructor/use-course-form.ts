@@ -33,6 +33,8 @@ export const useCourseForm = (initialCourseData?: Course) => {
   });
   const [imageFile, setChosenFile] = useState<File | undefined>();
 
+  // TODO: Make sure course image is uploaded and stored in the DB
+
   const { mutate: createCourse, isPending } = useMutation({
     mutationKey: ["create-course"],
     mutationFn: async (data: ICourseFormSchema) => {
@@ -76,6 +78,7 @@ export const useCourseForm = (initialCourseData?: Course) => {
 
       if (!initialCourseData) {
         reset();
+        client.invalidateQueries({ queryKey: ["instructor-courses"] });
       } else {
         client.invalidateQueries({
           queryKey: ["get-course", initialCourseData.code],

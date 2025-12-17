@@ -45,7 +45,7 @@ const SelectedDayDetails = ({
   isLoading,
   calendarEvents,
 }: SelectedDayDetailsProps) => {
-  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const { handleDeleteEvent, isDeleting } = useDeleteEvent();
 
   const formattedDate = selectedDate?.toLocaleDateString("en-US", {
@@ -59,7 +59,7 @@ const SelectedDayDetails = ({
     (event) => new Date(event.deadline_at).getDate() === selectedDate.getDate()
   );
 
-  const handleDelete = async (eventId: number) => {
+  const handleDelete = async (eventId: string) => {
     try {
       setPendingDeleteId(eventId);
       await handleDeleteEvent(eventId);
@@ -91,20 +91,25 @@ const SelectedDayDetails = ({
               <ItemContent>
                 {/* Title + Edit & Delete Buttons */}
                 <div className="flex items-start justify-between gap-2">
-                  <ItemTitle className="flex-1">
-                    <Badge
-                      className={`capitalize mr-2 ${EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName}`}
-                    >
-                      {EVENT_TYPE_TO_STYLINGS[event.type].prettyName || event.type}
-                    </Badge>
-                    {event.title}
+                  <ItemTitle className="flex-1 flex flex-col items-start">
+                    <span className="font-bold text-lg">{event.title}</span>
+                    <div>
+                      <Badge
+                        className={`capitalize me-1 ${EVENT_TYPE_TO_STYLINGS[event.type].backgroundColorClassName}`}
+                      >
+                        {EVENT_TYPE_TO_STYLINGS[event.type].prettyName ||
+                          event.type}
+                      </Badge>
+                      <Badge className={`capitalize me-2`} variant="outline">
+                        {event.course_id}
+                      </Badge>
+                    </div>
                   </ItemTitle>
 
                   {/* Action Buttons */}
                   <div className="flex items-center gap-1 shrink-0">
                     <EditEventModal event={event} />
 
-                    
                     {/* Delete Modal */}
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
@@ -112,7 +117,10 @@ const SelectedDayDetails = ({
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 text-destructive hover:bg-destructive/10"
-                          disabled={isDeleting && pendingDeleteId === event.id}
+                          disabled={
+                            (isDeleting && pendingDeleteId === event.id) ||
+                            event.type === "assignment"
+                          }
                         >
                           {isDeleting && pendingDeleteId === event.id ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -124,10 +132,17 @@ const SelectedDayDetails = ({
 
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Delete this event?</AlertDialogTitle>
+                          <AlertDialogTitle>
+                            Delete this event?
+                          </AlertDialogTitle>
                           <AlertDialogDescription>
-                            This action cannot be undone. This will permanently remove the event
-                            <span className="font-semibold"> "{event.title}"</span>.
+                            This action cannot be undone. This will permanently
+                            remove the event
+                            <span className="font-semibold">
+                              {" "}
+                              "{event.title}"
+                            </span>
+                            .
                           </AlertDialogDescription>
                         </AlertDialogHeader>
 

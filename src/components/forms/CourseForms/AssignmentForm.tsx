@@ -1,22 +1,32 @@
-import { Controller } from "react-hook-form";
-import { useState } from "react";
+import FileCard from "@/components/common/course/assignments/FileCard";
+import { UploadDropZone } from "@/components/global/UploadDropZone";
 import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Textarea } from "@/components/ui/textarea";
+import useDeleteAssignmentFile from "@/hooks/instructor/use-delete-assignment-file";
 import { useAssignmentForm } from "@/hooks/student/use-assignment-form";
+import type { UploadFile } from "@/types/general/files";
 import type { InferredAssignmentFormSchema } from "@/validations/AssignmentFormSchema";
-import { FileText, Trash2 } from "lucide-react";
-// import type { File } from "@/types/student/file";
+import { Controller } from "react-hook-form";
+import { toast } from "sonner";
 
 type AssignmentFormProps = {
   mode?: "create" | "edit";
-  assignmentId?: number;
+  assignmentId?: string;
   courseCode: string;
   onClose: () => void;
   defaultValues?: Partial<InferredAssignmentFormSchema>;
+  attached_files?: UploadFile[];
 };
+
+// TODO: Clean this file
 
 export default function AddAssignmentForm({
   mode = "create",
@@ -24,24 +34,38 @@ export default function AddAssignmentForm({
   courseCode,
   onClose,
   defaultValues,
+  attached_files,
 }: AssignmentFormProps) {
-
-  const { control, isSubmitting, onSubmit } = useAssignmentForm({
+  const {
+    control,
+    isSubmitting,
+    onSubmit,
+    attachedFiles,
+    setAttachedFiles,
+    isValid,
+    isUploading,
+    setIsUploading,
+  } = useAssignmentForm({
     mode,
     assignmentId,
     courseCode,
     defaultValues,
+    onClose,
+    attached_files,
   });
+
+  const { deleteAssignmentFile, isDeletingAssignmentFile } =
+    useDeleteAssignmentFile(setAttachedFiles);
 
   const isEditMode = mode === "edit";
 
-  // State for attached files
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
-
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit} aria-busy={isSubmitting}>
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={onSubmit}
+      aria-busy={isSubmitting}
+    >
       <FieldGroup>
-
         {/* Title */}
         <Controller
           name="title"
@@ -66,7 +90,9 @@ export default function AddAssignmentForm({
           control={control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="assignment-description">Description</FieldLabel>
+              <FieldLabel htmlFor="assignment-description">
+                Description
+              </FieldLabel>
               <Textarea
                 {...field}
                 id="assignment-description"
@@ -116,70 +142,70 @@ export default function AddAssignmentForm({
           />
         </div>
 
-        {/* Upload Attach Files */}
-        {/* TODO: Fix the File type problem here */}
         <Controller
-          name="attachedFiles"
+          name="max_grade"
           control={control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="assignment-files">Attach Files</FieldLabel>
-              <div className="border-2 border-dashed border-border rounded-lg p-6 mb-4 text-center hover:border-primary transition-colors cursor-pointer">
-                <input
-                  id="assignment-files"
-                  type="file"
-                  multiple
-                  accept=".pdf,.docx,.txt,.zip,.png,.jpeg,.jpg"
-                  className="hidden"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (e.target.files) {
-                      const newFiles = Array.from(e.target.files);
-                      setAttachedFiles((prev) => {
-                        const updated = [...prev, ...newFiles];
-                        field.onChange(updated);
-                        return updated;
-                      });
-                    }
-                  }}
-                  aria-invalid={fieldState.invalid}
-                />
-                <label htmlFor="assignment-files" className="cursor-pointer">
-                  <span className="block text-sm font-medium text-foreground mb-2">Click to upload or drag and drop</span>
-                  <span className="block text-xs text-muted-foreground">PDF, DOCX, TXT, ZIP, PNG, JPEG, JPG (max 10MB)</span>
-                </label>
-              </div>
-
-              {/* List attached files */}
-              {attachedFiles.length > 0 && (
-                <div className="space-y-2 mb-4">
-                  {attachedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-foreground">{file.name}</span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => {
-                          setAttachedFiles((prev) => {
-                            const updated = prev.filter((_, i) => i !== index);
-                            field.onChange(updated);
-                            return updated;
-                          });
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
+              <FieldLabel htmlFor="max-grade">Maximum Grade</FieldLabel>
+              <Input
+                id="max-grade"
+                type="number"
+                min={0}
+                placeholder="Ex: 10"
+                aria-invalid={fieldState.invalid}
+                value={field.value ?? 1}
+                onChange={(e) =>
+                  field.onChange(
+                    e.target.value === "" ? undefined : Number(e.target.value)
+                  )
+                }
+                onBlur={field.onBlur}
+                ref={field.ref}
+                name={field.name}
+              />
               {fieldState.error && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
+
+        <UploadDropZone
+          config={{
+            mode: "auto",
+          }}
+          endpoint="assignmentUploader"
+          uploadProgressGranularity="fine"
+          onUploadBegin={() => setIsUploading(true)}
+          onClientUploadComplete={async (files) => {
+            setIsUploading(false);
+
+            if (!files.length) {
+              toast.error("No files returned from upload.");
+              return;
+            }
+
+            const uploadedFiles = files
+              .map((f) => f.serverData?.file_data)
+              .filter((file): file is UploadFile => Boolean(file));
+
+            setAttachedFiles((prev) => [...prev, ...uploadedFiles]);
+
+            // TODO: Handle the case where the user leaves the form without submitting, either delete the files from upload thing or persist it in local storage (maybe)
+          }}
+          onUploadError={(error) => {
+            console.error(error);
+            toast.error("An error has occurred while uploading the file.");
+          }}
+        />
+
+        {attachedFiles.map((file) => (
+          <FileCard
+            file={file}
+            key={file.id}
+            onDelete={() => deleteAssignmentFile(file.id)}
+            deleteButtonDisabled={isDeletingAssignmentFile}
+          />
+        ))}
 
         {/* Action Buttons */}
         <Field>
@@ -193,7 +219,10 @@ export default function AddAssignmentForm({
               Cancel
             </Button>
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              disabled={isSubmitting || !isValid || isUploading}
+            >
               {isSubmitting ? (
                 <>
                   {isEditMode ? "Updating..." : "Adding..."}

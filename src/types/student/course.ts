@@ -11,7 +11,7 @@ type Course = {
 
   // Additional attributes can be added here
   students_number: number;
-  representative_id?: number;
+  representatives_ids: string[];
 };
 
 export { type Course };

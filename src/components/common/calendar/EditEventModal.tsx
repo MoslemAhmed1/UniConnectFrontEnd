@@ -1,4 +1,5 @@
-import { useState } from "react";
+import EventForm from "@/components/forms/CourseForms/EventForm";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,11 +8,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
-import EventForm from "@/components/forms/CourseForms/EventForm";
 import type { CalendarEvent } from "@/types/student/calendar-event";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Edit } from "lucide-react";
+import { useState } from "react";
 
 type EditEventModalProps = {
   event: CalendarEvent;
@@ -32,13 +31,18 @@ export default function EditEventModal({ event }: EditEventModalProps) {
     dueDate: toInputDate(event.deadline_at),
     dueTime: toInputTime(event.deadline_at),
     type: event.type,
-    courseCode: event.course_code
+    courseCode: event.course_id,
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 hover:bg-muted"
+          disabled={event.type === "assignment"}
+        >
           <Edit className="w-4 h-4" />
         </Button>
       </DialogTrigger>
@@ -50,17 +54,13 @@ export default function EditEventModal({ event }: EditEventModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="max-h-[70vh] pr-4">
-          <EventForm
-            mode="edit"
-            eventId={event.id}
-            defaultValues={defaultValues}
-            onClose={() => setOpen(false)}
-          />
-        </ScrollArea>
+        <EventForm
+          mode="edit"
+          eventId={event.id}
+          defaultValues={defaultValues}
+          onClose={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );
 }
-
-

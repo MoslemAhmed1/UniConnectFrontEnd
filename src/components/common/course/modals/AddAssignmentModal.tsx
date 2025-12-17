@@ -1,4 +1,5 @@
-import { useState } from "react";
+import AssignmentForm from "@/components/forms/CourseForms/AssignmentForm";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,16 +8,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import AssignmentForm from "@/components/forms/CourseForms/AssignmentForm";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
 
 type AddAssignmentModalProps = {
   courseCode: string;
 };
 
-export default function AddAssignmentModal({ courseCode }: AddAssignmentModalProps) {
+export default function AddAssignmentModal({
+  courseCode,
+}: AddAssignmentModalProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,13 +35,11 @@ export default function AddAssignmentModal({ courseCode }: AddAssignmentModalPro
             Create a new assignment for your course.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="max-h-[70vh] pr-4">
-          <AssignmentForm
-            mode="create"
-            courseCode={courseCode}
-            onClose={() => setOpen(false)}
-          />
-        </ScrollArea>
+        <AssignmentForm
+          mode="create"
+          courseCode={courseCode}
+          onClose={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -1,13 +1,13 @@
-import StudentFormSubmission from "@/components/forms/CourseForms/StudentSubmissionForm";
+import StudentSubmissionForm from "@/components/forms/CourseForms/StudentSubmissionForm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useDeleteSubmission } from "@/hooks/student/use-delete-submission";
+import useDeleteSubmissionFile from "@/hooks/student/use-delete-submission-file";
 import useToggleTurnedIn from "@/hooks/student/use-toggle-turned-in";
 import type { Assignment } from "@/types/student/assignment";
 import type { Submission } from "@/types/student/submission";
-import { Eye, FileText } from "lucide-react";
-import DeleteSubmissionFileButton from "./DeleteSubmissionFileButton";
+import FileCard from "./FileCard";
 
 type SubmissionCardProps = {
   assignment: Assignment;
@@ -61,6 +61,13 @@ export default function SubmissionCard({
     courseId: assignment.course_id,
   });
 
+  const { deleteSubmissionFile, isDeletingSubmissionFile } =
+    useDeleteSubmissionFile({
+      assignmentId: assignment.id,
+      courseId: assignment.course_id,
+      submissionId: submission?.id,
+    });
+
   return (
     <Card className="p-6">
       <div className="mb-4">
@@ -75,7 +82,7 @@ export default function SubmissionCard({
       </div>
 
       {!submission?.is_turned_in && (
-        <StudentFormSubmission
+        <StudentSubmissionForm
           submission={submission}
           assignmentId={assignment.id}
           courseId={assignment.course_id}
@@ -85,28 +92,12 @@ export default function SubmissionCard({
       {submission?.attached_files && submission.attached_files.length > 0 && (
         <div className="space-y-2 mb-4">
           {submission.attached_files.map((file) => (
-            <div
+            <FileCard
               key={file.id}
-              className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-            >
-              <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-primary" />
-                <span className="text-sm text-foreground">{file.name}</span>
-              </div>
-              <div>
-                <DeleteSubmissionFileButton
-                  assignmentId={assignment.id}
-                  courseId={assignment.course_id}
-                  fileId={file.id}
-                  submissionId={submission.id}
-                />
-                <Button variant="ghost" size="icon" asChild>
-                  <a href={file.url} target="_blank">
-                    <Eye className="size-4" aria-label="View file" />
-                  </a>
-                </Button>
-              </div>
-            </div>
+              file={file}
+              onDelete={() => deleteSubmissionFile(file.id)}
+              deleteButtonDisabled={isDeletingSubmissionFile}
+            />
           ))}
         </div>
       )}

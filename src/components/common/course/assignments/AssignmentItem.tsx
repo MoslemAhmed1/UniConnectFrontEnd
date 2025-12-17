@@ -16,14 +16,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { FileText, Calendar, Eye, Trash2, Loader2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import { useSubmissionData } from "@/hooks/student/use-submission-data";
+// import { Badge } from "@/components/ui/badge";
+// import { useSubmissionData } from "@/hooks/student/use-submission-data";
+// import type { Submission } from "@/types/student/submission";
 import { useDeleteAssignment } from "@/hooks/student/use-delete-assignment";
 import EditAssignmentModal from "../modals/EditAssignmentModal";
 import { useGetRoleUrl } from "@/hooks/use-role-url";
-import type { Submission } from "@/types/student/submission";
 import type { Assignment } from "@/types/student/assignment";
 
 type AssignmentItemProps = {
@@ -31,34 +31,35 @@ type AssignmentItemProps = {
   allowModifyAssignments: boolean;
 };
 
-const getStatus = (assignment: Assignment, submission?: Submission | null) => {
-  const deadline = new Date(assignment.deadline_at).getTime();
-  const now = Date.now();
-  const isToday = new Date(deadline).toDateString() === new Date().toDateString();
+// const getStatus = (assignment: Assignment, submission?: Submission | null) => {
+//   const deadline = new Date(assignment.deadline_at).getTime();
+//   const now = Date.now();
+//   const isToday =
+//     new Date(deadline).toDateString() === new Date().toDateString();
 
-  if (now > deadline && (!submission || submission.status === "unsubmitted")) return "Overdue";
-  if(submission?.status === "graded") return "Graded";
-  if(submission?.status === "submitted") return "Submitted";
-  if (isToday) return "Due Today";
-  return "Due";
-};
+//   if (now > deadline && (!submission || submission.status === "unsubmitted"))
+//     return "Overdue";
+//   if (submission?.status === "graded") return "Graded";
+//   if (isToday) return "Due Today";
+//   return "Due";
+// };
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "due":
-      return "bg-blue-50 text-blue-600";
-    case "due today":
-      return "bg-amber-50 text-amber-600";
-    case "overdue":
-      return "bg-red-50 text-red-600";
-    case "submitted":
-      return "bg-green-50 text-green-600";
-    case "graded":
-      return "bg-slate-100 text-slate-600";
-    default:
-      return "bg-slate-100 text-slate-600";
-  }
-};
+// const getStatusColor = (status: string) => {
+//   switch (status) {
+//     case "due":
+//       return "bg-blue-50 text-blue-600";
+//     case "due today":
+//       return "bg-amber-50 text-amber-600";
+//     case "overdue":
+//       return "bg-red-50 text-red-600";
+//     case "submitted":
+//       return "bg-green-50 text-green-600";
+//     case "graded":
+//       return "bg-slate-100 text-slate-600";
+//     default:
+//       return "bg-slate-100 text-slate-600";
+//   }
+// };
 
 const formatDate = (assignment: Assignment) => {
   const uploadedAt = new Date(assignment.created_at);
@@ -71,28 +72,31 @@ const formatDate = (assignment: Assignment) => {
   } else {
     return format(uploadedAt, "MMM d, h:mma");
   }
-}
+};
 
 export default function AssignmentItem({
   assignment,
   allowModifyAssignments = false,
 }: AssignmentItemProps) {
-  
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
-  const { handleDeleteAssignment, isDeleting } = useDeleteAssignment();
-  const { submission } = useSubmissionData(assignment.id);
+  // TODO: I think this should be moved to the assignment list component for better performance
+  const { deleteAssignment, isDeleting } = useDeleteAssignment(
+    assignment.course_id,
+    assignment.id
+  );
+  // const { submission } = useSubmissionData(assignment.id, assignment.course_id);
   const { getRoleUrl } = useGetRoleUrl();
 
   const handleDelete = async (assignmentId: string) => {
     try {
       setPendingDeleteId(assignmentId);
-      await handleDeleteAssignment(assignmentId);
+      await deleteAssignment();
     } finally {
       setPendingDeleteId(null);
     }
   };
 
-  const submissionStatus = getStatus(assignment, submission);
+  // const submissionStatus = getStatus(assignment, submission);
   const formattedDate = formatDate(assignment);
 
   return (
@@ -147,9 +151,9 @@ export default function AssignmentItem({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          <Badge className={getStatusColor(submission?.status ?? "Due")}>
+          {/* <Badge className={getStatusColor(submission?.status ?? "Due")}>
             {submissionStatus}
-          </Badge>
+          </Badge> */}
           {allowModifyAssignments && (
             <>
               <EditAssignmentModal assignment={assignment} />

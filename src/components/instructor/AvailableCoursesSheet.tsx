@@ -10,24 +10,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { Course } from "@/types/student/course";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { CreateCourseModal } from "./CreateCourseModal";
+import useAvailableInstructorCourses from "@/hooks/instructor/use-available-instructor-courses";
 
-type AvailableCoursesSheetProps = {
-  availableCourses: Course[];
-};
+export default function AvailableCoursesSheet() {
+  const {
+    availableCourses,
+    assignInstructorToCourse,
+    isAssigningInstructorToCourse,
+  } = useAvailableInstructorCourses();
 
-export default function AvailableCoursesSheet({
-  availableCourses,
-}: AvailableCoursesSheetProps) {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-
+  // TODO: Add loading skeleton
+  // TODO: Clean this component up
+  // TODO: Add searching and pagination
   return (
     <div className="flex items-center justify-between mb-8">
       <h1 className="text-3xl font-bold text-foreground">My Courses</h1>
-      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+      <Sheet>
         <SheetTrigger asChild>
           <Button>
             <Plus className="w-4 h-4 mr-2" />
@@ -68,7 +69,8 @@ export default function AvailableCoursesSheet({
                   {/* TODO: Implement Assign Self To Course */}
                   <Button
                     className="w-full"
-                    // onClick={}
+                    onClick={() => assignInstructorToCourse(course.code)}
+                    disabled={isAssigningInstructorToCourse}
                   >
                     Assign to me
                   </Button>

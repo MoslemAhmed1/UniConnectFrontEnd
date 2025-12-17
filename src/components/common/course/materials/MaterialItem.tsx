@@ -139,7 +139,9 @@ export default function MaterialItem({
               </>
             )}
             <Button variant="ghost" size="icon" className="cursor-pointer">
-              <Eye className="w-5 h-5" />
+              <a href={material.file.url} target="_blank">
+                <Eye className="w-5 h-5" />
+              </a>
             </Button>
 
             <Button

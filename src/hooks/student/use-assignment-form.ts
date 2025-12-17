@@ -9,16 +9,32 @@ import {
   assignmentFormSchema,
   type InferredAssignmentFormSchema,
 } from "@/validations/AssignmentFormSchema";
+import { useState } from "react";
+import type { UploadFile } from "@/types/general/files";
 
 type UseAssignmentFormArgs = {
   mode: "create" | "edit";
   courseCode?: string;
-  assignmentId?: number;
+  assignmentId?: string;
+  onClose: () => void;
   defaultValues?: Partial<InferredAssignmentFormSchema>;
+  attached_files?: UploadFile[];
 };
 
-export const useAssignmentForm = ({ mode, courseCode, assignmentId, defaultValues }: UseAssignmentFormArgs) => {
+export const useAssignmentForm = ({
+  mode,
+  courseCode,
+  assignmentId,
+  defaultValues,
+  onClose,
+  attached_files,
+}: UseAssignmentFormArgs) => {
   const queryClient = useQueryClient();
+
+  const [attachedFiles, setAttachedFiles] = useState<UploadFile[]>(
+    () => attached_files ?? []
+  );
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm<InferredAssignmentFormSchema>({
     resolver: zodResolver(assignmentFormSchema),
@@ -27,41 +43,54 @@ export const useAssignmentForm = ({ mode, courseCode, assignmentId, defaultValue
       description: defaultValues?.description ?? "",
       dueDate: defaultValues?.dueDate ?? "",
       dueTime: defaultValues?.dueTime ?? "",
-      attachedFiles: defaultValues?.attachedFiles ?? undefined, // TODO: replace this with the correct value
+      max_grade: defaultValues?.max_grade ?? 1,
     },
     mode: "onBlur",
   });
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     reset,
   } = form;
 
   // TODO: handle attaching multiple files
-  const mutation = useMutation({
+  const { mutate: upsertAssignment } = useMutation({
     mutationKey: ["assignment", mode, assignmentId],
     mutationFn: async (values: InferredAssignmentFormSchema) => {
       const newAssignment = {
         title: values.title,
         description: values.description,
-        deadline_at: new Date(`${values.dueDate}T${values.dueTime}`).getTime(),
-        course_code: courseCode,
-        attached_files: values.attachedFiles,
+        deadline_at: new Date(`${values.dueDate}T${values.dueTime}`),
+        attached_files_ids: attachedFiles.map((file) => file.id),
+        max_grade: values.max_grade,
       };
 
       if (mode === "create") {
-        return api.post("/api/assignments", newAssignment);
+        return api.post(
+          `/api/courses/${courseCode}/assignments`,
+          newAssignment
+        );
       } else {
-        if (!assignmentId) throw new Error("Assignment ID is required for edit.");
-        return api.put(`/api/assignments/${assignmentId}`, newAssignment);
+        if (!assignmentId)
+          throw new Error("Assignment ID is required for edit.");
+
+        return api.patch(
+          `/api/courses/${courseCode}/assignments/${assignmentId}`,
+          newAssignment
+        );
       }
     },
     onSuccess: () => {
-      toast.success(`Assignment has been ${mode === "create" ? "created" : "updated"} successfully.`);
+      toast.success(
+        `Assignment has been ${mode === "create" ? "created" : "updated"} successfully.`
+      );
 
-      queryClient.invalidateQueries({ queryKey: ["assignments", courseCode] });
+      // queryClient.invalidateQueries({ queryKey: ["assignments", courseCode] });
+      queryClient.invalidateQueries({
+        queryKey: ["course-assignments", courseCode],
+      });
 
       if (mode === "create") {
         reset({
@@ -69,11 +98,15 @@ export const useAssignmentForm = ({ mode, courseCode, assignmentId, defaultValue
           description: "",
           dueDate: "",
           dueTime: "",
-          attachedFiles: undefined,
         });
+        setAttachedFiles([]);
+      } else {
+        onClose();
       }
     },
     onError: (err) => {
+      console.error(err);
+
       if (err instanceof AxiosError) {
         if (err.response?.data && "message" in err.response.data) {
           toast.error(err.response.data.message);
@@ -86,11 +119,16 @@ export const useAssignmentForm = ({ mode, courseCode, assignmentId, defaultValue
     },
   });
 
-  const onSubmit = handleSubmit((values) => mutation.mutate(values));
+  const onSubmit = handleSubmit((values) => upsertAssignment(values));
 
   return {
     control,
-    isSubmitting: isSubmitting || mutation.isPending,
+    isSubmitting,
     onSubmit,
+    attachedFiles,
+    setAttachedFiles,
+    isUploading,
+    setIsUploading,
+    isValid,
   };
 };

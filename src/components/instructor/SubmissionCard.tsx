@@ -1,28 +1,28 @@
-import { Card } from "@/components/ui/card";
+import GradeSubmissionForm from "@/components/forms/CourseForms/GradeSubmissionForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, Eye } from "lucide-react";
-import { useState } from "react";
-import type { Submission } from "@/types/student/submission";
-import GradeSubmissionForm from "@/components/forms/CourseForms/GradeSubmissionForm";
+import { Card } from "@/components/ui/card";
 import useDeleteSubmissionGrade from "@/hooks/instructor/use-delete-submission-grade";
+import type { Submission } from "@/types/student/submission";
 import { format } from "date-fns";
+import { useState } from "react";
+import FileCard from "../common/course/assignments/FileCard";
+import type { Assignment } from "@/types/student/assignment";
 
 type SubmissionCardProps = {
   submission: Submission;
-  assignmentId?: string;
-  maxGrade?: number | null;
+  assignment: Assignment;
 };
 
 export default function SubmissionCard({
   submission,
-  assignmentId,
-  maxGrade,
+  assignment,
 }: SubmissionCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isAssigningGrade, setIsAssigningGrade] = useState(false);
-  const { handleDeleteSubmissionGrade, isDeleting } =
-    useDeleteSubmissionGrade(assignmentId);
+  const { handleDeleteSubmissionGrade, isDeleting } = useDeleteSubmissionGrade(
+    submission.assignment_id
+  );
 
   return (
     <Card className="p-4">
@@ -41,8 +41,8 @@ export default function SubmissionCard({
           </h4>
           <p className="text-sm text-muted-foreground">
             Submitted at{" "}
-            {submission.submitted_at
-              ? format(new Date(submission.submitted_at), "MMM d, yyyy h:mm a")
+            {submission.turned_in_at
+              ? format(new Date(submission.turned_in_at), "MMM d, yyyy h:mm a")
                   .replace("am", "AM")
                   .replace("pm", "PM")
               : "—"}
@@ -54,41 +54,20 @@ export default function SubmissionCard({
       <div className="space-y-2 mb-4">
         <p className="text-sm font-medium text-foreground">Files:</p>
         {submission.attached_files?.map((file) => (
-          <div
+          <FileCard
             key={file.id}
-            className="flex items-center justify-between p-2 bg-muted/50 rounded"
-          >
-            <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
-              <span className="text-sm">{file.name}</span>
-              <span className="text-xs text-muted-foreground">
-                ({file.size})
-              </span>
-            </div>
-            <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={`view-${file.name}`}
-              >
-                <Eye className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={`download-${file.name}`}
-              >
-                <Download className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
+            file={file}
+            showDelete={false}
+            showDownload={true}
+            showView={true}
+          />
         ))}
       </div>
 
-      {submission.status === "graded" ? (
+      {typeof submission.grade === "number" ? (
         <div className="p-3 pt-0 bg-accent/5 rounded border border-accent/20 mb-3">
           <p className="text-sm font-medium text-foreground mb-1">
-            Grade: {submission.grade}/{maxGrade}
+            Grade: {submission.grade}/{assignment.max_grade}
           </p>
           <p className="text-sm text-muted-foreground mb-2">
             {submission.feedback}
@@ -96,9 +75,10 @@ export default function SubmissionCard({
 
           {isEditing ? (
             <GradeSubmissionForm
+              assignment={assignment}
               mode="edit"
               submissionId={submission.id}
-              assignmentId={assignmentId}
+              assignmentId={submission.assignment_id}
               onClose={() => setIsEditing(false)}
               defaultValues={{
                 grade: String(submission.grade),
@@ -129,9 +109,10 @@ export default function SubmissionCard({
         <>
           {isAssigningGrade ? (
             <GradeSubmissionForm
+              assignment={assignment}
               mode="create"
               submissionId={submission.id}
-              assignmentId={assignmentId}
+              assignmentId={submission.assignment_id}
               onClose={() => setIsAssigningGrade(false)}
             />
           ) : (

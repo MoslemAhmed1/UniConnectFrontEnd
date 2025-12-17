@@ -13,7 +13,12 @@ export const InstructorCoursePage = () => {
   const { id } = useParams<{ id: string }>();
 
   // Find the selected course by code (id from URL)
-  const { courseData } = useCourseData(id);
+  const { courseData, isLoading: isLoadingCourseData } = useCourseData(id);
+
+  if (isLoadingCourseData) {
+    // TODO: Add skeleton or lottie
+    return <></>;
+  }
 
   if (!courseData) {
     return (

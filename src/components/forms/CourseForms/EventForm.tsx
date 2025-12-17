@@ -1,14 +1,11 @@
-import { Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Spinner } from "@/components/ui/spinner";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -16,15 +13,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
+import { Controller } from "react-hook-form";
 
+import useCurrentUserCourses from "@/hooks/shared/use-current-user-courses";
 import { useEventForm } from "@/hooks/student/use-event-form";
-import type { InferredEventFormSchema } from "@/validations/EventFormSchema";
 import { useAuth } from "@/providers/context/authContext";
-import { useStudentCourses } from "@/hooks/student/use-student-courses";
+import type { Course } from "@/types/student/course";
+import type { InferredEventFormSchema } from "@/validations/EventFormSchema";
 
 type EventFormProps = {
   mode?: "create" | "edit";
-  eventId?: number;
+  eventId?: string;
   onClose: () => void;
   defaultValues?: Partial<InferredEventFormSchema>;
 };
@@ -35,21 +36,33 @@ export default function EventForm({
   onClose,
   defaultValues,
 }: EventFormProps) {
-  const { control, isSubmitting, onSubmit } = useEventForm({
+  const { control, isSubmitting, onSubmit, isValid } = useEventForm({
     mode,
     eventId,
     defaultValues,
+    onClose,
   });
   const { auth } = useAuth();
-  const { courses } = useStudentCourses();
+  const { currentUserCourses } = useCurrentUserCourses();
 
   const isEditMode = mode === "edit";
 
-  // should use .find() since relation is 1-1 but it displayed error, so i used .filter()
-  const availableCourses =
-    auth.user?.role === "course_head"
-      ? courses.filter((course) => course.representative_id === auth.user?.id)
-      : courses;
+  const userId = auth.user?.id;
+  if (!userId) return null;
+
+  let availableCourses: Course[] = [];
+  if (auth.user?.role === "course_head") {
+    availableCourses = currentUserCourses.filter((course) =>
+      course.representatives_ids.includes(userId)
+    );
+  } else if (
+    auth.user?.role === "professor/ta" ||
+    auth.user?.role === "class_representative"
+  ) {
+    // TODO: Based on the project requirements class reps should be able to add deadlines (post, poll, quiz, and exam) to any course
+    // in their class, but we didn't create table that maps a course to a class
+    availableCourses = currentUserCourses;
+  }
 
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit}>
@@ -169,7 +182,7 @@ export default function EventForm({
                   <SelectItem value="quiz">Quiz</SelectItem>
                   <SelectItem value="exam">Exam</SelectItem>
                   <SelectItem value="project">Project</SelectItem>
-                  <SelectItem value="assignment">Assignment</SelectItem>
+                  {/* <SelectItem value="assignment">Assignment</SelectItem> */}
                   <SelectItem value="lab_exam">Lab Exam</SelectItem>
                   <SelectItem value="poll">Poll</SelectItem>
                 </SelectContent>
@@ -191,7 +204,7 @@ export default function EventForm({
               Cancel
             </Button>
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || !isValid}>
               {isSubmitting ? (
                 <>
                   {isEditMode ? "Updating..." : "Creating..."}
@@ -207,5 +220,3 @@ export default function EventForm({
     </form>
   );
 }
-
-

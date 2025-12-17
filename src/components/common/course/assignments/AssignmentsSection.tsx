@@ -3,8 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, Search } from "lucide-react";
 import { useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format, differenceInCalendarDays, isSameDay } from "date-fns";
 import AssignmentItem from "./AssignmentItem";
@@ -18,7 +28,11 @@ type AssignmentsSectionProps = {
   allowModifyAssignments: boolean;
 };
 
-export default function AssignmentsSection({ assignments, courseCode, allowModifyAssignments }: AssignmentsSectionProps) {
+export default function AssignmentsSection({
+  assignments,
+  courseCode,
+  allowModifyAssignments,
+}: AssignmentsSectionProps) {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterDays, setFilterDays] = useState<string>("all");
   const [filterDate, setFilterDate] = useState<Date>();
@@ -29,7 +43,9 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
   const filteredAndSortedAssignments = [...assignments]
     .filter((assignment) => {
       // filter by search bar
-      const matchesSearch = assignment.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = assignment.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
       // filter by date
       let matchesDate = true;
@@ -54,11 +70,15 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
       }
 
       return matchesSearch && matchesDate && matchesDays;
-    }).sort((a, b) => {
-        const dateA = new Date(a.deadline_at).getTime();
-        const dateB = new Date(b.deadline_at).getTime();
-        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-      });
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.deadline_at).getTime();
+      const dateB = new Date(b.deadline_at).getTime();
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+
+  // TODO: I feel that we should make the assignment form in a page instead of a modal
+  // It has lots of details and we should make the description a rich text editor instead of a textarea
 
   return (
     <div className="space-y-4">
@@ -77,7 +97,10 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
           </div>
 
           {/* Sort Order */}
-          <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
+          <Select
+            value={sortOrder}
+            onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Sort by deadline" />
             </SelectTrigger>
@@ -148,14 +171,14 @@ export default function AssignmentsSection({ assignments, courseCode, allowModif
           <div className="p-6 text-sm text-slate-500">No assignments found</div>
         ) : (
           filteredAndSortedAssignments.map((assignment) => (
-            <AssignmentItem 
-              key={assignment.id} 
-              assignment={assignment} 
-              allowModifyAssignments={allowModifyAssignments} 
+            <AssignmentItem
+              key={assignment.id}
+              assignment={assignment}
+              allowModifyAssignments={allowModifyAssignments}
             />
           ))
         )}
       </Card>
     </div>
   );
-};
+}

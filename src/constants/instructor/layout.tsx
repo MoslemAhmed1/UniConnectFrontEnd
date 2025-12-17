@@ -1,4 +1,4 @@
-import { Album, Book, BookA, type LucideProps } from "lucide-react";
+import { Book, Calendar, type LucideProps } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 
 export const INSTRUCTOR_SIDEBAR_ITEMS: {
@@ -14,13 +14,8 @@ export const INSTRUCTOR_SIDEBAR_ITEMS: {
     title: "My Courses",
   },
   {
-    icon: BookA,
-    url: "/instructor/assignments",
-    title: "Assignments",
-  },
-  {
-    icon: Album,
-    url: "/instructor/announcements",
-    title: "Announcements",
+    icon: Calendar,
+    url: "/instructor/calendar",
+    title: "Calendar",
   },
 ] as const;

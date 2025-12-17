@@ -3,10 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 
 import { useGradeSubmissionForm } from "@/hooks/instructor/use-grade-submission-form";
 import type { InferredGradeFormSchema } from "@/validations/GradeFormSchema";
+import type { Assignment } from "@/types/student/assignment";
 
 type GradeSubmissionFormProps = {
   mode?: "create" | "edit";
@@ -14,6 +20,7 @@ type GradeSubmissionFormProps = {
   assignmentId?: string;
   onClose?: () => void;
   defaultValues?: Partial<InferredGradeFormSchema>;
+  assignment: Assignment;
 };
 
 export default function GradeSubmissionForm({
@@ -22,16 +29,22 @@ export default function GradeSubmissionForm({
   assignmentId,
   onClose,
   defaultValues,
+  assignment,
 }: GradeSubmissionFormProps) {
   const { control, isSubmitting, onSubmit } = useGradeSubmissionForm({
     mode,
     submissionId,
     assignmentId,
     defaultValues,
+    assignment,
   });
 
   return (
-    <form className="flex flex-col gap-3" onSubmit={onSubmit} aria-busy={isSubmitting}>
+    <form
+      className="flex flex-col gap-3"
+      onSubmit={onSubmit}
+      aria-busy={isSubmitting}
+    >
       <FieldGroup>
         <Controller
           name="grade"
@@ -57,7 +70,9 @@ export default function GradeSubmissionForm({
           control={control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={`feedback-${submissionId}`}>Feedback (optional)</FieldLabel>
+              <FieldLabel htmlFor={`feedback-${submissionId}`}>
+                Feedback (optional)
+              </FieldLabel>
               <Textarea
                 {...field}
                 id={`feedback-${submissionId}`}
@@ -72,14 +87,20 @@ export default function GradeSubmissionForm({
 
         <Field>
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
 
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  {mode === "edit" ? "Updating..." : "Submitting..."} <Spinner />
+                  {mode === "edit" ? "Updating..." : "Submitting..."}{" "}
+                  <Spinner />
                 </>
               ) : (
                 <>{mode === "edit" ? "Update Grade" : "Submit Grade"}</>
