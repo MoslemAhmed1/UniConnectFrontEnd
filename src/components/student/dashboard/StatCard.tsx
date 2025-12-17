@@ -1,13 +1,13 @@
-import { Card, CardHeader } from "@/components/ui/card"
-import type { LucideIcon } from "lucide-react"
+import { Card, CardHeader } from "@/components/ui/card";
+import type { LucideIcon } from "lucide-react";
 
 type StatCardProps = {
-  icon: LucideIcon
-  label: string
-  value: string
-  color: string
-  isLoading: boolean
-}
+  icon: LucideIcon;
+  label: string;
+  value: number;
+  color: string;
+  isLoading: boolean;
+};
 
 export default function StatCard({
   icon: Icon,
@@ -20,7 +20,9 @@ export default function StatCard({
     <Card className="hover:shadow-lg transition-shadow p-6 gap-0">
       <CardHeader className="p-0 mb-0">
         <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 bg-linear-to-br ${color} rounded-xl flex items-center justify-center`}>
+          <div
+            className={`w-12 h-12 bg-linear-to-br ${color} rounded-xl flex items-center justify-center`}
+          >
             <Icon className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -32,5 +34,5 @@ export default function StatCard({
         </div>
       </CardHeader>
     </Card>
-  )
+  );
 }
