@@ -32,6 +32,7 @@ import ClassAnnouncementsPage from "./pages/student/class-announcements-page";
 import CoursesPage from "./pages/admin/CoursesPage";
 import UsersPage from "./pages/admin/UsersPage";
 import PendingUsersPage from "./pages/admin/PendingUsersPage";
+import { StatisticsPage } from "./pages/admin/StatisticsPage";
 
 const queryClient = new QueryClient();
 
@@ -108,21 +109,19 @@ createRoot(document.getElementById("root")!).render(
                     <Route path="calendar" element={<Calendar />} />
                   </Route>
                 </Route>
-
-                <Route
-                  path="/admin"
-                  element={<AuthGuard allowedRoles={["system_admin"]} />}
-                >
-                  <Route path="create-admin" element={<CreateAdminPage />} />
-                </Route>
               </Route>
 
-              <Route path="/admin">
+              <Route
+                path="/admin"
+                element={<AuthGuard allowedRoles={["system_admin"]} />}
+              >
                 <Route path="create" element={<CreateAdminPage />} />
                 <Route path="courses" element={<CoursesPage />} />
                 <Route path="users" element={<UsersPage />} />
                 <Route path="pending-users" element={<PendingUsersPage />} />
+                <Route path="statistics" element={<StatisticsPage />} />
               </Route>
+
               <Route path="/unauthorized" element={<Unauthorized />} />
             </Routes>
             <Toaster position="top-center" />

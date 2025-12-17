@@ -5,14 +5,16 @@ import {
 } from "@/components/ui/navigation-menu";
 import Notifications from "@/components/layout/notifications/Notifications";
 import Profile from "@/components/layout/profile/profile";
+import { useAuth } from "@/providers/context/authContext";
 
 const NavBar = () => {
+  const { auth } = useAuth();
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear">
       <NavigationMenu className="p-3 border-b flex justify-end shadow-sm max-w-none">
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Notifications />
+            {auth.user && <Notifications />}
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Profile />
