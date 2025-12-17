@@ -105,6 +105,7 @@ createRoot(document.getElementById("root")!).render(
                       path="materials/:id/:category"
                       element={<Materials />}
                     />
+                    <Route path="calendar" element={<Calendar />} />
                   </Route>
                 </Route>
 

@@ -14,7 +14,7 @@ const GlobalSidebar = () => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <Logo showText={open} />
+        <Logo showText={open} asLink />
       </SidebarHeader>
       <PopulatedSidebarContent />
       <SidebarFooter>

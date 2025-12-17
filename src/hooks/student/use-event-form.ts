@@ -5,16 +5,25 @@ import { AxiosError } from "axios";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 
-import { eventFormSchema, type InferredEventFormSchema } from "@/validations/EventFormSchema";
+import {
+  eventFormSchema,
+  type InferredEventFormSchema,
+} from "@/validations/EventFormSchema";
 import type { CalendarEvent } from "@/types/student/calendar-event";
 
 type UseEventFormArgs = {
   mode: "create" | "edit";
-  eventId?: number;
+  eventId?: string;
   defaultValues?: Partial<InferredEventFormSchema>;
+  onClose?: () => void;
 };
 
-export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs) => {
+export const useEventForm = ({
+  mode,
+  eventId,
+  defaultValues,
+  onClose,
+}: UseEventFormArgs) => {
   const queryClient = useQueryClient();
 
   const form = useForm<InferredEventFormSchema>({
@@ -32,7 +41,7 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     reset,
   } = form;
@@ -45,19 +54,21 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
         notes: values.notes,
         deadline_at: new Date(`${values.dueDate}T${values.dueTime}`).getTime(),
         type: values.type,
-        course_code: values.courseCode,
+        course_id: values.courseCode,
       };
 
       if (mode === "create") {
-        return api.post("/api/events", newEvent);
+        return api.post(`/api/courses/${values.courseCode}/events`, newEvent);
       } else {
         if (!eventId) throw new Error("Event ID is required for edit.");
-        return api.put(`/api/events/${eventId}`, newEvent);
+        return api.patch(`/api/events/${eventId}`, newEvent);
       }
     },
     onSuccess: () => {
-      toast.success(`Event has been ${mode === "create" ? "created" : "updated"} successfully.`);
-      
+      toast.success(
+        `Event has been ${mode === "create" ? "created" : "updated"} successfully.`
+      );
+
       queryClient.invalidateQueries({ queryKey: ["calendar-events"] });
 
       if (mode === "create") {
@@ -69,6 +80,8 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
           type: "quiz",
           courseCode: "",
         });
+      } else {
+        onClose?.();
       }
     },
     onError: (err) => {
@@ -78,7 +91,9 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
           return;
         }
       }
-      toast.error(`An error occurred while ${mode === "create" ? "creating" : "updating"} this event.`);
+      toast.error(
+        `An error occurred while ${mode === "create" ? "creating" : "updating"} this event.`
+      );
     },
   });
 
@@ -87,6 +102,7 @@ export const useEventForm = ({ mode, eventId, defaultValues }: UseEventFormArgs)
   return {
     control,
     isSubmitting: isSubmitting || mutation.isPending,
+    isValid,
     onSubmit,
   };
 };

@@ -51,6 +51,31 @@ export const uploadRouter = {
       return { success: false };
     }
   }),
+  assignmentUploader: f({
+    pdf: {
+      maxFileSize: "4MB",
+      maxFileCount: 5,
+    },
+    video: {
+      maxFileSize: "256MB",
+      maxFileCount: 1,
+    },
+  }).onUploadComplete(async () => {
+    try {
+      return {
+        success: true,
+        file_data: {
+          name: "",
+          size: "",
+          key: "",
+          id: "",
+          url: "",
+        },
+      };
+    } catch {
+      return { success: false };
+    }
+  }),
   imageUploader: f({
     image: {
       maxFileSize: "4MB",

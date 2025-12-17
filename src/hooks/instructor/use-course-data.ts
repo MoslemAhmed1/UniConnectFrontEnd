@@ -24,7 +24,7 @@ export const useCourseData = (courseCode: string | undefined) => {
             throw new Error(message);
           }
 
-          throw new Error("Unexpected error occured");
+          throw new Error("Unexpected error occurred");
         }
       }
     },

@@ -7,6 +7,7 @@ type ModalProviderProps = {
 
 const ModalProvider = ({ children }: ModalProviderProps) => {
   const [displayedModal, setDisplayedModal] = useState<ReactNode>(null);
+  console.log(displayedModal);
 
   return (
     <ModalContext.Provider

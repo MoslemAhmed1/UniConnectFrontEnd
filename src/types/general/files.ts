@@ -3,4 +3,5 @@ export type UploadFile = {
   size: string;
   key: string;
   id: string;
+  url: string;
 };

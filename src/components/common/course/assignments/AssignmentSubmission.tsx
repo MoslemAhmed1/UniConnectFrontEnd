@@ -25,7 +25,12 @@ export default function AssignmentSubmission() {
   );
 
   const { submission } = useSubmissionData(assignmentId, courseId);
-  const { submissions } = useStudentSubmissions(assignmentId ?? null);
+  const { submissionsAndMetadata } = useStudentSubmissions({
+    assignmentId,
+    courseId: assignment?.course_id,
+  });
+
+  const submissions = submissionsAndMetadata.data;
 
   const { getRoleUrl } = useGetRoleUrl();
   const userRole = getRoleUrl();
@@ -91,10 +96,7 @@ export default function AssignmentSubmission() {
 
               {/* View Submissions (DIALOG BELOW) */}
               {userRole === "instructor" && (
-                <GradeSubmissionModal
-                  submissions={submissions}
-                  assignment={assignment}
-                />
+                <GradeSubmissionModal submissions={submissions} />
               )}
             </div>
 

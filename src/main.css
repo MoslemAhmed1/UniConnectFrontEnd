@@ -122,7 +122,7 @@
   }
 }
 
-div[role="dialog"] {
+div[role="dialog"][data-slot="dialog-content"] {
   max-height: 80vh;
   overflow-y: auto;
 }

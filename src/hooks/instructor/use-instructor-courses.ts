@@ -6,8 +6,7 @@ export const useInstructorCourses = () => {
   const { data: courses, isLoading } = useQuery<Course[]>({
     queryKey: ["instructor-courses"],
     queryFn: async () => {
-      // Simulate a backend call until we get the backend ready
-      const res = await api.get("/api/courses/");
+      const res = await api.get("/api/me/courses/teaching");
       return res.data.data;
     },
     initialData: [],

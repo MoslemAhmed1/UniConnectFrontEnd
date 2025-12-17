@@ -1,34 +1,36 @@
-import { useState } from "react";
+import AddEventModal from "@/components/common/calendar/AddEventModal";
 import ConfiguredCalendar from "@/components/common/calendar/ConfiguredCalendar";
 import Legend from "@/components/common/calendar/Legend";
 import SelectedDayDetails from "@/components/common/calendar/SelectedDayDetails";
-import { useStudentCalendar } from "@/hooks/student/use-student-calendar";
-import { useStudentCourses } from "@/hooks/student/use-student-courses";
-import AddEventModal from "@/components/common/calendar/AddEventModal";
-import { useAuth } from "@/providers/context/authContext";
-
 import {
   Select,
-  SelectTrigger,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useCurrentUserCourses from "@/hooks/shared/use-current-user-courses";
+import { useStudentCalendar } from "@/hooks/student/use-student-calendar";
+import { useAuth } from "@/providers/context/authContext";
+import { useState } from "react";
 
-export default function StudentCalendar() {
+export default function Calendar() {
   const { calendarEvents, date, isLoading, setDate } = useStudentCalendar();
-  const { courses, isLoading: isCoursesLoading } = useStudentCourses();
+  const { currentUserCourses, isLoadingCurrentUserCourses } =
+    useCurrentUserCourses();
   const { auth } = useAuth();
 
   const userRole = auth.user?.role;
-  const allowModifyEvents = userRole && ["professor/ta", "class_representative", "course_head"].includes(userRole);
+  const allowModifyEvents =
+    userRole &&
+    ["professor/ta", "class_representative", "course_head"].includes(userRole);
 
   const [selectedCourse, setSelectedCourse] = useState<string>("all");
 
-  const filteredEvents = calendarEvents
-    ?.filter((event) => {
+  const filteredEvents =
+    calendarEvents?.filter((event) => {
       if (selectedCourse === "all") return true;
-      return event.course_code === selectedCourse;
+      return event.course_id === selectedCourse;
     }) ?? [];
 
   return (
@@ -49,7 +51,9 @@ export default function StudentCalendar() {
               <SelectTrigger className="w-[220px]">
                 <SelectValue
                   placeholder={
-                    isCoursesLoading ? "Loading courses..." : "All courses"
+                    isLoadingCurrentUserCourses
+                      ? "Loading courses..."
+                      : "All courses"
                   }
                 />
               </SelectTrigger>
@@ -57,9 +61,12 @@ export default function StudentCalendar() {
               <SelectContent>
                 <SelectItem value="all">All Courses</SelectItem>
 
-                {courses.map((course) => (
+                {currentUserCourses.map((course) => (
                   <SelectItem key={course.code} value={course.code}>
-                    <span className="font-bold text-blue-700 text-sm">{course.code}</span> - <span className="text-gray-800">{course.name}</span>
+                    <span className="font-bold text-blue-700 text-sm">
+                      {course.code}
+                    </span>{" "}
+                    - <span className="text-gray-800">{course.name}</span>
                   </SelectItem>
                 ))}
               </SelectContent>

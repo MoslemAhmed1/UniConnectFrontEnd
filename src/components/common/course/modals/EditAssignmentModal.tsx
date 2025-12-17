@@ -1,17 +1,15 @@
-import { useState } from "react";
+import AssignmentForm from "@/components/forms/CourseForms/AssignmentForm";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
-import AssignmentForm from "@/components/forms/CourseForms/AssignmentForm";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Assignment } from "@/types/student/assignment";
+import { Edit } from "lucide-react";
+import { useState } from "react";
 
 type EditAssignmentModalProps = {
   assignment: Assignment;
@@ -28,12 +26,13 @@ export default function EditAssignmentModal({
 }: EditAssignmentModalProps) {
   const [open, setOpen] = useState(false);
 
+  console.log(assignment);
+
   const defaultValues = {
     title: assignment.title,
     description: assignment.description,
     dueDate: toInputDate(assignment.deadline_at),
     dueTime: toInputTime(assignment.deadline_at),
-    attachedFiles: assignment.attached_files,
   };
 
   return (
@@ -45,19 +44,16 @@ export default function EditAssignmentModal({
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create Assignment</DialogTitle>
-          <DialogDescription>
-            Create a new assignment for your course.
-          </DialogDescription>
+          <DialogTitle>Edit Assignment</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="max-h-[70vh] pr-4">
-          <AssignmentForm
-            mode="create"
-            courseCode={assignment.course_id}
-            defaultValues={defaultValues}
-            onClose={() => setOpen(false)}
-          />
-        </ScrollArea>
+        <AssignmentForm
+          mode="edit"
+          courseCode={assignment.course_id}
+          defaultValues={defaultValues}
+          onClose={() => setOpen(false)}
+          assignmentId={assignment.id}
+          attached_files={assignment.attached_files}
+        />
       </DialogContent>
     </Dialog>
   );

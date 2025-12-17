@@ -5,20 +5,18 @@ import { toast } from "sonner";
 type UseDeleteSubmissionFileArgs = {
   courseId: string;
   assignmentId: string;
-  submissionId: string;
-  fileId: string;
+  submissionId: string | undefined;
 };
 
 const useDeleteSubmissionFile = ({
   assignmentId,
   courseId,
-  fileId,
   submissionId,
 }: UseDeleteSubmissionFileArgs) => {
   const queryClient = useQueryClient();
   const { mutate: deleteSubmissionFile, isPending: isDeletingSubmissionFile } =
     useMutation({
-      mutationFn: () => {
+      mutationFn: (fileId: string) => {
         return api.delete(
           `/api/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}/files/${fileId}`
         );

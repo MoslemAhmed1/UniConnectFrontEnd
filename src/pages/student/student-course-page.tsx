@@ -41,7 +41,7 @@ export const StudentCoursePage = () => {
     featureFlags.showAddCalendarEventBtn = true;
   } else if (studentRole === "course_head") {
     const isTeamHeadForThisCourse =
-      courseData.representative_id === auth.user?.id;
+      auth.user?.id && courseData.representatives_ids.includes(auth.user?.id);
 
     if (isTeamHeadForThisCourse) {
       featureFlags.showModifyCourseBtn = true;

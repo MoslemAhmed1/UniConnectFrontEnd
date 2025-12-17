@@ -5,14 +5,20 @@ import { AxiosError } from "axios";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 
-import { gradeFormSchema, type InferredGradeFormSchema } from "@/validations/GradeFormSchema";
+import {
+  gradeFormSchema,
+  type InferredGradeFormSchema,
+} from "@/validations/GradeFormSchema";
 import type { Submission } from "@/types/student/submission";
+import type { Assignment } from "@/types/student/assignment";
+import { useModal } from "@/providers/context/modalContext";
 
 type UseGradeSubmissionFormArgs = {
   mode: "create" | "edit";
   submissionId: string;
   assignmentId?: string;
   defaultValues?: Partial<InferredGradeFormSchema>;
+  assignment: Assignment;
 };
 
 export const useGradeSubmissionForm = ({
@@ -20,6 +26,7 @@ export const useGradeSubmissionForm = ({
   submissionId,
   assignmentId,
   defaultValues,
+  assignment,
 }: UseGradeSubmissionFormArgs) => {
   const queryClient = useQueryClient();
 
@@ -36,8 +43,9 @@ export const useGradeSubmissionForm = ({
     control,
     formState: { isSubmitting },
     handleSubmit,
-    reset,
   } = form;
+
+  const { setClose: closeModal } = useModal();
 
   const mutation = useMutation({
     mutationKey: ["submission-grade", mode, submissionId],
@@ -47,23 +55,25 @@ export const useGradeSubmissionForm = ({
         feedback: values.feedback,
       };
 
-      if (mode === "create") {
-        return api.post<Submission>(`/api/submissions/${submissionId}/grade`, newSubmissionGrade);
-      } else {
-        if (!submissionId) throw new Error("Submission ID is required for edit.");
-        return api.put<Submission>(`/api/submissions/${submissionId}/grade`, newSubmissionGrade);
-      }
+      return api.patch<Submission>(
+        `/api/courses/${assignment.course_id}/assignments/${assignment.id}/submissions/${submissionId}`,
+        newSubmissionGrade
+      );
     },
     onSuccess: () => {
-      toast.success(`Grade has been ${mode === "create" ? "added" : "updated"} successfully.`);
-      
-      if (assignmentId) {
-        queryClient.invalidateQueries({ queryKey: ["student-submissions", assignmentId] });
-      } 
+      toast.success(
+        `Grade has been ${mode === "create" ? "added" : "updated"} successfully.`
+      );
 
-      if (mode === "create") {
-        reset({ grade: undefined, feedback: undefined });
-      }
+      queryClient.invalidateQueries({
+        queryKey: ["submissions", assignment.id],
+      });
+
+      // if (mode === "create") {
+      //   reset({ grade: undefined, feedback: undefined });
+      // }
+
+      closeModal();
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -72,7 +82,9 @@ export const useGradeSubmissionForm = ({
           return;
         }
       }
-      toast.error(`An error occurred while ${mode === "create" ? "adding" : "updating"} the grade. Please try again.`);
+      toast.error(
+        `An error occurred while ${mode === "create" ? "adding" : "updating"} the grade. Please try again.`
+      );
     },
   });
 
