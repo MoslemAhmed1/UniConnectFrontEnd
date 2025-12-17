@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -7,27 +6,16 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import type { User } from "@/types/user/user";
-import { SquareArrowOutUpRight } from "lucide-react";
 import type { ReactNode } from "react";
-import { Link } from "react-router";
+import ViewProfileButton from "../../ViewProfileButton";
 
 type MemberProps = {
   member: User;
   extraActions?: ReactNode;
-  currentPageAbsoluteUrl: string;
 };
 
-const Member = ({
-  member,
-  extraActions,
-  currentPageAbsoluteUrl,
-}: MemberProps) => {
+const Member = ({ member, extraActions }: MemberProps) => {
   return (
     <Item variant="outline" className="mb-3">
       <ItemMedia>
@@ -43,24 +31,7 @@ const Member = ({
       </ItemContent>
       <ItemActions>
         {extraActions}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon-sm"
-              variant="ghost"
-              className="rounded-full"
-              aria-label="View Profile"
-              asChild
-            >
-              <Link
-                to={`/profiles/${member.id}?back=${currentPageAbsoluteUrl}`}
-              >
-                <SquareArrowOutUpRight />
-              </Link>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>View Profile</TooltipContent>
-        </Tooltip>
+        <ViewProfileButton profileId={member.id} />
       </ItemActions>
     </Item>
   );
