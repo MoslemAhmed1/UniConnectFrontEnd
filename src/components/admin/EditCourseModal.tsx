@@ -26,20 +26,27 @@ type EditCourseModalProps = {
 };
 
 export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
-
   const { users, isLoading: isLoadingUsers } = useGetCourseUsers(course?.code);
-  const { control, isValid, onSubmit, isPending, isSubmitting, dirtyFields } = useCourseForm(course ?? undefined);
+  const { control, isValid, onSubmit, isPending, isSubmitting } = useCourseForm(
+    course ?? undefined
+  );
 
   if (!course) return null;
 
   const instructors = users.filter((u) => u.role === "professor/ta");
-  const students = users.filter((u) => u.role !== "professor/ta" && u.role !== "system_admin");
+  const students = users.filter(
+    (u) => u.role !== "professor/ta" && u.role !== "system_admin"
+  );
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button variant="ghost" size="icon" className="hover:bg-blue-100 hover:text-blue-600">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-blue-100 hover:text-blue-600"
+          >
             <Edit className="w-4 h-4" />
           </Button>
         )}
@@ -87,14 +94,7 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
 
-                <Button
-                  type="submit"
-                  disabled={
-                    !isValid ||
-                    isSubmitting ||
-                    Object.keys(dirtyFields).length === 0
-                  }
-                >
+                <Button type="submit" disabled={!isValid || isSubmitting}>
                   {isPending ? "Updating Course" : "Update Course"}
                   {isPending && <Spinner />}
                 </Button>
@@ -106,10 +106,16 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
             {isLoadingUsers ? (
               <div className="text-center py-8">
                 <Spinner />
-                <p className="text-muted-foreground mt-2">Loading students...</p>
+                <p className="text-muted-foreground mt-2">
+                  Loading students...
+                </p>
               </div>
             ) : (
-              <CourseUsersTab courseCode={course.code} users={students} type="students" />
+              <CourseUsersTab
+                courseCode={course.code}
+                users={students}
+                type="students"
+              />
             )}
           </TabsContent>
 
@@ -117,10 +123,16 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
             {isLoadingUsers ? (
               <div className="text-center py-8">
                 <Spinner />
-                <p className="text-muted-foreground mt-2">Loading instructors...</p>
+                <p className="text-muted-foreground mt-2">
+                  Loading instructors...
+                </p>
               </div>
             ) : (
-              <CourseUsersTab courseCode={course.code} users={instructors} type="instructors" />
+              <CourseUsersTab
+                courseCode={course.code}
+                users={instructors}
+                type="instructors"
+              />
             )}
           </TabsContent>
         </Tabs>

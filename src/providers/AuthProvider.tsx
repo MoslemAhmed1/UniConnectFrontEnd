@@ -8,6 +8,7 @@ import { AuthContext, type AuthType } from "./context/authContext";
 import api from "@/lib/axios";
 import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 import type { refreshResponse } from "@/types/api/auth";
+import { useActiveTimeOnSite } from "@/hooks/use-active-time-onsite";
 
 interface RetryRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -16,6 +17,8 @@ interface RetryRequestConfig extends InternalAxiosRequestConfig {
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [auth, setAuth] = useState<AuthType>({ user: null, token: null });
   const [loading, setLoading] = useState<boolean>(true);
+
+  useActiveTimeOnSite(!!auth.user);
 
   useEffect(() => {
     // fills in the auth object if a valid refresh cookie is stored

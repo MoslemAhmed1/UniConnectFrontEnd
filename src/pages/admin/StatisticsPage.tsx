@@ -1,66 +1,78 @@
-import { Card } from "@/components/ui/card";
-import { Book, BookOpen, User } from "lucide-react";
+import { Book, BookCheck, BookOpen, User } from "lucide-react";
 
-const KPICard = ({
-  icon: Icon,
-  title,
-  value,
-  subtitle,
-}: {
-  icon: React.ElementType;
-  title: string;
-  value: string | number;
-  subtitle?: string;
-}) => (
-  <Card className={`p-4 hover:shadow-md transition-shadow`}>
-    <div className="flex items-start justify-between">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-teal-500 rounded-lg flex items-center justify-center text-white">
-          <Icon className="w-5 h-5" />
-        </div>
-        <div>
-          <p className="text-sm text-muted-foreground">{title}</p>
-          <p className="text-xl font-bold text-foreground">{value}</p>
-          {subtitle && (
-            <p className="text-xs text-muted-foreground">{subtitle}</p>
-          )}
-        </div>
-      </div>
-    </div>
-  </Card>
-);
+import { SingleStatCard } from "@/components/admin/statistics/SingleStatCard";
+import { AverageCoursesCard } from "@/components/admin/statistics/AverageCoursesCard";
+import { MostActiveChatCard } from "@/components/admin/statistics/MostActiveChatCard";
+import { YearStudentsCard } from "@/components/admin/statistics/YearStudentsCard";
+import { AssignmentCompletionCard } from "@/components/admin/statistics/AssignmentCompletionCard";
+import { DailyUsersCard } from "@/components/admin/statistics/DailyUsersCard";
+import { SessionDurationCard } from "@/components/admin/statistics/SessionDurationCard";
+import { useQuery } from "@tanstack/react-query";
+import api from "@/lib/axios";
+import { toast } from "sonner";
+import { type GeneralStats } from "@/types/admin/stats";
 
 export const StatisticsPage = () => {
+  const { data: generalStats, isLoading } = useQuery<GeneralStats>({
+    queryKey: ["general-stats"],
+    queryFn: async () => {
+      try {
+        const res = await api.get("/api/stats/general");
+        return res.data;
+      } catch {
+        toast.error("Error occurred while fetching general statistics.");
+      }
+    },
+  });
+
+  if (isLoading || !generalStats) return <>Crying...</>;
+
+  const getCourseStatsSubtitle = (studentCount: number, courseName: string) => {
+    return `${studentCount} student${studentCount > 1 ? "s" : ""} are in ${courseName}`;
+  };
+
   return (
     <div className="container mx-auto px-6 py-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <KPICard
-          icon={Book}
+        <SingleStatCard
+          icon={BookCheck}
           title="Course with the most students"
-          value={"CMP123: Jalal course"}
-          subtitle="200 students are in Jalal Course"
+          value={`${generalStats.max_course.course_code}: ${generalStats.max_course.course_name}`}
+          subtitle={getCourseStatsSubtitle(
+            generalStats.max_course.course_student_count,
+            generalStats.max_course.course_name
+          )}
         />
-        <KPICard
+        <SingleStatCard
           icon={Book}
           title="Course with the least students"
-          value={"CMP123: Moslem Course"}
-          // TODO: (singular, none singular)
-          subtitle="1 student (only muslim) in Moslem course"
+          value={`${generalStats.min_course.course_code}: ${generalStats.min_course.course_name}`}
+          subtitle={getCourseStatsSubtitle(
+            generalStats.min_course.course_student_count,
+            generalStats.min_course.course_name
+          )}
         />
-        <KPICard
+        <SingleStatCard
           icon={BookOpen}
           title="Courses Count"
-          value={200}
+          value={generalStats.course_count}
           subtitle="In the UniConnect system."
         />
-        <KPICard
+        <SingleStatCard
           icon={User}
           title="System User Count"
-          value={2000}
+          value={generalStats.student_count}
           subtitle="Across all Courses"
         />
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ">
+        <YearStudentsCard />
+        <AverageCoursesCard />
+        <MostActiveChatCard />
+        <AssignmentCompletionCard />
+        <DailyUsersCard />
+        <SessionDurationCard />
       </div>
     </div>
   );
