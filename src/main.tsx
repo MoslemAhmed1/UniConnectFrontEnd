@@ -32,6 +32,7 @@ import ClassAnnouncementsPage from "./pages/student/class-announcements-page";
 import CoursesPage from "./pages/admin/CoursesPage";
 import UsersPage from "./pages/admin/UsersPage";
 import PendingUsersPage from "./pages/admin/PendingUsersPage";
+import { StatisticsPage } from "./pages/admin/StatisticsPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const queryClient = new QueryClient();
@@ -113,6 +114,7 @@ createRoot(document.getElementById("root")!).render(
                   <Route path="courses" element={<CoursesPage />} />
                   <Route path="users" element={<UsersPage />} />
                   <Route path="pending-users" element={<PendingUsersPage />} />
+                  <Route path="statistics" element={<StatisticsPage />} />
                 </Route>
               </Route>
 
