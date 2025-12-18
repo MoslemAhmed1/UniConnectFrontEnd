@@ -26,7 +26,7 @@ type CourseCardProps = {
 export const CourseCard = ({ course }: CourseCardProps) => {
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const { handleDeleteCourse, isDeleting } = useDeleteCourse(course.code);
-
+  
   const handleDelete = async (courseCode: string) => {
     try {
       setPendingDeleteId(courseCode);
@@ -132,16 +132,3 @@ export const CourseInfo = ({ course }: CourseInfoProps) => {
     </div>
   )
 }
-
-        {/* <UpdateCourseModal
-          courseData={course}
-          trigger={
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hover:bg-blue-100 hover:text-blue-600"
-            >
-              <Edit className="w-4 h-4" />
-            </Button>
-          }
-        /> */}

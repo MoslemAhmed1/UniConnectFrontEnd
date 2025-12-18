@@ -3,13 +3,13 @@ import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-export const useApproveUser = (user_id: string) => {
+export const useApproveUser = (userId: string) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: approveUser, isPending: isApproving } = useMutation({
     mutationKey: ["approve-user"],
     mutationFn: async (userId: string) => {
-      return api.put(`/api/users/${userId}`);
+      return api.put(`/api/users/${userId}/approve`);
     },
     onSuccess: () => {
       toast.success("User has been approved successfully.");
@@ -18,7 +18,7 @@ export const useApproveUser = (user_id: string) => {
         queryKey: ["get-users"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["user", user_id],
+        queryKey: ["user", userId],
       });
     },
     onError: (err) => {

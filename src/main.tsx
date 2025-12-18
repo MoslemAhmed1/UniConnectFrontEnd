@@ -32,6 +32,7 @@ import ClassAnnouncementsPage from "./pages/student/class-announcements-page";
 import CoursesPage from "./pages/admin/CoursesPage";
 import UsersPage from "./pages/admin/UsersPage";
 import PendingUsersPage from "./pages/admin/PendingUsersPage";
+import { StatisticsPage } from "./pages/admin/StatisticsPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import LandingPage from "./pages/user/landing-page";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -125,6 +126,7 @@ createRoot(document.getElementById("root")!).render(
                       path="pending-users"
                       element={<PendingUsersPage />}
                     />
+                    <Route path="statistics" element={<StatisticsPage />} />
                   </Route>
                 </Route>
 

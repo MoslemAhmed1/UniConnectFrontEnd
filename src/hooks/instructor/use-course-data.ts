@@ -16,6 +16,7 @@ export const useCourseData = (courseCode: string | undefined) => {
         const res = await api.get<{ data: Course }>(
           `/api/courses/${courseCode}`
         );
+        console.log(res.data.data);
         return res.data.data;
       } catch (err) {
         if (err instanceof AxiosError) {

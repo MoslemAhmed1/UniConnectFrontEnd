@@ -25,6 +25,7 @@ export const UnAuthGuard = () => {
   function prevRouteFits(from: string, role: serverRolesType) {
     if (STUDENT_ROLES.includes(role)) return from.includes("student");
     if (role === "professor/ta") return from.includes("instructor");
+    if (role === "system_admin") return from.includes("system_admin");
     return false;
   }
   const getNavigateRoute = () => {
@@ -33,6 +34,7 @@ export const UnAuthGuard = () => {
     if (!from || !prevRouteFits(from, auth.user.role)) {
       if (STUDENT_ROLES.includes(auth.user.role)) from = "/student/dashboard";
       else if (auth.user.role === "professor/ta") from = "/instructor/courses";
+      else if (auth.user.role === "system_admin") from = "/admin/courses"
       else from = "/";
     }
 

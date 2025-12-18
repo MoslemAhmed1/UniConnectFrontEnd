@@ -53,7 +53,7 @@ export const useAdminCreateUserForm = ({ onSuccess }: UseAdminCreateUserFormArgs
           year: data.year,
         };
 
-        return api.post("/api/users/register", newUser);
+        return api.post("/api/users/create", newUser);
       } else if (data.role === "professor/ta") {
         const newUser = {
           first_name: data.firstName,
@@ -62,7 +62,7 @@ export const useAdminCreateUserForm = ({ onSuccess }: UseAdminCreateUserFormArgs
           password: data.password,
           role: data.role,
         };
-        return api.post("/api/users/register", newUser);
+        return api.post("/api/users/create", newUser);
       }
 
       return new Promise((_, reject) => reject("Invalid Role."));

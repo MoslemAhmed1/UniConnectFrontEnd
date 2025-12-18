@@ -28,12 +28,13 @@ const useLoginForm = () => {
   } = form;
 
   // The type is changed here so it enforces the api request body on the output of the form
-  // an error will be displayed if they can't be matched togther
+  // an error will be displayed if they can't be matched together
 
   async function onSubmit(data: loginRequestBody) {
     try {
       const res = await api.post<loginResponse>("/api/auth/login", data);
       setAuth({ token: res.data.accessToken, user: res.data.user });
+
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data && "message" in err.response.data) {

@@ -19,6 +19,7 @@ import { CourseFieldGroup } from "../instructor/CourseFieldGroup";
 import { CourseUsersTab } from "@/components/admin/CourseUsersTab";
 import type { Course } from "@/types/student/course";
 import { Spinner } from "../ui/spinner";
+import { useState } from "react";
 
 type EditCourseModalProps = {
   course: Course | null;
@@ -27,31 +28,34 @@ type EditCourseModalProps = {
 
 export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
 
-  const { users, isLoading: isLoadingUsers } = useGetCourseUsers(course?.code);
-  const { control, isValid, onSubmit, isPending, isSubmitting, dirtyFields } = useCourseForm(course ?? undefined);
+  const { students, instructors, isLoading: isLoadingUsers } = useGetCourseUsers(course?.code);
+  const [open, setOpen] = useState(false);
+  const { control, isValid, onSubmit, isPending, isSubmitting, handleImageChange } =
+    useCourseForm(course ?? undefined, () => setOpen(false));
 
   if (!course) return null;
 
-  const instructors = users.filter((u) => u.role === "professor/ta");
-  const students = users.filter((u) => u.role !== "professor/ta" && u.role !== "system_admin");
-
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button variant="ghost" size="icon" className="hover:bg-blue-100 hover:text-blue-600">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-blue-100 hover:text-blue-600"
+          >
             <Edit className="w-4 h-4" />
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Update the course</DialogTitle>
           <DialogDescription>
             Update course information or manage users.
           </DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="info" className="w-full">
+        <Tabs defaultValue="info" className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="info" className="gap-2">
               <BookOpen className="w-4 h-4" />
@@ -76,25 +80,20 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="info" className="mt-4">
-            <form onSubmit={onSubmit} className="flex flex-col gap-4">
-              <ScrollArea className="max-h-[70vh] pr-4">
-                <CourseFieldGroup control={control} disableCode={true} />
+          <TabsContent value="info" className="mt-4 flex-1 overflow-hidden">
+            <form onSubmit={onSubmit} className="flex flex-col h-full">
+              <ScrollArea className="flex-1 pr-4">
+                <div className="pb-4">
+                  <CourseFieldGroup control={control} disableCode={true} handleImageChange={handleImageChange} />
+                </div>
               </ScrollArea>
 
-              <DialogFooter>
+              <DialogFooter className="mt-4">
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
 
-                <Button
-                  type="submit"
-                  disabled={
-                    !isValid ||
-                    isSubmitting ||
-                    Object.keys(dirtyFields).length === 0
-                  }
-                >
+                <Button type="submit" disabled={!isValid || isSubmitting}>
                   {isPending ? "Updating Course" : "Update Course"}
                   {isPending && <Spinner />}
                 </Button>
@@ -106,10 +105,16 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
             {isLoadingUsers ? (
               <div className="text-center py-8">
                 <Spinner />
-                <p className="text-muted-foreground mt-2">Loading students...</p>
+                <p className="text-muted-foreground mt-2">
+                  Loading students...
+                </p>
               </div>
             ) : (
-              <CourseUsersTab courseCode={course.code} users={students} type="students" />
+              <CourseUsersTab
+                courseCode={course.code}
+                users={students}
+                type="students"
+              />
             )}
           </TabsContent>
 
@@ -117,10 +122,16 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
             {isLoadingUsers ? (
               <div className="text-center py-8">
                 <Spinner />
-                <p className="text-muted-foreground mt-2">Loading instructors...</p>
+                <p className="text-muted-foreground mt-2">
+                  Loading instructors...
+                </p>
               </div>
             ) : (
-              <CourseUsersTab courseCode={course.code} users={instructors} type="instructors" />
+              <CourseUsersTab
+                courseCode={course.code}
+                users={instructors}
+                type="instructors"
+              />
             )}
           </TabsContent>
         </Tabs>
