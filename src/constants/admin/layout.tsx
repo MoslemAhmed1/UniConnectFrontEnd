@@ -5,6 +5,7 @@ import {
   Book,
   User,
   type LucideProps,
+  ChartBar,
 } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -19,6 +20,11 @@ export const ADMIN_SIDEBAR_ITEMS: {
     icon: LayoutDashboard,
     url: "/admin/dashboard",
     title: "Dashboard",
+  },
+  {
+    icon: ChartBar,
+    url: "/admin/Statistics",
+    title: "Statistics",
   },
   {
     icon: Book,

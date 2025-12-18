@@ -118,6 +118,7 @@ createRoot(document.getElementById("root")!).render(
                     path="/admin"
                     element={<AuthGuard allowedRoles={["system_admin"]} />}
                   >
+                    <Route path="profile" element={<PersonalProfilePage />} />
                     <Route path="dashboard" element={<AdminDashboard />} />
                     <Route path="create-admin" element={<CreateAdminPage />} />
                     <Route path="courses" element={<CoursesPage />} />
