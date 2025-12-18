@@ -14,7 +14,7 @@ import { useCourseForm } from "@/hooks/instructor/use-course-form";
 import { CourseFieldGroup } from "./CourseFieldGroup";
 import { Edit } from "lucide-react";
 import type { Course } from "@/types/student/course";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { useState } from "react";
 
 type UpdateCourseModalProps = {
   trigger?: React.ReactNode;
@@ -25,6 +25,7 @@ export const UpdateCourseModal = ({
   trigger,
   courseData,
 }: UpdateCourseModalProps) => {
+  const [open, setOpen] = useState(false);
   const {
     control,
     isValid,
@@ -32,10 +33,10 @@ export const UpdateCourseModal = ({
     isPending,
     isSubmitting,
     handleImageChange,
-  } = useCourseForm(courseData);
+  } = useCourseForm(courseData, () => setOpen(false));
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger ? (
           trigger
@@ -55,7 +56,6 @@ export const UpdateCourseModal = ({
               course.
             </DialogDescription>
           </DialogHeader>
-          <ScrollArea className="max-h-[70vh] pr-4">
             {courseData && (
               <CourseFieldGroup
                 control={control}
@@ -63,7 +63,6 @@ export const UpdateCourseModal = ({
                 handleImageChange={handleImageChange}
               />
             )}
-          </ScrollArea>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>

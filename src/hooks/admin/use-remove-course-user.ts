@@ -1,4 +1,3 @@
-// hooks/admin/use-remove-course-user.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
@@ -15,9 +14,11 @@ export const useRemoveCourseUser = (courseCode?: string) => {
     },
     onSuccess: () => {
       toast.success("User has been removed from the course successfully.");
+      
+      // Invalidate the courses list to refresh students_number
+      queryClient.invalidateQueries({ queryKey: ["all-courses"] });
+      // Invalidate the course users list
       queryClient.invalidateQueries({ queryKey: ["course-users", courseCode] });
-      // optionally invalidate other user/course lists
-      queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
