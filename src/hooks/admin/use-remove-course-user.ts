@@ -10,7 +10,7 @@ export const useRemoveCourseUser = (courseCode?: string) => {
     mutationKey: ["remove-course-user", courseCode],
     mutationFn: async (userId: string) => {
       if (!courseCode) throw new Error("Course Code is required to remove a user.");
-      return api.delete(`/api/courses/${courseCode}/users/${userId}`);
+      return api.delete(`/api/admin/${courseCode}/users/${userId}`);
     },
     onSuccess: () => {
       toast.success("User has been removed from the course successfully.");

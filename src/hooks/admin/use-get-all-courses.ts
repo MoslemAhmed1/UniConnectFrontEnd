@@ -22,13 +22,14 @@ const useGetAllCourses = (params?: UseGetAllCoursesParams) => {
   const { data, isLoading } = useQuery<GetAllCoursesRawResponse>({
     queryKey: ["all-courses", params],
     queryFn: async () => {
-      const result = await api.get("/api/courses", {
+      const result = await api.get("/api/admin/", {
         params: {
           page: params?.page,
           per_page: params?.perPage,
           search: params?.search,
         },
       });
+      console.log(result.data.data)
       return result.data.data as GetAllCoursesRawResponse;
     },
   });

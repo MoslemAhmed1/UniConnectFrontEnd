@@ -9,7 +9,7 @@ export const useDeleteCourse = (course_code: string) => {
   const { mutateAsync: deleteCourse, isPending: isDeleting } = useMutation({
     mutationKey: ["delete-course", course_code],
     mutationFn: async (courseCode: string) => {
-      return api.delete(`/api/courses/${courseCode}`);
+      return api.delete(`/api/admin/${courseCode}`);
     },
     onSuccess: () => {
       toast.success("Course has been deleted successfully.");
