@@ -19,6 +19,7 @@ import { CourseFieldGroup } from "../instructor/CourseFieldGroup";
 import { CourseUsersTab } from "@/components/admin/CourseUsersTab";
 import type { Course } from "@/types/student/course";
 import { Spinner } from "../ui/spinner";
+import { useState } from "react";
 
 type EditCourseModalProps = {
   course: Course | null;
@@ -26,20 +27,16 @@ type EditCourseModalProps = {
 };
 
 export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
-  const { users, isLoading: isLoadingUsers } = useGetCourseUsers(course?.code);
-  const { control, isValid, onSubmit, isPending, isSubmitting } = useCourseForm(
-    course ?? undefined
-  );
+
+  const { students, instructors, isLoading: isLoadingUsers } = useGetCourseUsers(course?.code);
+  const [open, setOpen] = useState(false);
+  const { control, isValid, onSubmit, isPending, isSubmitting, handleImageChange } =
+    useCourseForm(course ?? undefined, () => setOpen(false));
 
   if (!course) return null;
 
-  const instructors = users.filter((u) => u.role === "professor/ta");
-  const students = users.filter(
-    (u) => u.role !== "professor/ta" && u.role !== "system_admin"
-  );
-
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
           <Button
@@ -51,14 +48,14 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Update the course</DialogTitle>
           <DialogDescription>
             Update course information or manage users.
           </DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="info" className="w-full">
+        <Tabs defaultValue="info" className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="info" className="gap-2">
               <BookOpen className="w-4 h-4" />
@@ -83,13 +80,15 @@ export const EditCourseModal = ({ course, trigger }: EditCourseModalProps) => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="info" className="mt-4">
-            <form onSubmit={onSubmit} className="flex flex-col gap-4">
-              <ScrollArea className="max-h-[70vh] pr-4">
-                <CourseFieldGroup control={control} disableCode={true} />
+          <TabsContent value="info" className="mt-4 flex-1 overflow-hidden">
+            <form onSubmit={onSubmit} className="flex flex-col h-full">
+              <ScrollArea className="flex-1 pr-4">
+                <div className="pb-4">
+                  <CourseFieldGroup control={control} disableCode={true} handleImageChange={handleImageChange} />
+                </div>
               </ScrollArea>
 
-              <DialogFooter>
+              <DialogFooter className="mt-4">
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>

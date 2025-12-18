@@ -1,22 +1,37 @@
-import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Search, Plus } from "lucide-react";
 import { CourseCard } from "@/components/admin/CourseCard";
 import { AdminPagination } from "@/components/admin/AdminPagination";
 import { CreateCourseModal } from "@/components/instructor/CreateCourseModal";
 import { Button } from "@/components/ui/button";
-import { useStudentCourses } from "@/hooks/student/use-student-courses";
+import useAllCourses from "@/hooks/shared/use-all-courses";
 import type { Course } from "@/types/student/course";
 
 export const CoursesPage = () => {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const perPage = 10;
+  const search = searchParams.get("search") || "";
+  const page = parseInt(searchParams.get("page") || "1", 10);
 
-  const { data, isLoading } = useStudentCourses({ page, perPage: 10, search });
+  const updateSearchParams = (updates: Record<string, string | null>) => {
+    const newParams = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === "") {
+        newParams.delete(key);
+      } else {
+        newParams.set(key, value);
+      }
+    });
+    // Reset to page 1 when filters change (except when changing page)
+    if (updates.page === undefined) {
+      newParams.delete("page");
+    }
+    setSearchParams(newParams);
+  };
 
-  const courses = data?.data ?? [];
-  const totalPages = Math.ceil((data?.total ?? 0) / 10);
-
+  const { courses, totalPages, isLoading } = useAllCourses({ page, perPage, search: search || undefined });
+  
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-6 py-8">
@@ -40,8 +55,7 @@ export const CoursesPage = () => {
             placeholder="Search courses..."
             value={search}
             onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
+              updateSearchParams({ search: e.target.value || null });
             }}
             className="pl-10"
           />
@@ -50,7 +64,7 @@ export const CoursesPage = () => {
         <AdminPagination
           page={page}
           totalPages={totalPages}
-          onPageChange={setPage}
+          onPageChange={(newPage) => updateSearchParams({ page: newPage.toString() })}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -73,7 +87,7 @@ export const CoursesPage = () => {
         <AdminPagination
           page={page}
           totalPages={totalPages}
-          onPageChange={setPage}
+          onPageChange={(newPage) => updateSearchParams({ page: newPage.toString() })}
         />
       </div>
     </div>

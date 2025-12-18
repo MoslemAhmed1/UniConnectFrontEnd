@@ -7,16 +7,15 @@ export const useDeleteCourse = (course_code: string) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: deleteCourse, isPending: isDeleting } = useMutation({
-    mutationKey: ["delete-course"],
+    mutationKey: ["delete-course", course_code],
     mutationFn: async (courseCode: string) => {
       return api.delete(`/api/courses/${courseCode}`);
     },
     onSuccess: () => {
       toast.success("Course has been deleted successfully.");
 
-      queryClient.invalidateQueries({
-        queryKey: ["student-courses", course_code],
-      });
+      queryClient.invalidateQueries({ queryKey: ["all-courses"] });
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
     onError: (err) => {
       if (err instanceof AxiosError) {

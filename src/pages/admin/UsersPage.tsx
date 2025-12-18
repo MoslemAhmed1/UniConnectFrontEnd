@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useSearchParams } from "react-router";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
@@ -14,24 +14,41 @@ const ROLES: { value: serverRolesType | "all"; label: string }[] = [
   { value: "professor/ta", label: "Instructor" },
   { value: "class_representative", label: "Class Rep" },
   { value: "course_head", label: "Course Head" },
-  { value: "system_admin", label: "Admin" },
 ];
 
 export const UsersPage = () => {
-  // Search & Filter & Pagination state
-  const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState<serverRolesType | "all">("all");
-  const [yearFilter, setYearFilter] = useState<string>("all");
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
   const perPage = 10;
 
-  // Fetch users with backend pagination
+  // Get values from URL search params
+  const search = searchParams.get("search") || "";
+  const roleFilter = (searchParams.get("role") as serverRolesType | "all") || "all";
+  const yearFilter = searchParams.get("year") || "all";
+  const page = parseInt(searchParams.get("page") || "1", 10);
+
+  // Update URL search params
+  const updateSearchParams = (updates: Record<string, string | null>) => {
+    const newParams = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === "" || value === "all") {
+        newParams.delete(key);
+      } else {
+        newParams.set(key, value);
+      }
+    });
+    // Reset to page 1 when filters change
+    if (updates.page === undefined) {
+      newParams.delete("page");
+    }
+    setSearchParams(newParams);
+  };
+
   const { users, totalPages, isLoadingUsers } = useGetUsers({
     page,
     perPage,
-    search,
-    roleFilter,
-    yearFilter,
+    search: search || undefined,
+    roleFilter: roleFilter !== "all" ? roleFilter : undefined,
+    yearFilter: yearFilter !== "all" ? yearFilter : undefined,
   });
 
   return (
@@ -48,8 +65,7 @@ export const UsersPage = () => {
                 placeholder="Search users..." 
                 value={search} 
                 onChange={(e) => { 
-                  setSearch(e.target.value); 
-                  setPage(1); 
+                  updateSearchParams({ search: e.target.value || null }); 
                 }} 
                 className="pl-10" 
               />
@@ -57,8 +73,7 @@ export const UsersPage = () => {
             <Select 
               value={roleFilter} 
               onValueChange={(v) => { 
-                setRoleFilter(v as any); 
-                setPage(1); 
+                updateSearchParams({ role: v !== "all" ? v : null }); 
               }}
             >
               <SelectTrigger className="w-[150px]">
@@ -75,8 +90,7 @@ export const UsersPage = () => {
             <Select 
               value={yearFilter} 
               onValueChange={(v) => { 
-                setYearFilter(v); 
-                setPage(1); 
+                updateSearchParams({ year: v !== "all" ? v : null }); 
               }}
             >
               <SelectTrigger className="w-[120px]">
@@ -95,7 +109,11 @@ export const UsersPage = () => {
           <CreateUserModal />
         </div>
 
-        <AdminPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        <AdminPagination 
+          page={page} 
+          totalPages={totalPages} 
+          onPageChange={(newPage) => updateSearchParams({ page: newPage.toString() })} 
+        />
 
         {isLoadingUsers ? (
           <div className="text-center py-8">
@@ -114,7 +132,11 @@ export const UsersPage = () => {
           </>
         )}
 
-        <AdminPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        <AdminPagination 
+          page={page} 
+          totalPages={totalPages} 
+          onPageChange={(newPage) => updateSearchParams({ page: newPage.toString() })} 
+        />
       </div>
     </div>
   );

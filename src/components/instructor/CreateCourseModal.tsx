@@ -13,19 +13,23 @@ import { Spinner } from "@/components/ui/spinner";
 import { useCourseForm } from "@/hooks/instructor/use-course-form";
 import { CourseFieldGroup } from "./CourseFieldGroup";
 import { Plus } from "lucide-react";
+import { useState } from "react";
+
 type CreateCourseModalProps = {
   trigger?: React.ReactNode;
 };
 
 export const CreateCourseModal = ({ trigger }: CreateCourseModalProps) => {
+  const [open, setOpen] = useState(false);
   const { control, isValid, onSubmit, reset, isPending, handleImageChange } =
-    useCourseForm();
+    useCourseForm(undefined, () => setOpen(false));
 
   const handleOpenChange = (open: boolean) => {
+    setOpen(open);
     if (open) reset();
   };
   return (
-    <Dialog onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {trigger ? (
           trigger

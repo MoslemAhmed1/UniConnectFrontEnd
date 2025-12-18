@@ -15,6 +15,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -148,9 +149,9 @@ export const CourseUsersTab = ({ courseCode, users, type }: CourseUsersTabProps)
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remove {type === "students" ? "Student" : "Instructor"}</AlertDialogTitle>
-            <div className="text-sm text-muted-foreground">
+            <AlertDialogDescription className="text-sm text-muted-foreground">
               Are you sure you want to remove {selectedUser?.first_name} {selectedUser?.parent_name} from this course? This action cannot be undone.
-            </div>
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>

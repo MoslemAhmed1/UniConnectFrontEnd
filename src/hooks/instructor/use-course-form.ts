@@ -12,7 +12,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export const useCourseForm = (initialCourseData?: Course) => {
+export const useCourseForm = (
+  initialCourseData?: Course,
+  onSuccess?: () => void
+) => {
   const client = useQueryClient();
   const {
     handleSubmit,
@@ -23,7 +26,7 @@ export const useCourseForm = (initialCourseData?: Course) => {
     setValue,
   } = useForm({
     resolver: zodResolver(CourseFormSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       image_url: initialCourseData?.image_url,
       name: initialCourseData?.name,
@@ -84,6 +87,10 @@ export const useCourseForm = (initialCourseData?: Course) => {
           queryKey: ["get-course", initialCourseData.code],
         });
       }
+
+      // Refresh shared course listings
+      client.invalidateQueries({ queryKey: ["all-courses"] });
+      onSuccess?.();
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
