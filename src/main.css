@@ -126,3 +126,7 @@ div[role="dialog"][data-slot="dialog-content"] {
   max-height: 80vh;
   overflow-y: auto;
 }
+
+html {
+  scroll-behavior: smooth;
+}

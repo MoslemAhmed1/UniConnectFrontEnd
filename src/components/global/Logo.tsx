@@ -25,14 +25,13 @@ const Logo = ({
   className,
 }: LogoProps) => {
   const { auth } = useAuth();
-  if (!auth.user?.role) return null;
 
   const Component = asLink ? Link : "div";
 
   return (
     <Component
       className={cn("flex flex-col items-center text-2xl", className)}
-      to={USER_ROLE_TO_URL[auth.user.role]}
+      to={auth.user?.role ? USER_ROLE_TO_URL[auth.user.role] : "/"}
     >
       <img
         src="/uniconnect_logo.svg"
