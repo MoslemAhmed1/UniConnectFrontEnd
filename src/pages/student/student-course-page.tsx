@@ -13,7 +13,9 @@ import CustomLottie from "@/components/global/CustomLottie";
 export const StudentCoursePage = () => {
   const { auth } = useAuth();
   const { id } = useParams<{ id: string }>();
-  const { courseData } = useCourseData(id);
+  const { courseData, isLoading } = useCourseData(id);
+
+  if (isLoading) return <></>;
 
   if (!courseData) {
     return (

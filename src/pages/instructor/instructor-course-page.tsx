@@ -12,7 +12,6 @@ import CustomLottie from "@/components/global/CustomLottie";
 export const InstructorCoursePage = () => {
   const { id } = useParams<{ id: string }>();
 
-  // Find the selected course by code (id from URL)
   const { courseData, isLoading: isLoadingCourseData } = useCourseData(id);
 
   if (isLoadingCourseData) {

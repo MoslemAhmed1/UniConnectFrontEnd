@@ -97,6 +97,7 @@ export default function SubmissionCard({
               file={file}
               onDelete={() => deleteSubmissionFile(file.id)}
               deleteButtonDisabled={isDeletingSubmissionFile}
+              showDelete={!submission.is_turned_in}
             />
           ))}
         </div>

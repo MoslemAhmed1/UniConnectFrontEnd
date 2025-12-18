@@ -19,6 +19,7 @@ export const useCourseAnnouncements = (courseCode: string | undefined) => {
       return result.data.data;
     },
     initialData: [],
+    enabled: !!courseCode,
   });
 
   const queryClient = useQueryClient();

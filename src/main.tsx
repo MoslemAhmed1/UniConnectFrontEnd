@@ -33,6 +33,8 @@ import CoursesPage from "./pages/admin/CoursesPage";
 import UsersPage from "./pages/admin/UsersPage";
 import PendingUsersPage from "./pages/admin/PendingUsersPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import LandingPage from "./pages/user/landing-page";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const queryClient = new QueryClient();
 
@@ -40,87 +42,98 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ModalProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route element={<UnAuthGuard />}>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignupPage />} />
-              </Route>
+        <ThemeProvider>
+          <ModalProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route element={<UnAuthGuard />}>
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignupPage />} />
+                </Route>
 
-              <Route path="/profiles/:profile_id" element={<ProfilePage />} />
-              <Route element={<GlobalLayout />}>
-                <Route
-                  element={
-                    <AuthGuard
-                      allowedRoles={[
-                        "student",
-                        "class_representative",
-                        "course_head",
-                      ]}
-                    />
-                  }
-                >
-                  <Route path="/student">
-                    <Route path="calendar" element={<Calendar />} />
-                    <Route path="groups/:id" element={<Group />} />
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="courses" element={<MyStudentCourses />} />
-                    <Route path="courses/:id" element={<StudentCoursePage />} />
+                <Route path="/profiles/:profile_id" element={<ProfilePage />} />
+                <Route element={<GlobalLayout />}>
+                  <Route
+                    element={
+                      <AuthGuard
+                        allowedRoles={[
+                          "student",
+                          "class_representative",
+                          "course_head",
+                        ]}
+                      />
+                    }
+                  >
+                    <Route path="/student">
+                      <Route path="calendar" element={<Calendar />} />
+                      <Route path="groups/:id" element={<Group />} />
+                      <Route path="dashboard" element={<Dashboard />} />
+                      <Route path="courses" element={<MyStudentCourses />} />
+                      <Route
+                        path="courses/:id"
+                        element={<StudentCoursePage />}
+                      />
+                      <Route
+                        path="courses/:id/assignment/:assignmentId"
+                        element={<AssignmentSubmission />}
+                      />
+                      <Route
+                        path="materials/:id/:category"
+                        element={<Materials />}
+                      />
+                      <Route path="profile" element={<PersonalProfilePage />} />
+                      <Route path="class-members" element={<ClassMembers />} />
+                      <Route
+                        path="class-announcements"
+                        element={<ClassAnnouncementsPage />}
+                      />
+                    </Route>
+                  </Route>
+
+                  <Route
+                    element={<AuthGuard allowedRoles={["professor/ta"]} />}
+                  >
+                    <Route path="/instructor">
+                      <Route path="profile" element={<PersonalProfilePage />} />
+                      <Route
+                        path="courses/:id"
+                        element={<InstructorCoursePage />}
+                      />
+                      <Route path="courses" element={<MyInstructorCourses />} />
+                      <Route
+                        path="courses/:id/assignment/:assignmentId"
+                        element={<AssignmentSubmissionProfessor />}
+                      />
+                      <Route
+                        path="materials/:id/:category"
+                        element={<Materials />}
+                      />
+                      <Route path="calendar" element={<Calendar />} />
+                    </Route>
+                  </Route>
+
+                  <Route
+                    path="/admin"
+                    element={<AuthGuard allowedRoles={["system_admin"]} />}
+                  >
+                    <Route path="dashboard" element={<AdminDashboard />} />
+                    <Route path="create-admin" element={<CreateAdminPage />} />
+                    <Route path="courses" element={<CoursesPage />} />
+                    <Route path="users" element={<UsersPage />} />
                     <Route
-                      path="courses/:id/assignment/:assignmentId"
-                      element={<AssignmentSubmission />}
-                    />
-                    <Route
-                      path="materials/:id/:category"
-                      element={<Materials />}
-                    />
-                    <Route path="profile" element={<PersonalProfilePage />} />
-                    <Route path="class-members" element={<ClassMembers />} />
-                    <Route
-                      path="class-announcements"
-                      element={<ClassAnnouncementsPage />}
+                      path="pending-users"
+                      element={<PendingUsersPage />}
                     />
                   </Route>
                 </Route>
 
-                <Route element={<AuthGuard allowedRoles={["professor/ta"]} />}>
-                  <Route path="/instructor">
-                    <Route path="profile" element={<PersonalProfilePage />} />
-                    <Route
-                      path="courses/:id"
-                      element={<InstructorCoursePage />}
-                    />
-                    <Route path="courses" element={<MyInstructorCourses />} />
-                    <Route
-                      path="courses/:id/assignment/:assignmentId"
-                      element={<AssignmentSubmissionProfessor />}
-                    />
-                    <Route
-                      path="materials/:id/:category"
-                      element={<Materials />}
-                    />
-                    <Route path="calendar" element={<Calendar />} />
-                  </Route>
-                </Route>
-
-                <Route
-                  path="/admin"
-                  element={<AuthGuard allowedRoles={["system_admin"]} />}
-                >
-                  <Route path="dashboard" element={<AdminDashboard />} />
-                  <Route path="create-admin" element={<CreateAdminPage />} />
-                  <Route path="courses" element={<CoursesPage />} />
-                  <Route path="users" element={<UsersPage />} />
-                  <Route path="pending-users" element={<PendingUsersPage />} />
-                </Route>
-              </Route>
-
-              <Route path="/unauthorized" element={<Unauthorized />} />
-            </Routes>
-            <Toaster position="top-center" />
-          </BrowserRouter>
-        </ModalProvider>
+                <Route path="/unauthorized" element={<Unauthorized />} />
+              </Routes>
+              <Toaster position="top-center" />
+            </BrowserRouter>
+          </ModalProvider>
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>

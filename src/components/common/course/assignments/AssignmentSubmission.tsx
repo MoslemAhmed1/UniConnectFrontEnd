@@ -27,7 +27,7 @@ export default function AssignmentSubmission() {
   const { submission } = useSubmissionData(assignmentId, courseId);
   const { submissionsAndMetadata } = useStudentSubmissions({
     assignmentId,
-    courseId: assignment?.course_id,
+    courseId,
   });
 
   const submissions = submissionsAndMetadata.data;
@@ -162,7 +162,7 @@ export default function AssignmentSubmission() {
                 assignment={assignment}
                 submission={submission}
               />
-              {submission?.feedback !== undefined && (
+              {submission?.feedback && (
                 <Card className="p-6">
                   <h3 className="font-semibold text-foreground">Feedback</h3>
                   <div

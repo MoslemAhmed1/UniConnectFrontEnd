@@ -38,8 +38,6 @@ export default function AssignmentsSection({
   const [filterDate, setFilterDate] = useState<Date>();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  allowModifyAssignments = true;
-
   const filteredAndSortedAssignments = [...assignments]
     .filter((assignment) => {
       // filter by search bar
