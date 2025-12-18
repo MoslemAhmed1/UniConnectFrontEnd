@@ -5,7 +5,7 @@ import { CourseCard } from "@/components/admin/CourseCard";
 import { AdminPagination } from "@/components/admin/AdminPagination";
 import { CreateCourseModal } from "@/components/instructor/CreateCourseModal";
 import { Button } from "@/components/ui/button";
-import useAllCourses from "@/hooks/shared/use-all-courses";
+import useGetAllCourses from "@/hooks/admin/use-get-all-courses";
 import type { Course } from "@/types/student/course";
 
 export const CoursesPage = () => {
@@ -30,7 +30,7 @@ export const CoursesPage = () => {
     setSearchParams(newParams);
   };
 
-  const { courses, totalPages, isLoading } = useAllCourses({ page, perPage, search: search || undefined });
+  const { courses, totalPages, isLoading } = useGetAllCourses({ page, perPage, search: search || undefined });
   
   return (
     <div className="min-h-screen bg-background">
@@ -70,14 +70,14 @@ export const CoursesPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {isLoading ? (
             <p>Loading...</p>
-          ) : (
+          ) : (courses &&
             courses.map((course: Course) => (
               <CourseCard key={course.code} course={course} />
             ))
           )}
         </div>
 
-        {courses.length === 0 && (
+        {courses && courses.length === 0 && (
           // TODO: Skeleton Loader / Spinner
           <p className="text-center text-muted-foreground py-8">
             No courses found. 

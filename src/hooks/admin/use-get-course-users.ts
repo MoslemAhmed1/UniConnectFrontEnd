@@ -15,7 +15,7 @@ export const useGetCourseUsers = (courseCode: string | undefined) => {
     queryFn: async () => {
       if (!courseCode) return { students: [], instructors: [] };
       
-      const result = await api.get(`/api/courses/${courseCode}/members`);
+      const result = await api.get(`/api/admin/${courseCode}/members`);
       return result.data.data;
     },
     enabled: !!courseCode,
