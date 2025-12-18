@@ -8,6 +8,7 @@ import SubtleParagraph from "@/components/global/SubtleParagraph";
 import { ClassMembersModal } from "@/components/student/members/class-members-modal";
 import type { StudentUser } from "@/types/student/student-user";
 import { useState } from "react";
+import { useHasRole } from "@/hooks/use-has-role";
 
 export const ClassMembers = () => {
   const { classMembers, isLoading } = useClassMembers();
@@ -19,12 +20,17 @@ export const ClassMembers = () => {
     setSelectedUser(user);
   };
 
+  const { hasRole } = useHasRole();
+
+  const isClassRep = hasRole("class_representative");
+
   return (
     <div className="w-full h-full">
       <Heading>Class Members</Heading>
       <SubtleParagraph className="mb-8">
-        The following is a list of your class mates, you can assign them as
-        heads to different courses
+        {isClassRep
+          ? "The following is a list of your class mates, you can assign them as heads to different courses"
+          : "The following is a list of your class mates."}
       </SubtleParagraph>
       {isLoading || !classMembers ? (
         <div className="w-full h-full flex items-center justify-center">
@@ -37,13 +43,15 @@ export const ClassMembers = () => {
             currentPageAbsoluteUrl={window.location.toString()}
             member={classMember}
             extraActions={
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleModalOpen(classMember)}
-              >
-                Assign Course Head
-              </Button>
+              isClassRep ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleModalOpen(classMember)}
+                >
+                  Assign Course Head
+                </Button>
+              ) : undefined
             }
           ></Member>
         ))

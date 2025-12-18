@@ -33,6 +33,7 @@ import CoursesPage from "./pages/admin/CoursesPage";
 import UsersPage from "./pages/admin/UsersPage";
 import PendingUsersPage from "./pages/admin/PendingUsersPage";
 import { StatisticsPage } from "./pages/admin/StatisticsPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -76,13 +77,7 @@ createRoot(document.getElementById("root")!).render(
                       element={<Materials />}
                     />
                     <Route path="profile" element={<PersonalProfilePage />} />
-                    <Route
-                      element={
-                        <AuthGuard allowedRoles={["class_representative"]} />
-                      }
-                    >
-                      <Route path="class-members" element={<ClassMembers />} />
-                    </Route>
+                    <Route path="class-members" element={<ClassMembers />} />
                     <Route
                       path="class-announcements"
                       element={<ClassAnnouncementsPage />}
@@ -109,17 +104,18 @@ createRoot(document.getElementById("root")!).render(
                     <Route path="calendar" element={<Calendar />} />
                   </Route>
                 </Route>
-              </Route>
 
-              <Route
-                path="/admin"
-                element={<AuthGuard allowedRoles={["system_admin"]} />}
-              >
-                <Route path="create" element={<CreateAdminPage />} />
-                <Route path="courses" element={<CoursesPage />} />
-                <Route path="users" element={<UsersPage />} />
-                <Route path="pending-users" element={<PendingUsersPage />} />
-                <Route path="statistics" element={<StatisticsPage />} />
+                <Route
+                  path="/admin"
+                  element={<AuthGuard allowedRoles={["system_admin"]} />}
+                >
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="create-admin" element={<CreateAdminPage />} />
+                  <Route path="courses" element={<CoursesPage />} />
+                  <Route path="users" element={<UsersPage />} />
+                  <Route path="pending-users" element={<PendingUsersPage />} />
+                  <Route path="statistics" element={<StatisticsPage />} />
+                </Route>
               </Route>
 
               <Route path="/unauthorized" element={<Unauthorized />} />

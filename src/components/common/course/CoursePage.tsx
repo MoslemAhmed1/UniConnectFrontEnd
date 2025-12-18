@@ -14,6 +14,8 @@ import { useStudentMaterials } from "@/hooks/student/use-student-materials";
 import type { FeatureFlags } from "@/constants/user/feature-flags";
 import type { Course } from "@/types/student/course";
 import { useCourseAnnouncements } from "@/hooks/student/use-course-announcements";
+import { useHasRole } from "@/hooks/use-has-role";
+import CourseStudentsDetailsTable from "@/components/instructor/CourseStudentsDetailsTable";
 
 type CoursePageProps = {
   course: Course;
@@ -28,6 +30,7 @@ export default function CoursePage({ course, featureFlags }: CoursePageProps) {
 
   // TODO: backend route returns only 3-4 recent materials + returns an array with the material count for each category ??
   const { materials } = useStudentMaterials(course.code);
+  const { hasRole } = useHasRole();
 
   return (
     <div className="min-h-screen">
@@ -45,6 +48,11 @@ export default function CoursePage({ course, featureFlags }: CoursePageProps) {
             <TabsTrigger value="announcements">Announcements</TabsTrigger>
             <TabsTrigger value="assignments">Assignments</TabsTrigger>
             <TabsTrigger value="members">Members</TabsTrigger>
+            {hasRole("professor/ta") && (
+              <TabsTrigger value="students_details">
+                Students Details
+              </TabsTrigger>
+            )}
           </TabsList>
 
           {/* TODO: Remove courseCode Props in all sections if backend route handles them */}
@@ -77,6 +85,12 @@ export default function CoursePage({ course, featureFlags }: CoursePageProps) {
           <TabsContent value="members">
             <CourseMembersSection />
           </TabsContent>
+
+          {hasRole("professor/ta") && (
+            <TabsContent value="students_details">
+              <CourseStudentsDetailsTable />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </div>

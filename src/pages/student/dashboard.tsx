@@ -34,6 +34,10 @@ export default function Dashboard() {
       </div>
 
       <DashboardStats
+        dueAssignmentsCount={
+          upcomingEvents.filter((event) => event.type === "assignment").length
+        }
+        isLoadingDueAssignments={isLoadingUpcomingEvents}
         upcomingEventsCount={upcomingEvents.length}
         activeCoursesCount={courses.length}
         isLoadingUpcomingEvents={isLoadingUpcomingEvents}
