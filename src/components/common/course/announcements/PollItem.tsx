@@ -23,7 +23,7 @@ const PollItem = ({ courseStudentsCount, pollItem }: PollItemProps) => {
         className="size-5"
         checked={pollItemChecked}
         onCheckedChange={() => toggleVote()}
-        disabled={auth.user?.role !== "student"}
+        disabled={auth.user?.role === "professor/ta"}
       />
       <div className="flex flex-col grow">
         <div className="flex justify-between items-center">

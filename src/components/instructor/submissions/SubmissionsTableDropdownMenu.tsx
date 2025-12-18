@@ -10,6 +10,7 @@ import {
 import type { Assignment } from "@/types/student/assignment";
 import type { Submission } from "@/types/student/submission";
 import { MoreHorizontal } from "lucide-react";
+import { Link } from "react-router";
 import StudentSubmissionModal from "../StudentSubmissionModal";
 import { useModal } from "@/providers/context/modalContext";
 
@@ -49,7 +50,7 @@ const SubmissionsTableDropdownMenu = ({
           View submission
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>View student profile</DropdownMenuItem>
+        <DropdownMenuItem asChild><Link to={`/profiles/${submission.submitter.id}?back=${window.location.href}`}>View student profile</Link></DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
