@@ -51,7 +51,7 @@ export default function Dashboard() {
 
           {/* Recent Announcements */}
           <DashboardAnnouncements
-            announcements={announcements}
+            announcements={announcements.slice(0, 5)}
             isLoading={isLoadingAnnouncements}
           />
         </div>

@@ -30,7 +30,7 @@ export const uploadRouter = {
   submissionUploader: f({
     pdf: {
       maxFileSize: "4MB",
-      maxFileCount: 1,
+      maxFileCount: 5,
     },
     video: {
       maxFileSize: "256MB",

@@ -7,6 +7,7 @@ type LogoProps = {
   showText?: boolean;
   imageClassName?: string;
   asLink?: boolean;
+  className?: string;
 };
 
 const USER_ROLE_TO_URL: Record<serverRolesType, string> = {
@@ -21,23 +22,23 @@ const Logo = ({
   showText = true,
   imageClassName,
   asLink = false,
+  className,
 }: LogoProps) => {
-  const Component = asLink ? Link : "div";
-
   const { auth } = useAuth();
-  if (!auth.user?.role) return null;
+
+  const Component = asLink ? Link : "div";
 
   return (
     <Component
-      className="flex flex-col items-center"
-      to={USER_ROLE_TO_URL[auth.user.role]}
+      className={cn("flex flex-col items-center text-2xl", className)}
+      to={auth.user?.role ? USER_ROLE_TO_URL[auth.user.role] : "/"}
     >
       <img
         src="/uniconnect_logo.svg"
         alt="UniConnect Logo."
         className={cn("size-14", imageClassName)}
       />
-      {showText && <span className="font-bold text-2xl">UniConnect</span>}
+      {showText && <span className="font-bold">UniConnect</span>}
     </Component>
   );
 };

@@ -29,7 +29,7 @@ export const useCourseData = (courseCode: string | undefined) => {
         }
       }
     },
-    enabled: courseCode !== undefined,
+    enabled: !!courseCode,
   });
 
   return {

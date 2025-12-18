@@ -1,4 +1,4 @@
-import type { AuthUser } from "@/types/api/auth";
+import type { User } from "@/types/user/user";
 import {
   createContext,
   useContext,
@@ -7,7 +7,7 @@ import {
 } from "react";
 
 export type AuthType = {
-  user: AuthUser | null;
+  user: User | null;
   token: string | null;
 };
 
