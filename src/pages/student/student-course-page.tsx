@@ -37,7 +37,6 @@ export const StudentCoursePage = () => {
   };
 
   if (studentRole === "class_representative") {
-    featureFlags.showModifyCourseBtn = true;
     featureFlags.showAddMaterialBtn = true;
     featureFlags.showAddAnnouncementBtn = true;
     featureFlags.showAddCalendarEventBtn = true;
@@ -46,7 +45,6 @@ export const StudentCoursePage = () => {
       auth.user?.id && courseData.representatives_ids.includes(auth.user?.id);
 
     if (isTeamHeadForThisCourse) {
-      featureFlags.showModifyCourseBtn = true;
       featureFlags.showAddMaterialBtn = true;
       featureFlags.showAddAnnouncementBtn = true;
       featureFlags.showAddCalendarEventBtn = true;

@@ -4,6 +4,10 @@ import { useAssignmentData } from "@/hooks/student/use-assignment-data";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
 import SubmissionsTable from "./SubmissionsTable";
+import { Separator } from "@radix-ui/react-separator";
+import { Download, FileText } from "lucide-react";
+import downloadFromLink from "@/utils/files/downloadFile";
+import { Button } from "@/components/ui/button";
 // import GradeSubmissionModal from "../modals/GradeSubmissionModal";
 
 const AssignmentSubmissionProfessor = () => {
@@ -48,13 +52,57 @@ const AssignmentSubmissionProfessor = () => {
 
           {/* Description */}
           <Card className="p-6">
-            <div
-              className="prose prose-sm max-w-none text-foreground"
-              dangerouslySetInnerHTML={{
-                __html: assignment.description ?? "",
-              }}
-            />
-          </Card>
+              <h3 className="font-semibold text-foreground">Description</h3>
+              <div
+                className="prose prose-sm max-w-none text-slate-700"
+                dangerouslySetInnerHTML={{
+                  __html: assignment.description ?? "",
+                }}
+              />
+
+              {/* Attached Files */}
+              {assignment.attached_files &&
+                assignment.attached_files.length > 0 && (
+                  <>
+                    <Separator />
+                    <h3 className="font-semibold text-foreground">
+                      Attached Files
+                    </h3>
+                    <div className="space-y-3">
+                      {assignment.attached_files.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                        >
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-5 h-5 text-primary" />
+                            <div>
+                              <p className="font-medium text-gray-800">
+                                {file.name}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {file.type} • {file.size}
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              downloadFromLink(file.url, file.name)
+                            }
+                          >
+                            <Download
+                              className="size-4"
+                              aria-label="Download file"
+                            />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+            </Card>
 
           <SubmissionsTable
             columns={SUBMISSIONS_TABLE_COLUMNS}

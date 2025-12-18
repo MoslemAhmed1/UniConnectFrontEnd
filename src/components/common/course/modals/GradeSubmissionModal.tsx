@@ -9,15 +9,18 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Submission } from "@/types/student/submission";
+import type { Assignment } from "@/types/student/assignment";
 import { Users } from "lucide-react";
 import SubmissionCard from "../../../instructor/SubmissionCard";
 
 type GradeSubmissionModalProps = {
   submissions: Submission[];
+  assignment: Assignment;
 };
 
 export default function GradeSubmissionModal({
   submissions,
+  assignment,
 }: GradeSubmissionModalProps) {
   return (
     <Dialog>
@@ -39,7 +42,11 @@ export default function GradeSubmissionModal({
         <ScrollArea className="h-[60vh] p-3">
           <div className="space-y-4">
             {submissions.map((submission) => (
-              <SubmissionCard key={submission.id} submission={submission} />
+              <SubmissionCard
+                key={submission.id}
+                submission={submission}
+                assignment={assignment}
+              />
             ))}
           </div>
         </ScrollArea>

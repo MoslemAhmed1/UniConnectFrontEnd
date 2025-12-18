@@ -42,7 +42,10 @@ const LandingPage = () => {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
+        <div className="space-x-2">
         <ModeToggle />
+        <Link to="/login"><Button>Login</Button></Link>
+        </div>
       </header>
       <section className="h-screen relative">
         <div className="absolute top-1/2 start-1/2 -translate-1/2 flex flex-col items-center gap-5">

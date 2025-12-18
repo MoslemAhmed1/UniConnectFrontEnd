@@ -2,7 +2,6 @@ import GradeSubmissionForm from "@/components/forms/CourseForms/GradeSubmissionF
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import useDeleteSubmissionGrade from "@/hooks/instructor/use-delete-submission-grade";
 import type { Submission } from "@/types/student/submission";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -20,9 +19,6 @@ export default function SubmissionCard({
 }: SubmissionCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isAssigningGrade, setIsAssigningGrade] = useState(false);
-  const { handleDeleteSubmissionGrade, isDeleting } = useDeleteSubmissionGrade(
-    submission.assignment_id
-  );
 
   return (
     <Card className="p-4">
@@ -93,14 +89,6 @@ export default function SubmissionCard({
                 onClick={() => setIsEditing(true)}
               >
                 Edit Grade
-              </Button>
-              <Button
-                variant="destructive"
-                className="w-full mt-4"
-                onClick={() => handleDeleteSubmissionGrade(submission.id)}
-                disabled={isDeleting}
-              >
-                {isDeleting ? "Removing..." : "Remove Grade"}
               </Button>
             </>
           )}

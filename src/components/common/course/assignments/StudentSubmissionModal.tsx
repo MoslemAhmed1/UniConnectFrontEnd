@@ -95,9 +95,19 @@ export default function SubmissionCard({
             <FileCard
               key={file.id}
               file={file}
-              onDelete={() => deleteSubmissionFile(file.id)}
-              deleteButtonDisabled={isDeletingSubmissionFile}
-              showDelete={!submission.is_turned_in}
+              onDelete={
+                !submission.is_turned_in && typeof submission.grade !== "number"
+                  ? () => deleteSubmissionFile(file.id)
+                  : undefined
+              }
+              deleteButtonDisabled={
+                isDeletingSubmissionFile ||
+                submission.is_turned_in ||
+                typeof submission.grade === "number"
+              }
+              showDelete={
+                !submission.is_turned_in && typeof submission.grade !== "number"
+              }
             />
           ))}
         </div>

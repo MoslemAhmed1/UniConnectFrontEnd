@@ -95,6 +95,7 @@ export default function Calendar() {
               selectedDate={date}
               isLoading={isLoading}
               calendarEvents={filteredEvents}
+              allowModifyEvents={!!allowModifyEvents}
             />
             <Legend />
           </div>

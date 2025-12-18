@@ -96,7 +96,10 @@ export default function AssignmentSubmission() {
 
               {/* View Submissions (DIALOG BELOW) */}
               {userRole === "instructor" && (
-                <GradeSubmissionModal submissions={submissions} />
+                <GradeSubmissionModal
+                  submissions={submissions}
+                  assignment={assignment}
+                />
               )}
             </div>
 

@@ -74,7 +74,7 @@ const SubmissionsTable = <TValue,>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onPaginationChange: setPagination,
-    pageCount: submissionsAndMetadata.meta.totalPages,
+    pageCount: submissionsAndMetadata.meta.totalPages as number,
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,

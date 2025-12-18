@@ -33,24 +33,26 @@ import { Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EditEventModal from "@/components/common/calendar/EditEventModal";
 import { useDeleteEvent } from "@/hooks/student/use-delete-event";
-import { useHasRole } from "@/hooks/use-has-role";
-import { useAuth } from "@/providers/context/authContext";
+// import { useHasRole } from "@/hooks/use-has-role";
+// import { useAuth } from "@/providers/context/authContext";
 
 type SelectedDayDetailsProps = {
   selectedDate: Date;
   isLoading: boolean;
   calendarEvents: CalendarEvent[];
+  allowModifyEvents: boolean;
 };
 
 const SelectedDayDetails = ({
   selectedDate,
   isLoading,
   calendarEvents,
+  allowModifyEvents,
 }: SelectedDayDetailsProps) => {
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const { handleDeleteEvent, isDeleting } = useDeleteEvent();
-  const { hasRole } = useHasRole();
-  const { auth } = useAuth();
+  // const { hasRole } = useHasRole();
+  // const { auth } = useAuth();
 
   const formattedDate = selectedDate?.toLocaleDateString("en-US", {
     weekday: "long",
@@ -110,67 +112,63 @@ const SelectedDayDetails = ({
                     </div>
                   </ItemTitle>
 
-                  {/* Action Buttons */}
-                  {hasRole("class_representative", "professor/ta") ||
-                    // TODO: Fix this
-                    (event?.course?.courseHeads.some(
-                      (head) => head.userId === auth.user.id
-                    ) && (
-                      <div className="flex items-center gap-1 shrink-0">
-                        <EditEventModal event={event} />
+                  {/* Action Buttons - only for users allowed to modify events */}
+                  {allowModifyEvents && (
+                    <div className="flex items-center gap-1 shrink-0">
+                      <EditEventModal event={event} />
 
-                        {/* Delete Modal */}
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-destructive hover:bg-destructive/10"
-                              disabled={
-                                (isDeleting && pendingDeleteId === event.id) ||
-                                event.type === "assignment"
-                              }
+                      {/* Delete Modal */}
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                            disabled={
+                              (isDeleting && pendingDeleteId === event.id) ||
+                              event.type === "assignment"
+                            }
+                          >
+                            {isDeleting && pendingDeleteId === event.id ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="w-4 h-4" />
+                            )}
+                          </Button>
+                        </AlertDialogTrigger>
+
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Delete this event?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently remove the event
+                              <span className="font-semibold">
+                                {" "}
+                                "{event.title}"
+                              </span>
+                              .
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="bg-destructive text-white hover:bg-destructive/90"
+                              onClick={() => handleDelete(event.id)}
                             >
                               {isDeleting && pendingDeleteId === event.id ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                              ) : (
-                                <Trash2 className="w-4 h-4" />
-                              )}
-                            </Button>
-                          </AlertDialogTrigger>
-
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Delete this event?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will
-                                permanently remove the event
-                                <span className="font-semibold">
-                                  {" "}
-                                  "{event.title}"
-                                </span>
-                                .
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                className="bg-destructive text-white hover:bg-destructive/90"
-                                onClick={() => handleDelete(event.id)}
-                              >
-                                {isDeleting && pendingDeleteId === event.id ? (
-                                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                                ) : null}
-                                Delete
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    ))}
+                                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                              ) : null}
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  )}
                 </div>
                 <ItemDescription>
                   <div
