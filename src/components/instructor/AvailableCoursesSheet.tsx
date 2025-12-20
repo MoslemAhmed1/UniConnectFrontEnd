@@ -11,7 +11,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { CreateCourseModal } from "./CreateCourseModal";
 import useAvailableInstructorCourses from "@/hooks/instructor/use-available-instructor-courses";
 

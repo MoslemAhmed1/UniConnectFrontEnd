@@ -74,7 +74,6 @@ export default function SubmissionCard({
               assignment={assignment}
               mode="edit"
               submissionId={submission.id}
-              assignmentId={submission.assignment_id}
               onClose={() => setIsEditing(false)}
               defaultValues={{
                 grade: String(submission.grade),
@@ -100,7 +99,6 @@ export default function SubmissionCard({
               assignment={assignment}
               mode="create"
               submissionId={submission.id}
-              assignmentId={submission.assignment_id}
               onClose={() => setIsAssigningGrade(false)}
             />
           ) : (

@@ -37,6 +37,7 @@ export const useMaterialForm = ({
         key: materialData.file.key,
         name: materialData.file.name,
         size: materialData.file.size,
+        url: materialData.file.url,
       });
     }
   }, [materialData]);

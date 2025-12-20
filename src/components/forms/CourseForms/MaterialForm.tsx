@@ -127,7 +127,7 @@ export default function MaterialForm({
                 return;
               }
 
-              chooseFile(file.serverData.file_data);
+              chooseFile({ ...file.serverData.file_data, url: file.ufsUrl });
             }}
             onUploadError={() => {
               toast.error("An error has occurred while uploading the file.");

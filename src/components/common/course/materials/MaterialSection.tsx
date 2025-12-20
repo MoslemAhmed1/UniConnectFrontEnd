@@ -6,13 +6,11 @@ import { useAuth } from "@/providers/context/authContext";
 type MaterialSectionProps = {
   materials: Material[];
   sectionName: string;
-  courseCode: string;
 };
 
 export default function MaterialSection({
   materials,
   sectionName,
-  courseCode,
 }: MaterialSectionProps) {
   const { auth } = useAuth();
   // const { courseRepId } = useCourseData(courseCode)
@@ -22,7 +20,7 @@ export default function MaterialSection({
   const allowModifyMaterials =
     role == "class_representative" ||
     role == "professor/ta" ||
-    role == "course_head" /* auth.user?.id == courseRepId */;
+    role == "course_head"; /* auth.user?.id == courseRepId */
 
   return (
     <Card className="divide-y gap-0 p-0">

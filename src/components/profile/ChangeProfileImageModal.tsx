@@ -28,7 +28,7 @@ export const ChangeProfileImageModal = ({
   const [currImageUrl, setCurrImageUrl] = useState<string | undefined>(
     image_url
   );
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
   const { mutate: changePicture, isPending } = useMutation({
     mutationKey: ["change-picture"],
@@ -54,12 +54,18 @@ export const ChangeProfileImageModal = ({
     },
     onSuccess: (url) => {
       client.invalidateQueries({ queryKey: ["profile-data"] });
-      setAuth({
-        token: auth.token,
-        user: {
-          ...auth.user,
-          image_url: url,
-        },
+      setAuth((auth) => {
+        // TODO: Is this even safe?
+        // TODO: Find a better way to handle this
+        if (!auth.user) throw new Error("");
+
+        return {
+          ...auth,
+          user: {
+            ...auth.user,
+            image_url: url,
+          },
+        };
       });
       toast.success("Updated profile image successfully.");
     },

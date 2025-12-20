@@ -17,7 +17,6 @@ import type { Assignment } from "@/types/student/assignment";
 type GradeSubmissionFormProps = {
   mode?: "create" | "edit";
   submissionId: string;
-  assignmentId?: string;
   onClose?: () => void;
   defaultValues?: Partial<InferredGradeFormSchema>;
   assignment: Assignment;
@@ -26,7 +25,6 @@ type GradeSubmissionFormProps = {
 export default function GradeSubmissionForm({
   mode = "create",
   submissionId,
-  assignmentId,
   onClose,
   defaultValues,
   assignment,
@@ -34,7 +32,6 @@ export default function GradeSubmissionForm({
   const { control, isSubmitting, onSubmit } = useGradeSubmissionForm({
     mode,
     submissionId,
-    assignmentId,
     defaultValues,
     assignment,
   });

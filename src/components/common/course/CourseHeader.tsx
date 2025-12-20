@@ -1,8 +1,8 @@
-import { Badge } from "@/components/ui/badge";
-import { Users, Edit } from "lucide-react";
-import type { Course } from "@/types/student/course";
 import { UpdateCourseModal } from "@/components/instructor/UpdateCourseModal";
 import Teachers from "@/components/student/dashboard/Teachers";
+import { Badge } from "@/components/ui/badge";
+import type { Course } from "@/types/student/course";
+import { Users } from "lucide-react";
 
 type CourseHeaderProps = {
   course: Course;

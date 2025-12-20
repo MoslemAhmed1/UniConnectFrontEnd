@@ -19,7 +19,6 @@ const DeleteSubmissionFileButton = ({
     useDeleteSubmissionFile({
       assignmentId,
       courseId,
-      fileId,
       submissionId,
     });
 
@@ -27,7 +26,7 @@ const DeleteSubmissionFileButton = ({
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => deleteSubmissionFile()}
+      onClick={() => deleteSubmissionFile(fileId)}
       disabled={isDeletingSubmissionFile}
     >
       <Trash className="size-4" aria-label="Delete file" />

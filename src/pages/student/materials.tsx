@@ -39,12 +39,14 @@ export default function Materials() {
       <Tabs defaultValue={category || "lecture"} className="space-y-6">
         <TabsList className="bg-slate-100">
           {categoryList
-            .filter(cat => !(userRole === "instructor" && cat.category === "quiz"))
+            .filter(
+              (cat) => !(userRole === "instructor" && cat.category === "quiz")
+            )
             .map((cat) => (
               <TabsTrigger key={cat.id} value={cat.id}>
                 {cat.label}
               </TabsTrigger>
-          ))}
+            ))}
         </TabsList>
 
         {categoryList.map((cat) => (
@@ -52,7 +54,6 @@ export default function Materials() {
             <MaterialSection
               materials={filterMaterialsByCategory(cat.category)}
               sectionName={cat.label}
-              courseCode={id}
             />
           </TabsContent>
         ))}

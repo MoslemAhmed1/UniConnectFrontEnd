@@ -16,7 +16,6 @@ import { useModal } from "@/providers/context/modalContext";
 type UseGradeSubmissionFormArgs = {
   mode: "create" | "edit";
   submissionId: string;
-  assignmentId?: string;
   defaultValues?: Partial<InferredGradeFormSchema>;
   assignment: Assignment;
 };
@@ -24,7 +23,6 @@ type UseGradeSubmissionFormArgs = {
 export const useGradeSubmissionForm = ({
   mode,
   submissionId,
-  assignmentId,
   defaultValues,
   assignment,
 }: UseGradeSubmissionFormArgs) => {

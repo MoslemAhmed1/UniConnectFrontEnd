@@ -12,15 +12,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { YEARS } from "@/constants/student/student";
-import type { InferedFormSchema } from "@/validations/SignupFormSchema";
+import type { InferredFormSchema } from "@/validations/SignupFormSchema";
 import { Controller, type Control, type UseFormTrigger } from "react-hook-form";
 
 const StudentYearField = ({
   control,
   trigger,
 }: {
-  control: Control<InferedFormSchema>;
-  trigger: UseFormTrigger<InferedFormSchema>;
+  control: Control<InferredFormSchema>;
+  trigger: UseFormTrigger<InferredFormSchema>;
 }) => {
   return (
     <Controller
