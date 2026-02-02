@@ -50,6 +50,33 @@ Support for multiple user roles with specific privileges:
 
 ---
 
+## 📸 Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.jpg)
+*Main dashboard showing enrolled courses and recent activity*
+
+### Course Page
+![Course Page](screenshots/course-page.jpg)
+![Course Page](screenshots/course-page2.jpg)
+![Course Page](screenshots/course-page3.jpg)
+*Course view with announcements, materials, and assignments*
+
+### Group Chat
+![Group Chat](screenshots/group-chat.jpg)
+*Built-in group chat for course discussions*
+
+### Calendar View
+![Calendar](screenshots/calendar.jpg)
+*Unified calendar showing all course events*
+
+### Assignment Submission
+![Assignment Submission](screenshots/assignment-submission.jpg)
+![Assignment Submission](screenshots/assignment-submission2.jpg)
+*Assignment submission interface*
+
+---
+
 ## 🛠️ Tech Stack
 
 **Frontend:**
@@ -81,30 +108,6 @@ Support for multiple user roles with specific privileges:
 * Business logic implemented manually
 * All database access is done through the backend API
 * Separate backend repository: [Add backend repo link if applicable]
-
----
-
-## 📸 Screenshots
-
-### Dashboard
-![Dashboard](screenshots/dashboard.jpg)
-*Main dashboard showing enrolled courses and recent activity*
-
-### Course Page
-![Course Page](screenshots/course-page.jpg)
-*Course view with announcements, materials, and assignments*
-
-### Group Chat
-![Group Chat](screenshots/group-chat.jpg)
-*Built-in group chat for course discussions*
-
-### Calendar View
-![Calendar](screenshots/calendar.jpg)
-*Unified calendar showing all course events*
-
-### Assignment Submission
-![Assignment Submission](screenshots/assignment-submission.jpg)
-*Assignment submission interface*
 
 ---
 
