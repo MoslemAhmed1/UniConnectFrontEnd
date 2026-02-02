@@ -53,26 +53,26 @@ Support for multiple user roles with specific privileges:
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.jpg)
+![Dashboard](screenshots/dashboard.JPG)
 *Main dashboard showing enrolled courses and recent activity*
 
 ### Course Page
-![Course Page](screenshots/course-page.jpg)
-![Course Page](screenshots/course-page2.jpg)
-![Course Page](screenshots/course-page3.jpg)
+![Course Page](screenshots/course-page.JPG)
+![Course Page](screenshots/course-page2.JPG)
+![Course Page](screenshots/course-page3.JPG)
 *Course view with announcements, materials, and assignments*
 
 ### Group Chat
-![Group Chat](screenshots/group-chat.jpg)
+![Group Chat](screenshots/group-chat.JPG)
 *Built-in group chat for course discussions*
 
 ### Calendar View
-![Calendar](screenshots/calendar.jpg)
+![Calendar](screenshots/calendar.JPG)
 *Unified calendar showing all course events*
 
 ### Assignment Submission
-![Assignment Submission](screenshots/assignment-submission.jpg)
-![Assignment Submission](screenshots/assignment-submission2.jpg)
+![Assignment Submission](screenshots/assignment-submission.JPG)
+![Assignment Submission](screenshots/assignment-submission2.JPG)
 *Assignment submission interface*
 
 ---
